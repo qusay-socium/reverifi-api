@@ -1,7 +1,7 @@
 ### All Submissions:
 
-* [ ] Have you followed the guidelines in our Contributing document?
-* [ ] Have you checked to ensure there aren't other open [Pull Requests](../../../pulls) for the same update/change?
+- [ ] Have you followed the guidelines in our Contributing document?
+- [ ] Have you checked to ensure there aren't other open [Pull Requests](../../../pulls) for the same update/change?
 
 <!-- You can erase any parts of this template not applicable to your Pull Request. -->
 
@@ -12,15 +12,11 @@
 
 ### Changes to Core Features:
 
-* [ ] Have you added an explanation of what your changes do and why you'd like us to include them?
-* [ ] Have you written new tests for your core changes, as applicable?
-* [ ] Have you successfully ran tests with your changes locally?
-* [ ] Have you added new environment keys to `.env.template`?
+- [ ] Have you added an explanation of what your changes do and why you'd like us to include them?
+- [ ] Have you written new tests for your core changes, as applicable?
+- [ ] Have you successfully ran tests with your changes locally?
+- [ ] Have you added new environment keys to `.env.template`?
 
 ### Changes with database updates
 
-* [ ] Have you added new seeds/migrations to the [database repo](https://github.com/OptimumPartners/owk-database)?
-
-### Changes with routes updates
-
-* [ ] Have you added/updated routing roles in [gateway repo](https://github.com/OptimumPartners/owk-api-gateway)?
+- [ ] Have you added new seeds/migrations?

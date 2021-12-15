@@ -1,3 +1,3 @@
 import expressJoiValidation from 'express-joi-validation';
 
-export const schemaValidator = expressJoiValidation.createValidator({});
+export const SchemaValidator = expressJoiValidation.createValidator({});

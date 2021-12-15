@@ -1,1 +1,1 @@
-export * from './sample.repo';
+export * from './auth.repo';

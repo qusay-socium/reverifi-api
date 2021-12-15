@@ -1,25 +1,31 @@
 {
-  "name": "audience-town-template",
+  "name": "reverifi-api",
   "version": "0.0.1",
   "description": "",
   "main": "./src/index.mjs",
   "scripts": {
     "test": "nyc mocha dotenv_config_path=tests/.env.test",
     "start": "node -r esm -r dotenv/config src/index.mjs",
-    "lint": "eslint -c .eslintrc.yml --ext .mjs,.js ."
+    "lint": "eslint -c .eslintrc.yml --ext .mjs,.js ." ,
+    "migrate": "node -r esm -r dotenv/config ./node_modules/.bin/sequelize-cli db:migrate",
+    "migrate:undo": "node -r esm -r dotenv/config ./node_modules/.bin/sequelize-cli db:migrate:undo",
+    "seed": "node -r esm -r dotenv/config ./node_modules/.bin/sequelize-cli db:seed:all",
+    "seed:undo": "node -r esm -r dotenv/config ./node_modules/.bin/sequelize-cli db:seed:undo"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OptimumPartners/audience-town-template.git"
+    "url": "git+https://github.com/abukhadraop-or/reverifi-api.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/OptimumPartners/audience-town-template/issues"
+    "url": "https://github.com/abukhadraop-or/reverifi-api/issues"
   },
-  "homepage": "https://github.com/OptimumPartners/audience-town-template#readme",
+  "homepage": "https://github.com/abukhadraop-or/reverifi-api#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
@@ -28,11 +34,13 @@
     "express-request-id": "^1.4.1",
     "helmet": "^4.6.0",
     "joi": "^17.5.0",
+    "jsonwebtoken": "^8.5.1",
     "mkdirp": "^1.0.4",
     "morgan": "^1.10.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.11.0",
+    "sequelize-cli": "^6.3.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {

@@ -1,1 +1,1 @@
-export * from './sample.router';
+export * from './auth.router';
