@@ -1,0 +1,21 @@
+{
+  "reporter": [
+    "html",
+    "text"
+  ],
+  "exclude": [
+    "**/*.spec.js",
+    "**/*.mock.js",
+    "dist",
+    "**/index.mjs",
+    "**/*.model.mjs",
+    "**/*.schema.mjs",
+    "tests",
+    "src/globals.mjs"
+  ],
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "check-coverage": true
+}

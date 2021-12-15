@@ -1,0 +1,11 @@
+require:
+  - esm
+  - dotenv/config
+  - tests/init.js
+spec: './tests/**/*.spec.*'
+color: true
+reporter: 'mochawesome'
+reporter-options: 'reportFilename=index'
+timeout: 50000
+recursive: true
+exit: true
