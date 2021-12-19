@@ -4,7 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morganLogger from '../logger/morganLogger';
 import appInfo from './../../package.json';
-import { AuthRouter } from './../routes';
+import { AuthRouter, CompanyRouter, UserInfoRouter } from './../routes';
 
 Logger.info('app::initExpress', 'express app init');
 export const app = express();
@@ -22,6 +22,8 @@ Logger.info('app::initExpress', 'express app init routes');
 app.get('/auth-service/healthcheck', (req, res) => res.json({ name: appInfo.name, version: appInfo.version }));
 
 app.use('/api/v2/auth/', AuthRouter);
+app.use('/api/v2/company/', CompanyRouter);
+app.use('/api/v2/user/', UserInfoRouter);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

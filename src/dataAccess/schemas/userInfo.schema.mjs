@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 const { DataTypes } = Sequelize;
 
 export const UserInfoSchema = {
-  user_id: {
+  userId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     allowNull: false,
@@ -12,17 +12,37 @@ export const UserInfoSchema = {
       key: 'id',
     },
     onUpdate: 'cascade',
+    field: 'user_id',
   },
-  about_me: {
+  companyId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: null,
+    references: {
+      model: 'companies',
+      key: 'id',
+    },
+    onUpdate: 'cascade',
+    field: 'company_id',
+  },
+  address: {
+    type: DataTypes.JSON,
+  },
+  website: {
     type: DataTypes.TEXT,
   },
   languages: {
+    type: DataTypes.ARRAY(DataTypes.STRING(55)),
+  },
+  serviceAreas: {
+    type: DataTypes.ARRAY(DataTypes.STRING(55)),
+    field: 'service_areas',
+  },
+  socials: {
     type: DataTypes.JSON,
   },
-  service_areas: {
-    type: DataTypes.JSON,
-  },
-  contact: {
-    type: DataTypes.JSON,
+  aboutMe: {
+    type: DataTypes.TEXT,
+    field: 'about_me',
   },
 };

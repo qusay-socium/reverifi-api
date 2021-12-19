@@ -2,7 +2,7 @@ import Sequelize from 'sequelize';
 
 const { DataTypes } = Sequelize;
 
-export const UserSchema = {
+export const CompanySchema = {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -16,25 +16,25 @@ export const UserSchema = {
     type: DataTypes.TEXT,
     unique: true,
   },
-  passwordHash: {
-    type: DataTypes.STRING(64),
-    is: /^[0-9a-f]{64}$/i,
-    field: 'password_hash',
-  },
-  phone: {
+  website: {
     type: DataTypes.TEXT,
   },
-  isVerified: {
-    type: DataTypes.BOOLEAN,
-    field: 'is_verified',
+  address: {
+    type: DataTypes.JSON,
   },
-  created_at: {
-    type: DataTypes.DATE,
+  metadata: {
+    type: DataTypes.JSON,
   },
-  updated_at: {
+  createdAt: {
     type: DataTypes.DATE,
+    field: 'created_at',
   },
-  deleted_at: {
+  updatedAt: {
     type: DataTypes.DATE,
+    field: 'updated_at',
+  },
+  deletedAt: {
+    type: DataTypes.DATE,
+    field: 'deleted_at',
   },
 };
