@@ -1,5 +1,5 @@
 import { UserInfoModel, CompanyModel } from '../models';
-// import { PasswordHelper, jwtHelper } from '../../helpers';
+import { getUpdatedEntity } from '../../helpers';
 
 export const UserInfoRepo = {
   create: async (loginId, { address, website, languages, serviceAreas, socials, aboutMe, companyId }) => {
@@ -25,14 +25,21 @@ export const UserInfoRepo = {
       aboutMe,
       companyId,
     };
-    const updated = await UserInfoModel.update(updateUser, { where: { user_id: loginId }, returning: true, raw: true, nest: true }).then(res => res[1][0]);
+    const updated = await UserInfoModel.update(updateUser, { where: { user_id: loginId }, returning: true, raw: true, nest: true }).then(res => getUpdatedEntity(res));
     return updated;
   },
-  get: async id => UserInfoModel.findOne({ where: { user_id: id }, include: [{ model: CompanyModel, as: 'company' }] }),
+  get: async id =>
+    UserInfoModel.findByPk(id, {
+      include: [
+        {
+          model: CompanyModel,
+          required: true,
+        },
+      ],
+    }),
   filter: async ({ limit }) => {
     const filter = {};
 
-    // if (userId) filter.userId = userId;
     const companies = await UserInfoModel.findAndCountAll({
       where: filter,
       limit,

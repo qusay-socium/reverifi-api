@@ -1,4 +1,4 @@
-import { UserModel, UserInfoModel, CompanyModel } from '../models';
+import { UserModel, UserInfoModel } from '../models';
 import { PasswordHelper, jwtHelper } from '../../helpers';
 
 export const AuthRepo = {
@@ -33,14 +33,6 @@ export const AuthRepo = {
             companyId: user.userInfo.companyId,
           }
         : undefined,
-      // company: user.company
-      //   ? {
-      //       name: user.company.name,
-      //       email: user.company.email,
-      //       website: user.company.website,
-      //       address: user.company.address,
-      //     }
-      //   : undefined,
     };
 
     const [token, refreshToken] = await jwtHelper.sign(signedUser);

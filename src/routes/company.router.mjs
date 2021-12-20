@@ -1,9 +1,8 @@
 import expressRouter from 'express-async-router';
 import { SchemaValidator, Auth } from '../middlewares';
-import { CompanyRouteSchema } from './schemas';
+import { CompanyRouteSchema, CompanyFilterRouteSchema, CompanyUpdateRouteSchema } from './schemas';
 import { CompanyRepo } from '../dataAccess';
 import { StatusCode } from '../constants';
-import { CompanyUpdateRouteSchema, CompanyFilterRouteSchema } from './schemas';
 export const CompanyRouter = new expressRouter.AsyncRouter({ mergeParams: true });
 
 CompanyRouter.post('/', [SchemaValidator.body(CompanyRouteSchema.body), Auth.authenticateToken], async (req, res) => {
@@ -13,11 +12,11 @@ CompanyRouter.post('/', [SchemaValidator.body(CompanyRouteSchema.body), Auth.aut
 
 CompanyRouter.patch('/:id', [SchemaValidator.body(CompanyUpdateRouteSchema.body), Auth.authenticateToken], async (req, res) => {
   const updatedCompany = await CompanyRepo.update(req.params.id, req.body);
-  res.status(StatusCode.OK).json(updatedCompany);
+  updatedCompany ? res.status(StatusCode.OK).json(updatedCompany) : res.status(StatusCode.NOT_FOUND).send('Item not found!');
 });
 
 CompanyRouter.get('/:id', [SchemaValidator.params(CompanyRouteSchema.params), Auth.authenticateToken], async (req, res) => {
-  const company = await CompanyRepo.get(+req.params.id);
+  const company = await CompanyRepo.get(req.params.id);
   if (!company) return res.status(StatusCode.NOT_FOUND).send('Item not found!');
   res.status(StatusCode.OK).json(company);
 });
@@ -28,6 +27,7 @@ CompanyRouter.get('/', [SchemaValidator.query(CompanyFilterRouteSchema.query), A
 });
 
 CompanyRouter.delete('/:id', [SchemaValidator.params(CompanyRouteSchema.params), Auth.authenticateToken], async (req, res) => {
-  const deleted = await CompanyRepo.delete(+req.params.id);
-  res.status(StatusCode.OK).json(deleted);
+  const deletedCompany = await CompanyRepo.delete(req.params.id);
+  if (!deletedCompany) return res.status(StatusCode.NOT_FOUND).send('Item not found!');
+  res.status(StatusCode.OK).json(deletedCompany);
 });

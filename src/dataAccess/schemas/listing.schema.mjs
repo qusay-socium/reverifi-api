@@ -32,6 +32,7 @@ export const ListingSchema = {
   },
   price: {
     type: DataTypes.DOUBLE,
+    defaultValue: 0.0,
   },
   description: {
     type: DataTypes.TEXT,
