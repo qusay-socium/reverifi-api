@@ -12,6 +12,7 @@ export const UserInfoSchema = {
       key: 'id',
     },
     onUpdate: 'cascade',
+    onDelete: 'cascade ',
     field: 'user_id',
   },
   companyId: {
@@ -23,6 +24,7 @@ export const UserInfoSchema = {
       key: 'id',
     },
     onUpdate: 'cascade',
+    onDelete: 'cascade',
     field: 'company_id',
   },
   address: {

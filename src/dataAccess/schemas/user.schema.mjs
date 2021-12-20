@@ -28,13 +28,16 @@ export const UserSchema = {
     type: DataTypes.BOOLEAN,
     field: 'is_verified',
   },
-  created_at: {
+  createdAt: {
     type: DataTypes.DATE,
+    field: 'created_at',
   },
-  updated_at: {
+  updatedAt: {
     type: DataTypes.DATE,
+    field: 'updated_at',
   },
-  deleted_at: {
+  deletedAt: {
     type: DataTypes.DATE,
+    field: 'deleted_at',
   },
 };
