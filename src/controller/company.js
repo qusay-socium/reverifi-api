@@ -1,3 +1,4 @@
+const { NotFound } = require('../middleware/error-handler');
 const { removeCompany, addCompany, getCompanyById, updateCompany, getAllCompanies } = require('../services/company');
 
 const response = require('../utils/response');
@@ -11,6 +12,7 @@ const response = require('../utils/response');
  * @return {Object}
  */
 async function postCompany(req, res) {
+  console.log(req.body);
   const data = await addCompany(req.body);
 
   res.json(response(data));
@@ -71,9 +73,13 @@ async function getCompanies(req, res) {
  */
 async function deleteCompany(req, res) {
   const { id } = req.params;
-  await removeCompany(id);
 
-  res.send('OK');
+  const valid = await removeCompany(id);
+  if (valid) {
+    res.json(response(null, 200, 'Company Deleted'));
+  } else {
+    throw new NotFound('Company not exist!');
+  }
 }
 
 module.exports = { getCompanies, deleteCompany, postCompany, patchCompany, getCompany };

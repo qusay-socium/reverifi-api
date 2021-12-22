@@ -7,8 +7,8 @@ const router = Router({ mergeParams: true });
 router.get('/', auth, getUsersInfo);
 router.post('/', auth, postUserInfo);
 router.patch('/', auth, patchUserInfo);
+router.delete('/', auth, deleteUserInfo);
 
 router.get('/:id', auth, getUserInfo);
-router.delete('/:id', auth, deleteUserInfo);
 
 module.exports = router;

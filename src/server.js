@@ -16,10 +16,10 @@ app.use(express.json());
 app.use(cors({ origin: appConfig.cors.origin }));
 app.use('/api/v1', routes);
 
-app.use(errorHandler);
 app.use('*', (req, res, next) => {
   throw new NotFound();
 });
+app.use(errorHandler);
 
 module.exports = {
   start: port => {

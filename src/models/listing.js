@@ -1,8 +1,12 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Listings extends Model {}
-  Listings.init(
+  class Listing extends Model {
+    static associate({ User }) {
+      this.belongsTo(User, { as: 'userOwner', foreignKey: 'ownerId' });
+    }
+  }
+  Listing.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -57,8 +61,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       tableName: 'listings',
-      modelName: 'Listings',
+      modelName: 'Listing',
     }
   );
-  return Listings;
+  return Listing;
 };

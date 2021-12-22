@@ -1,4 +1,4 @@
-const { UserInfo, Company } = require('../models');
+const { UserInfo, Company, User } = require('../models');
 
 /**
  * Insert new user info.
@@ -9,7 +9,6 @@ const { UserInfo, Company } = require('../models');
  */
 const createUserInfo = async values => {
   const data = await UserInfo.create(values);
-  console.log('daaataaaa', data);
   return data.dataValues;
 };
 
@@ -26,10 +25,11 @@ const userInfoById = async id => {
       {
         model: Company,
       },
+      { model: User, as: 'userInfo' },
     ],
     where: { id },
   });
-  return data.dataValues;
+  return data;
 };
 
 /**
@@ -45,6 +45,7 @@ const usersInfo = async id => {
       {
         model: Company,
       },
+      { model: User, as: 'userInfo' },
     ],
   });
   return data;
@@ -58,8 +59,8 @@ const usersInfo = async id => {
  *
  * @returns {Promise<[number, Object[]]>} Updated user-info data.
  */
-const updateUserInfo = async (values, id) => {
-  const data = await UserInfo.update(values, { where: { id }, returning: true });
+const updateUserInfo = async (values, userId) => {
+  const data = await UserInfo.update(values, { where: { userId }, returning: true });
   return data;
 };
 
@@ -71,8 +72,9 @@ const updateUserInfo = async (values, id) => {
  *
  * @returns {Promise<[number, Object[]]>} Updated user-info data.
  */
-const destroyUserInfo = async id => {
-  await UserInfo.destroy({ where: { id } });
+const destroyUserInfo = async userId => {
+  const data = await UserInfo.destroy({ where: { userId }, returning: true });
+  return data;
 };
 
 module.exports = { destroyUserInfo, usersInfo, createUserInfo, userInfoById, updateUserInfo };

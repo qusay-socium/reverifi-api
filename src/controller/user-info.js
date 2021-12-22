@@ -1,4 +1,4 @@
-const { Validation } = require('../middleware/error-handler');
+const { Validation, NotFound } = require('../middleware/error-handler');
 const { createUserInfo, updateUserInfo, getUserInfoById, userInfoById, usersInfo, destroyUserInfo } = require('../services/user-info');
 const response = require('../utils/response');
 
@@ -26,9 +26,7 @@ async function postUserInfo(req, res) {
  * @return {Object}
  */
 async function patchUserInfo(req, res) {
-  if (req.body.userId || req.body.companyId || req.body.userId !== req.user.id) {
-    throw new Validation();
-  }
+  const userId = req.user.id;
 
   const data = await updateUserInfo(req.body, req.user.id);
 
@@ -36,7 +34,7 @@ async function patchUserInfo(req, res) {
 }
 
 /**
- * Get user info .
+ * Get user info by id.
  *
  * @param {express.Request}  req
  * @param {express.Response} res
@@ -75,15 +73,11 @@ async function getUsersInfo(req, res) {
  * @return {Object} Success message.
  */
 async function deleteUserInfo(req, res) {
-  const { id } = req.params;
-  const userInfoData = await userInfoById(id);
-
-  if (req.user.id !== userInfoData.userId) {
-    throw new Validation('You do not have an access!');
+  const valid = await destroyUserInfo(req.user.id);
+  if (valid) {
+    res.json(response(null, 200, 'User information deleted.'));
+  } else {
+    throw new NotFound('Company not exist!');
   }
-
-  await destroyUserInfo(id);
-
-  res.json(response(null, 200, 'User information deleted.'));
 }
 module.exports = { deleteUserInfo, getUsersInfo, getUserInfo, postUserInfo, patchUserInfo };

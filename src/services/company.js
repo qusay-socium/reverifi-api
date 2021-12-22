@@ -22,7 +22,7 @@ const addCompany = async values => {
 const updateCompany = async (values, id) => {
   const createCompany = await Company.update(values, { where: { id }, returning: true });
 
-  return createCompany.dataValues;
+  return createCompany;
 };
 
 /**
@@ -45,7 +45,7 @@ const getAllCompanies = async () => {
  * @return {Promise<Object>}
  */
 const getCompanyById = async id => {
-  const data = await Company.findOne({ where: id });
+  const data = await Company.findOne({ where: { id } });
   return data;
 };
 
@@ -55,7 +55,8 @@ const getCompanyById = async id => {
  * @param {Object} articleId Article id.
  */
 const removeCompany = async id => {
-  await Company.destroy({ where: { id } });
+  const data = await Company.destroy({ where: { id }, returning: true });
+  return data;
 };
 
 module.exports = { removeCompany, getAllCompanies, addCompany, updateCompany, getCompanyById };

@@ -13,8 +13,9 @@ class BaseError extends Error {
 }
 
 class NotFound extends BaseError {
-  constructor(msg, code) {
-    super((msg = 'Not Found!'), (code = 404));
+  constructor(msg = 'Not Found Page!', code) {
+    super(msg, (code = 404));
+    this.msg = msg;
   }
 }
 
@@ -38,8 +39,9 @@ class Authentication extends BaseError {
 const response = require('../utils/response');
 
 const errorHandler = (err, req, res, next) => {
-  const errorMsg = err.code ? err.msg : 'Error occurred!';
-  res.json(response(undefined, err.code || 500, errorMsg));
+  // const errorMsg = err.code ? err.msg : 'Error occurred!';
+  const errMsg = err.msg || err.message;
+  res.json(response(undefined, err.code || 500, errMsg));
 };
 
 module.exports = {

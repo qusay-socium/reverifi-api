@@ -8,9 +8,7 @@ const { User } = require('../models');
  * @returns {Promise<Object>} Username, Email.
  */
 const createUser = async values => {
-  console.log(values);
   const user = await User.create(values);
-  console.log(user, '0000');
   return user.dataValues;
 };
 
