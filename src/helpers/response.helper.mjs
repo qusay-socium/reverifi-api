@@ -1,4 +1,4 @@
-export const getUpdatedEntity = response => {
+const getUpdatedEntity = response => {
   if (!response || !Array.isArray(response)) {
     return undefined;
   }
@@ -14,3 +14,5 @@ export const getUpdatedEntity = response => {
   const [, [dataValues]] = response;
   return dataValues;
 };
+
+module.exports = { getUpdatedEntity };

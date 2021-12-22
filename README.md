@@ -1,3 +1,2 @@
 # reverifi-api
-
-Reverifi API
+Reverifi API 

@@ -1,7 +1,7 @@
 import { getUpdatedEntity } from '../../helpers';
 import { CompanyModel } from '../models';
 
-export const CompanyRepo = {
+const CompanyRepo = {
   create: async (loginId, { name, email, website, address }) => {
     const result = CompanyModel.create({
       name,
