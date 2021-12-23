@@ -24,11 +24,13 @@ const userInfoById = async (id) => {
     include: [
       {
         model: Company,
+        as: 'company',
       },
-      { model: User, as: 'userInfo' },
+      { model: User, as: 'user' },
     ],
     where: { id },
   });
+
   return data;
 };
 
@@ -44,8 +46,9 @@ const usersInfo = async (id) => {
     include: [
       {
         model: Company,
+        as: 'company',
       },
-      { model: User, as: 'userInfo' },
+      { model: User, as: 'user' },
     ],
   });
   return data;
@@ -70,7 +73,7 @@ const updateUserInfo = async (values, userId) => {
  * @param {Object} values
  * @param {number} id
  *
- * @returns {Promise<[number, Object[]]>} Updated user-info data.
+ * @returns {Promise<[number, Object[]]>} Deleted user-info data.
  */
 const destroyUserInfo = async (userId) => {
   const data = await UserInfo.destroy({ where: { userId }, returning: true });

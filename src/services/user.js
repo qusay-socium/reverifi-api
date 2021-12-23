@@ -3,9 +3,9 @@ const { User } = require('models');
 /**
  * Inserting new user.
  *
- * @param {Object} values Username,email & password.
+ * @param {Object} values
  *
- * @returns {Promise<Object>} Username, Email.
+ * @returns {Promise<Object>}
  */
 const createUser = async (values) => {
   const user = await User.create(values);

@@ -1,0 +1,376 @@
+openapi: 3.0.0
+
+info:
+  version: 1.0.0
+  title: Reverifi API
+
+tags:
+  - name: Authentication
+    description: Authentication endpoints
+  - name: User information
+    description: User information endpoints
+  - name: Companies
+    description: Companies endpoints
+  - name: Listings
+    description: Listings endpoints
+
+components:
+  securitySchemes:
+    bearerAuth: 
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    
+
+paths:
+ /api/auth/signup:
+    post:
+      tags:
+       - Authentication
+      summary: Creates a user.
+      description: Sign up user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: xyz@xyz.com
+                password:
+                  type: string
+                  example: x@adek1e$
+                name:
+                  type: string
+                  example: john
+                isVerified:
+                  type: boolean
+                  example: true
+                phone:
+                 type: string
+                 example: 0092xxxxxx        
+
+
+      responses: 
+        '200':
+          description: Created user information's
+
+ /api/auth/login:
+    post:
+       tags:
+        - Authentication
+       summary: Login
+       description: Login by email and password
+       requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: xyz@xyz.com
+                password:
+                  type: string
+                  example: x@adek1e$
+
+       responses: 
+         '200':
+           description: user information's related to sign up data with token
+
+          
+ /api/users:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+       - User information
+      summary: User information
+      description: Get all users information
+      
+      responses: 
+        '200':
+          description: Users information
+
+
+    post:
+       security:
+         - bearerAuth: []
+       tags:
+        - User information
+       summary: Create user information
+       description: Create user information by token
+       requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: object
+                  example:
+                   england: london
+                website:
+                  type: string
+                  example: www.england.com
+                languages:
+                  type: array
+                  example:
+                   - eng
+                   - ar
+                serviceAreas:
+                  type: array
+                  example:
+                   - Europe
+                socials:
+                  type: object
+                  example:
+                   FB: www.fb.com/england 
+                aboutMe:
+                  type: string
+                  example: Broker
+
+       responses: 
+         '200':
+           description: User information related by request body
+    patch:
+       security:
+         - bearerAuth: []
+       tags:
+        - User information
+       summary: Update user information
+       description: Update user information by token
+       requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: object
+                  example:
+                   england: london
+                website:
+                  type: string
+                  example: www.england.com
+                languages:
+                  type: array
+                  example:
+                   - eng
+                   - ar
+                serviceAreas:
+                  type: array
+                  example:
+                   - Europe
+                socials:
+                  type: object
+                  example:
+                   FB: www.fb.com/england 
+                aboutMe:
+                  type: string
+                  example: Broker
+
+       responses: 
+         '200':
+           description: Updated user information 
+
+    delete:
+       security:
+         - bearerAuth: []
+       tags:
+        - User information
+       summary: Delete user information
+       description: Delete user information by token
+       responses: 
+         '200':
+           description: Confirmation message for deleting 
+
+ /api/users/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: UUID of the user
+      tags:
+       - User information
+      summary: User information
+      description: user information by id
+      
+      responses: 
+        '200':
+          description: User information
+
+ /api/companies:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+       - Companies
+      summary: Companies information's
+      description: Get all companies information's
+      responses: 
+        '200':
+          description: companies information's
+
+    post:
+       security:
+         - bearerAuth: []
+       tags:
+        - Companies
+       summary: Creating
+       description: Create new company
+       requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: xyz company
+                website:
+                  type: string
+                  example: www.company.com
+                address:
+                  type: object
+                  example:
+                   Europe: England
+                metadata:
+                  type: object
+                  example:
+                   title: company name
+       responses: 
+         '200':
+           description: Created company information  
+
+ /api/companies/{id}:
+     get:
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: UUID of the company
+      tags:
+       - Companies
+      summary: Company information
+      description: Company information by id
+      
+      responses: 
+        '200':
+          description: Company information
+
+     patch:
+       security:
+         - bearerAuth: []
+       tags:
+        - Companies
+       summary: Updating
+       description: Update company by id
+       parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: UUID of the company
+
+       requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: xyz company
+                website:
+                  type: string
+                  example: www.company.com
+                address:
+                  type: object
+                  example:
+                   Europe: England
+                metadata:
+                  type: object
+                  example:
+                   title: company name
+       responses: 
+         '200':
+           description: Updated company information
+     delete:
+       security:
+         - bearerAuth: []
+       tags:
+        - Companies
+       parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: UUID of the company
+
+       summary: Delete Company
+       description: Delete Company by id with token auth
+       responses: 
+         '200':
+           description: Confirmation message for deleting 
+
+
+ /api/listings:
+     get:
+      security:
+        - bearerAuth: []
+      tags:
+       - Listings
+      summary: Listings data
+      description: Get all Listings data
+      
+      responses: 
+        '200':
+          description: Listings data
+
+     post:
+       security:
+         - bearerAuth: []
+       tags:
+        - Listings
+       summary: Creating
+       description: Create new list
+       requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: string
+                  example: image url..
+                price:
+                  type: number
+                  example: 1.3
+                address:
+                  type: object
+                  example:
+                   Europe: England
+                
+       responses: 
+         '200':
+           description: Created company information  
+

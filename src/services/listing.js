@@ -15,13 +15,13 @@ const addList = async (values) => {
 /**
  * Get listings.
  *
- * @param {Object} values
+ * @param {Object}
  *
  * @return {Promise<Object>}
  */
-const listings = async (values) => {
+const listings = async () => {
   const data = await Listing.findAndCountAll({
-    include: [{ model: User, as: 'userOwner' }],
+    include: [{ model: User, as: 'owner' }],
   });
   return data;
 };

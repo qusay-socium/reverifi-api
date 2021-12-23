@@ -28,8 +28,9 @@ const postUserInfo = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const patchUserInfo = async (req, res) => {
+  console.log("00000000000000000000000000000000000000000000000000000000")
   const data = await updateUserInfo(req.body, req.user.id);
-
+  
   res.json(response(data));
 };
 
@@ -41,8 +42,11 @@ const patchUserInfo = async (req, res) => {
  */
 const getUserInfo = async (req, res) => {
   const { id } = req.params;
-
   const data = await userInfoById(id);
+
+  if(!data){
+    throw new NotFound()
+  }
 
   res.json(response(data));
 };

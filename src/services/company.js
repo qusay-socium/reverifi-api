@@ -52,7 +52,7 @@ const getCompanyById = async (id) => {
 /**
  * Remove specific company.
  *
- * @param {Object} articleId Article id.
+ * @param {Object}
  */
 const removeCompany = async (id) => {
   const data = await Company.destroy({ where: { id }, returning: true });

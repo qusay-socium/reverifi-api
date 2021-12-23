@@ -57,9 +57,9 @@ const login = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const signup = async (req, res) => {
+  console.log(req.body)
   const hashPassword = await bcrypt.hash(req.body.password, 10);
   req.body.password = hashPassword;
-
   const user = await createUser(req.body);
 
   res.json(response(user));
