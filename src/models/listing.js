@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       agentId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
           model: 'User',
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         field: 'agent_id',
       },
       ownerId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
           model: 'User',

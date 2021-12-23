@@ -4,8 +4,8 @@ const getSharedColumns = require('models/shared-columns');
 
 class UserInfo extends BaseModel {
   static associate({ User, Company }) {
-    this.belongsTo(User, { as: 'userInfo', foreignKey: 'userId' });
-    this.belongsTo(Company, { foreignKey: 'company_id' });
+    this.belongsTo(User, { as: 'user', foreignKey: 'userId' });
+    this.belongsTo(Company, { as: 'company', foreignKey: 'companyId' });
   }
 }
 
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       userId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
         allowNull: false,
         onUpdate: 'cascade',
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         field: 'user_id',
       },
       companyId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true,
         defaultValue: null,
         onUpdate: 'cascade',

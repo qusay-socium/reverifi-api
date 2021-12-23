@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "nyc mocha dotenv_config_path=tests/.env.test",
-    "start": "node index.js",
+    "start": "node ./src/server.js",
     "start-dev": "LOG_LEVEL=debug nodemon --inspect=0.0.0.0:3000 -L",
     "lint": "eslint src --ext .js"
   },

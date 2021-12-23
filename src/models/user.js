@@ -5,8 +5,8 @@ const getSharedColumns = require('models/shared-columns');
 class User extends BaseModel {
   static associate({ UserInfo, Listing }) {
     this.hasOne(UserInfo, { as: 'userInfo', foreignKey: 'userId' });
-    this.hasMany(Listing, { as: 'agents', foreignKey: 'ownerId' });
-    this.hasMany(Listing, { as: 'ownedListings', foreignKey: 'ownerId' });
+    this.hasOne(Listing, { as: 'agent', foreignKey: 'agentId' });
+    this.hasOne(Listing, { as: 'ownedListing', foreignKey: 'ownerId' });
   }
 }
 /**

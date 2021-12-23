@@ -5,7 +5,7 @@ module.exports = {
         type: Sequelize.DATE,
         field: 'created_at',
         allowNull: false,
-        defaultValue: Sequelize.literal('NOW()'),
+        defaultValue: Sequelize.NOW,
       },
       createdBy: {
         type: Sequelize.UUID,
@@ -14,7 +14,7 @@ module.exports = {
       updatedAt: {
         type: Sequelize.DATE,
         field: 'updated_at',
-        defaultValue: Sequelize.literal('NOW() ON UPDATE NOW()'),
+        defaultValue: null,
       },
       updatedBy: {
         type: Sequelize.UUID,
@@ -88,7 +88,7 @@ module.exports = {
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       userId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         unique: true,
         references: {
@@ -100,7 +100,7 @@ module.exports = {
         field: 'user_id',
       },
       companyId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         efaultValue: null,
         references: {
@@ -141,8 +141,9 @@ module.exports = {
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       agentId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
+        unique: true,
         references: {
           model: 'users',
           key: 'id',
@@ -150,8 +151,9 @@ module.exports = {
         field: 'agent_id',
       },
       ownerId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
+        unique: true,
         references: {
           model: 'users',
           key: 'id',

@@ -4,7 +4,9 @@ const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
 class Company extends BaseModel {
-  // static associate({ User }) {}
+  static associate({ UserInfo }) {
+    this.hasOne(UserInfo, { as: 'userInfo', foreignKey: 'companyId' });
+  }
 }
 
 /**

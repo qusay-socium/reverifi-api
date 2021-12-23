@@ -1,10 +1,8 @@
-const { Sequelize } = require('sequelize');
-
 module.exports = (sequelize, DataTypes) => ({
   createdAt: {
     type: DataTypes.DATE,
     field: 'created_at',
-    defaultValue: Sequelize.literal('NOW()'),
+    defaultValue: DataTypes.NOW,
   },
   createdBy: {
     type: DataTypes.UUID,
@@ -13,7 +11,7 @@ module.exports = (sequelize, DataTypes) => ({
   updatedAt: {
     type: DataTypes.DATE,
     field: 'updated_at',
-    defaultValue: Sequelize.literal('NOW() ON UPDATE NOW()'),
+    defaultValue: null,
   },
   updatedBy: {
     type: DataTypes.UUID,

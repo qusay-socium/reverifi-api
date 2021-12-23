@@ -12,7 +12,7 @@ services:
       - DB_NAME=postgres
       - DB_PASSWORD=postgres
       - DB_PORT=5432
-      - DB_USERNAME=reverifi-db
+      - DB_USERNAME=postgres
       - NODE_ENV=development
       - PORT=3000
       - SECRET=AK
@@ -21,6 +21,7 @@ services:
       - 3000
     volumes:
       - ${PWD}:/app
+      - /app/node_modules/
     depends_on:
       - reverifi-db
     command: ['bin/boot.sh']
@@ -34,4 +35,4 @@ services:
       POSTGRES_PASSWORD: postgres
       VIRTUAL_HOST: reverifi-db.docker
     ports:
-      - 5432
+      - '54321:5432'
