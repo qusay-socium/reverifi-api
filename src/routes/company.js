@@ -1,5 +1,12 @@
-const Router = require('./router');
-const { deleteCompany, postCompany, patchCompany, getCompany, getCompanies } = require('../controller/company');
+const Router = require('express-promise-router');
+
+const {
+  deleteCompany,
+  postCompany,
+  patchCompany,
+  getCompany,
+  getCompanies,
+} = require('../controller/company');
 const auth = require('../middleware/auth');
 
 const router = Router({ mergeParams: true });

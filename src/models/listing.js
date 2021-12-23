@@ -1,24 +1,31 @@
-const { Model } = require('sequelize');
+const { Sequelize } = require('sequelize');
+const BaseModel = require('models/base-model');
+const getSharedColumns = require('models/shared-columns');
 
-module.exports = (sequelize, DataTypes) => {
-  class Listing extends Model {
-    static associate({ User }) {
-      this.belongsTo(User, { as: 'userOwner', foreignKey: 'ownerId' });
-    }
+class Listing extends BaseModel {
+  static associate({ User }) {
+    this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
+    this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
   }
+}
+
+/**
+ * @type {typeof Listing}
+ */
+module.exports = (sequelize, DataTypes) => {
   Listing.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
+        description: 'Primary key',
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       agentId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'users',
+          model: 'User',
           key: 'id',
         },
         field: 'agent_id',
@@ -27,36 +34,25 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'users',
+          model: 'User',
           key: 'id',
         },
         field: 'owner_id',
       },
       images: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
+        type: DataTypes.ARRAY(DataTypes.STRING),
       },
       price: {
         type: DataTypes.DOUBLE,
         defaultValue: 0.0,
       },
       description: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
       },
       address: {
         type: DataTypes.JSON,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: 'deleted_at',
-      },
+      ...getSharedColumns(sequelize, DataTypes),
     },
     {
       sequelize,

@@ -1,19 +1,25 @@
-const { Model } = require('sequelize');
+const { Sequelize } = require('sequelize');
+const BaseModel = require('models/base-model');
+const getSharedColumns = require('models/shared-columns');
 
-module.exports = (sequelize, DataTypes) => {
-  class UserInfo extends Model {
-    static associate({ User, Company }) {
-      this.belongsTo(User, { as: 'userInfo', foreignKey: 'userId' });
-      this.belongsTo(Company, { foreignKey: 'company_id' });
-    }
+class UserInfo extends BaseModel {
+  static associate({ User, Company }) {
+    this.belongsTo(User, { as: 'userInfo', foreignKey: 'userId' });
+    this.belongsTo(Company, { foreignKey: 'company_id' });
   }
+}
+
+/**
+ * @type {typeof UserInfo}
+ */
+module.exports = (sequelize, DataTypes) => {
   UserInfo.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
+        description: 'Primary key',
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       userId: {
         type: DataTypes.INTEGER,
@@ -35,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.JSON,
       },
       website: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
       },
       languages: {
         type: DataTypes.ARRAY(DataTypes.STRING(55)),
@@ -48,21 +54,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.JSON,
       },
       aboutMe: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         field: 'about_me',
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: 'deleted_at',
-      },
+      ...getSharedColumns(sequelize, DataTypes),
     },
     {
       sequelize,

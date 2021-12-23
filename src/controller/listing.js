@@ -1,7 +1,7 @@
+const { NotFound } = require('lib/errors');
 const response = require('../utils/response');
 
 const { addList, listings, listById, removeListById, updateList } = require('../services/listing');
-const { Validation, NotFound } = require('../middleware/error-handler');
 
 /**
  * Create new list.

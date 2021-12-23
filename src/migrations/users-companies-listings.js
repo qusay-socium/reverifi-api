@@ -1,86 +1,96 @@
 module.exports = {
-  up: async (queryInterface, DataTypes) => {
+  up: async (queryInterface, Sequelize) => {
+    const sharedColumns = {
+      createdAt: {
+        type: Sequelize.DATE,
+        field: 'created_at',
+        allowNull: false,
+        defaultValue: Sequelize.literal('NOW()'),
+      },
+      createdBy: {
+        type: Sequelize.UUID,
+        field: 'created_by',
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        field: 'updated_at',
+        defaultValue: Sequelize.literal('NOW() ON UPDATE NOW()'),
+      },
+      updatedBy: {
+        type: Sequelize.UUID,
+        field: 'updated_by',
+      },
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        field: 'is_deleted',
+        defaultValue: false,
+        allowNull: false,
+      },
+    };
+
+    await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+
     await queryInterface.createTable('users', {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
+        type: Sequelize.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       name: {
-        type: DataTypes.TEXT,
+        type: Sequelize.STRING,
       },
       email: {
-        type: DataTypes.TEXT,
+        type: Sequelize.STRING,
         unique: true,
       },
       password: {
-        type: DataTypes.STRING(64),
-        is: /^[0-9a-f]{64}$/i,
+        type: Sequelize.STRING,
       },
       phone: {
-        type: DataTypes.TEXT,
+        type: Sequelize.STRING,
       },
       isVerified: {
-        type: DataTypes.BOOLEAN,
+        type: Sequelize.BOOLEAN,
         field: 'is_verified',
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-      },
+      ...sharedColumns,
     });
+
     await queryInterface.createTable('companies', {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
+        type: Sequelize.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       name: {
-        type: DataTypes.TEXT,
+        type: Sequelize.STRING,
       },
       email: {
-        type: DataTypes.TEXT,
+        type: Sequelize.STRING,
         unique: true,
       },
       website: {
-        type: DataTypes.TEXT,
+        type: Sequelize.STRING,
       },
       address: {
-        type: DataTypes.JSON,
+        type: Sequelize.JSON,
       },
       metadata: {
-        type: DataTypes.JSON,
+        type: Sequelize.JSON,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: 'deleted_at',
-      },
+      ...sharedColumns,
     });
+
     await queryInterface.createTable('user_infos', {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
+        type: Sequelize.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       userId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
+        type: Sequelize.INTEGER,
         allowNull: false,
+        unique: true,
         references: {
           model: 'users',
           key: 'id',
@@ -90,9 +100,8 @@ module.exports = {
         field: 'user_id',
       },
       companyId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: true,
-
         efaultValue: null,
         references: {
           model: 'companies',
@@ -103,47 +112,36 @@ module.exports = {
         field: 'company_id',
       },
       address: {
-        type: DataTypes.JSON,
+        type: Sequelize.JSON,
       },
       website: {
-        type: DataTypes.TEXT,
+        type: Sequelize.STRING,
       },
       languages: {
-        type: DataTypes.ARRAY(DataTypes.STRING(55)),
+        type: Sequelize.ARRAY(Sequelize.STRING(55)),
       },
       serviceAreas: {
-        type: DataTypes.ARRAY(DataTypes.STRING(55)),
+        type: Sequelize.ARRAY(Sequelize.STRING(55)),
         field: 'service_areas',
       },
       socials: {
-        type: DataTypes.JSON,
+        type: Sequelize.JSON,
       },
       aboutMe: {
-        type: DataTypes.TEXT,
+        type: Sequelize.STRING,
         field: 'about_me',
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: 'deleted_at',
-      },
+      ...sharedColumns,
     });
+
     await queryInterface.createTable('listings', {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
+        type: Sequelize.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       agentId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'users',
@@ -152,7 +150,7 @@ module.exports = {
         field: 'agent_id',
       },
       ownerId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'users',
@@ -161,37 +159,26 @@ module.exports = {
         field: 'owner_id',
       },
       images: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
+        type: Sequelize.ARRAY(Sequelize.STRING),
       },
       price: {
-        type: DataTypes.DOUBLE,
+        type: Sequelize.DOUBLE,
         defaultValue: 0.0,
       },
       description: {
-        type: DataTypes.TEXT,
+        type: Sequelize.STRING,
       },
       address: {
-        type: DataTypes.JSON,
+        type: Sequelize.JSON,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: 'deleted_at',
-      },
+      ...sharedColumns,
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('listings');
     await queryInterface.dropTable('user_infos');
     await queryInterface.dropTable('companies');
-    await queryInterface.dropTable('listings');
     await queryInterface.dropTable('users');
   },
 };

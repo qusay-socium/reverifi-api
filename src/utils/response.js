@@ -1,16 +1,14 @@
-/* eslint-disable default-param-last */
-
 /**
- * Response function.
+ * Get response object.
  *
- * @param {Number} code -Status of HTTP request.
- * @param {object} data -Data from response.
- * @param {string} msg -Message.
+ * @param {Object} data Response data.
+ * @param {number} code Response status code.
+ * @param {string} message Response message.
  *
- * @return {{msg, code, data}|*}
+ * @return {Object} Response object.
  */
-module.exports = (data, code = 200, msg) => {
-  const res = { code, msg: msg || 'Ok' };
+module.exports = (data, code = 200, message = 'Ok') => {
+  const res = { code, message };
   if (data) {
     res.data = data;
   }

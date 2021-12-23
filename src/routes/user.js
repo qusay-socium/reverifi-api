@@ -1,4 +1,5 @@
-const Router = require('./router');
+const Router = require('express-promise-router');
+
 const auth = require('../middleware/auth');
 
 const router = Router({ mergeParams: true });

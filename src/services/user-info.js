@@ -7,7 +7,7 @@ const { UserInfo, Company, User } = require('../models');
  *
  * @return {Promise<Object>}
  */
-const createUserInfo = async values => {
+const createUserInfo = async (values) => {
   const data = await UserInfo.create(values);
   return data.dataValues;
 };
@@ -19,7 +19,7 @@ const createUserInfo = async values => {
  *
  * @return {Promise<Object>}
  */
-const userInfoById = async id => {
+const userInfoById = async (id) => {
   const data = await UserInfo.findOne({
     include: [
       {
@@ -39,7 +39,7 @@ const userInfoById = async id => {
  *
  * @return {Promise<Object>}
  */
-const usersInfo = async id => {
+const usersInfo = async (id) => {
   const data = await UserInfo.findAndCountAll({
     include: [
       {
@@ -72,7 +72,7 @@ const updateUserInfo = async (values, userId) => {
  *
  * @returns {Promise<[number, Object[]]>} Updated user-info data.
  */
-const destroyUserInfo = async userId => {
+const destroyUserInfo = async (userId) => {
   const data = await UserInfo.destroy({ where: { userId }, returning: true });
   return data;
 };

@@ -1,50 +1,44 @@
-const { Model } = require('sequelize');
+const { Sequelize } = require('sequelize');
+const BaseModel = require('models/base-model');
+const getSharedColumns = require('models/shared-columns');
 
-module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-    static associate({ UserInfo, Listing }) {
-      this.hasOne(UserInfo, { as: 'userInfo', foreignKey: 'userId' });
-      this.hasOne(Listing, { as: 'userOwner', foreignKey: 'ownerId' });
-    }
-
-    toJSON() {
-      return { ...this.get(), password: undefined };
-    }
+class User extends BaseModel {
+  static associate({ UserInfo, Listing }) {
+    this.hasOne(UserInfo, { as: 'userInfo', foreignKey: 'userId' });
+    this.hasMany(Listing, { as: 'agents', foreignKey: 'ownerId' });
+    this.hasMany(Listing, { as: 'ownedListings', foreignKey: 'ownerId' });
   }
+}
+/**
+ * @type {typeof User}
+ */
+module.exports = (sequelize, DataTypes) => {
   User.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
+        description: 'Primary key',
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       name: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
       },
       email: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         unique: true,
       },
       password: {
-        type: DataTypes.STRING(64),
-        is: /^[0-9a-f]{64}$/i,
+        type: DataTypes.STRING,
       },
       phone: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
       },
       isVerified: {
         type: DataTypes.BOOLEAN,
         field: 'is_verified',
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-      },
+      ...getSharedColumns(sequelize, DataTypes),
     },
     {
       sequelize,

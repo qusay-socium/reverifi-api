@@ -1,24 +1,33 @@
-const { Model } = require('sequelize');
+const { Sequelize } = require('sequelize');
 
+const BaseModel = require('models/base-model');
+const getSharedColumns = require('models/shared-columns');
+
+class Company extends BaseModel {
+  // static associate({ User }) {}
+}
+
+/**
+ * @type {typeof Company}
+ */
 module.exports = (sequelize, DataTypes) => {
-  class Company extends Model {}
   Company.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
+        description: 'Primary key',
+        type: DataTypes.UUID,
         primaryKey: true,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
       name: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
       },
       email: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         unique: true,
       },
       website: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
       },
       address: {
         type: DataTypes.JSON,
@@ -26,18 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       metadata: {
         type: DataTypes.JSON,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-        field: 'deleted_at',
-      },
+      ...getSharedColumns(sequelize, DataTypes),
     },
     {
       sequelize,

@@ -1,5 +1,12 @@
-const { Validation, NotFound } = require('../middleware/error-handler');
-const { createUserInfo, updateUserInfo, getUserInfoById, userInfoById, usersInfo, destroyUserInfo } = require('../services/user-info');
+const { NotFound } = require('lib/errors');
+const {
+  createUserInfo,
+  updateUserInfo,
+  getUserInfoById,
+  userInfoById,
+  usersInfo,
+  destroyUserInfo,
+} = require('../services/user-info');
 const response = require('../utils/response');
 
 /**

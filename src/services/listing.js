@@ -7,7 +7,7 @@ const { Listing, User } = require('../models');
  *
  * @return {Promise<Object>}
  */
-const addList = async values => {
+const addList = async (values) => {
   const data = await Listing.create(values);
   return data.dataValues;
 };
@@ -19,7 +19,7 @@ const addList = async values => {
  *
  * @return {Promise<Object>}
  */
-const listings = async values => {
+const listings = async (values) => {
   const data = await Listing.findAndCountAll({
     include: [{ model: User, as: 'userOwner' }],
   });
@@ -33,7 +33,7 @@ const listings = async values => {
  *
  * @return {Promise<Object>}
  */
-const listById = async id => {
+const listById = async (id) => {
   const data = await Listing.findOne({
     include: [{ model: User, as: 'userOwner' }],
     where: { id },
@@ -48,7 +48,7 @@ const listById = async id => {
  *
  * @return {Promise<Object>}
  */
-const removeListById = async ownerId => {
+const removeListById = async (ownerId) => {
   const data = await Listing.destroy({ where: { ownerId }, returning: true });
   return data;
 };

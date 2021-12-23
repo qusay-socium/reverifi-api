@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const { Unauthorized } = require('lib/errors');
 const { getUser, createUser, updateUser } = require('../services/user');
-const { Authentication } = require('../middleware/error-handler');
 const response = require('../utils/response');
 
 /**
@@ -19,7 +19,7 @@ async function login(req, res) {
   const userData = await getUser(email);
   console.log(userData, '0000000');
 
-  if (!userData) throw new Authentication('Invalid Email.');
+  if (!userData) throw new Unauthorized('Invalid Email.');
 
   const valid = await bcrypt.compare(password, userData.password);
   if (valid) {
@@ -47,7 +47,7 @@ async function login(req, res) {
 
     res.json(response(userData));
   } else {
-    throw new Authentication('Invalid Password.');
+    throw new Unauthorized('Invalid Password.');
   }
 }
 

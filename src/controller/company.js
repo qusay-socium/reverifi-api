@@ -1,5 +1,11 @@
-const { NotFound } = require('../middleware/error-handler');
-const { removeCompany, addCompany, getCompanyById, updateCompany, getAllCompanies } = require('../services/company');
+const { NotFound } = require('lib/errors');
+const {
+  removeCompany,
+  addCompany,
+  getCompanyById,
+  updateCompany,
+  getAllCompanies,
+} = require('../services/company');
 
 const response = require('../utils/response');
 

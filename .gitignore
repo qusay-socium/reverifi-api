@@ -107,3 +107,5 @@ mochawesome-report/
 .DS_Store
 .vscode/*
 data/
+
+docker-compose.override.yml

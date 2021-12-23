@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const { Unauthorized } = require('lib/errors');
 const { getUser } = require('../services/user');
-const { Authentication } = require('./error-handler');
+
 /**
  * Login by token.
  * Check if the token valid.
@@ -13,7 +14,7 @@ const { Authentication } = require('./error-handler');
  */
 module.exports = async (req, res, next) => {
   if (!req.headers.authorization) {
-    throw new Authentication('There is no token.');
+    throw new Unauthorized('There is no token.');
   }
 
   const token = req.headers.authorization.split(' ').pop();
@@ -23,6 +24,6 @@ module.exports = async (req, res, next) => {
     req.user = userData;
     next();
   } else {
-    throw new Authentication('Invalid token.');
+    throw new Unauthorized('Invalid token.');
   }
 };

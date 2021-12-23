@@ -7,7 +7,7 @@ const { Company } = require('../models');
  *
  * @return {Promise<Object>}
  */
-const addCompany = async values => {
+const addCompany = async (values) => {
   const createCompany = await Company.create(values);
   return createCompany.dataValues;
 };
@@ -44,7 +44,7 @@ const getAllCompanies = async () => {
  *
  * @return {Promise<Object>}
  */
-const getCompanyById = async id => {
+const getCompanyById = async (id) => {
   const data = await Company.findOne({ where: { id } });
   return data;
 };
@@ -54,7 +54,7 @@ const getCompanyById = async id => {
  *
  * @param {Object} articleId Article id.
  */
-const removeCompany = async id => {
+const removeCompany = async (id) => {
   const data = await Company.destroy({ where: { id }, returning: true });
   return data;
 };
