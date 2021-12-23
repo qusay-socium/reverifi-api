@@ -1,10 +1,10 @@
 /**
  * App global error handler.
  *
- * @param {Error}                          error Error object.
- * @param {import('express').Request}      req   Express route request object.
- * @param {import('express').Response}     res   Express route response object.
- * @param {import('express').NextFunction} next  Express route next function.
+ * @param {Error} error Error object.
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ * @param {import('express').NextFunction} next Express next function.
  */
 const errorHandler = (error, req, res, next) => {
   const { message, statusCode = 500, errors } = error;

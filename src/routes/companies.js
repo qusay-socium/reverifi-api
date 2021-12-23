@@ -2,17 +2,17 @@ const Router = require('express-promise-router');
 
 const {
   deleteCompany,
-  postCompany,
+  createCompany,
   patchCompany,
   getCompany,
   getCompanies,
-} = require('../controller/company');
-const auth = require('../middleware/auth');
+} = require('controllers/company');
+const auth = require('middleware/auth');
 
 const router = Router({ mergeParams: true });
 
 router.get('/', auth, getCompanies);
-router.post('/', auth, postCompany);
+router.post('/', auth, createCompany);
 
 router.get('/:id', auth, getCompany);
 router.patch('/:id', auth, patchCompany);

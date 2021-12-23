@@ -1,4 +1,4 @@
-const { Company } = require('../models');
+const { Company } = require('models');
 
 /**
  * Insert new company.

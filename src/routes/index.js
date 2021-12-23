@@ -1,15 +1,15 @@
 const Router = require('express-promise-router');
 
-const authRouter = require('./user');
-const companyRouter = require('./company');
-const listingRouter = require('./listing');
-const userInfoRouter = require('./user-info');
+const authRouter = require('./auth');
+const companiesRouter = require('./companies');
+const listingsRouter = require('./listings');
+const usersRouter = require('./users');
 
 const router = Router();
 
 router.use('/auth', authRouter);
-router.use('/user', userInfoRouter);
-router.use('/company', companyRouter);
-router.use('/listing', listingRouter);
+router.use('/users', usersRouter);
+router.use('/companies', companiesRouter);
+router.use('/listings', listingsRouter);
 
 module.exports = router;

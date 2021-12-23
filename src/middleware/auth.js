@@ -1,29 +1,27 @@
 const jwt = require('jsonwebtoken');
 const { Unauthorized } = require('lib/errors');
-const { getUser } = require('../services/user');
+const { getUser } = require('services/user');
+const { secret } = require('config/config');
 
 /**
- * Login by token.
- * Check if the token valid.
+ * Middleware to check if request has a valid token.
  *
- * @param {express.Request}      req Token.
- * @param {express.Response}     res
- * @param {express.NextFunction} next
- *
- * @return {object} User Information's (username,password,email).
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ * @param {import('express').NextFunction} next Express next function.
  */
 module.exports = async (req, res, next) => {
-  if (!req.headers.authorization) {
-    throw new Unauthorized('There is no token.');
+  const { authorization } = req.headers;
+  if (!authorization) {
+    throw new Unauthorized('Authorization header required');
   }
 
-  const token = req.headers.authorization.split(' ').pop();
-  const parsedToken = jwt.verify(token, process.env.SECRET);
-  const userData = await getUser(parsedToken.email);
-  if (userData) {
-    req.user = userData;
-    next();
-  } else {
-    throw new Unauthorized('Invalid token.');
+  const parsedToken = jwt.verify(authorization.split(' ').pop(), secret);
+  const user = await getUser(parsedToken.email);
+  if (!user) {
+    throw new Unauthorized('Invalid token');
   }
+
+  req.user = user;
+  next();
 };

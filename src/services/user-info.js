@@ -1,4 +1,4 @@
-const { UserInfo, Company, User } = require('../models');
+const { UserInfo, Company, User } = require('models');
 
 /**
  * Insert new user info.

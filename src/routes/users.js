@@ -1,13 +1,13 @@
 const Router = require('express-promise-router');
 
-const auth = require('../middleware/auth');
+const auth = require('middleware/auth');
 const {
   postUserInfo,
   patchUserInfo,
   getUserInfo,
   getUsersInfo,
   deleteUserInfo,
-} = require('../controller/user-info');
+} = require('controllers/user');
 
 const router = Router({ mergeParams: true });
 

@@ -1,4 +1,4 @@
-const { Listing, User } = require('../models');
+const { Listing, User } = require('models');
 
 /**
  * Insert new list.

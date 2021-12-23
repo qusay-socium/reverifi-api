@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User } = require('models');
 
 /**
  * Inserting new user.
@@ -7,7 +7,7 @@ const { User } = require('../models');
  *
  * @returns {Promise<Object>} Username, Email.
  */
-const createUser = async values => {
+const createUser = async (values) => {
   const user = await User.create(values);
   return user.dataValues;
 };
@@ -19,7 +19,7 @@ const createUser = async values => {
  *
  * @returns {Promise<Object>}
  */
-const getUser = async email => {
+const getUser = async (email) => {
   const user = await User.findOne({ where: { email } });
   return user;
 };

@@ -1,13 +1,13 @@
 const Router = require('express-promise-router');
 
-const auth = require('../middleware/auth');
+const auth = require('middleware/auth');
 const {
   postListing,
   patchList,
   getListings,
   getListing,
   deleteListing,
-} = require('../controller/listing');
+} = require('controllers/listing');
 
 const router = Router({ mergeParams: true });
 
