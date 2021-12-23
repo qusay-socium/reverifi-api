@@ -1,5 +1,5 @@
 ### Ticket
-https://cds-global.atlassian.net/browse/TICKET
+<Ticket>
 
 ### Description
 <Brief description of the code changes.>
