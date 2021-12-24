@@ -11,6 +11,9 @@ const {
 
 const router = Router({ mergeParams: true });
 
+/**
+ * User routes.
+ */
 router.get('/', auth, getUsersInfo);
 router.post('/', auth, postUserInfo);
 router.patch('/', auth, patchUserInfo);

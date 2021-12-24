@@ -11,11 +11,14 @@ const {
 
 const router = Router({ mergeParams: true });
 
+/**
+ * Listing routes.
+ */
 router.get('/', auth, getListings);
+router.patch('/', auth, patchList);
 router.post('/', auth, postListing);
+router.delete('/', auth, deleteListing);
 
 router.get('/:id', auth, getListing);
-router.patch('/', auth, patchList);
-router.delete('/', auth, deleteListing);
 
 module.exports = router;

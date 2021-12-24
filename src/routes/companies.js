@@ -11,6 +11,9 @@ const auth = require('middleware/auth');
 
 const router = Router({ mergeParams: true });
 
+/**
+ * Companies routes.
+ */
 router.get('/', auth, getCompanies);
 router.post('/', auth, createCompany);
 

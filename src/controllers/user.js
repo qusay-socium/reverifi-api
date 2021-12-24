@@ -1,9 +1,9 @@
 const { NotFound } = require('lib/errors');
 const {
+  usersInfo,
+  userInfoById,
   createUserInfo,
   updateUserInfo,
-  userInfoById,
-  usersInfo,
   destroyUserInfo,
 } = require('services/user-info');
 const response = require('utils/response');
@@ -16,6 +16,7 @@ const response = require('utils/response');
  */
 const postUserInfo = async (req, res) => {
   req.body.userId = req.user.id;
+
   const data = await createUserInfo(req.body);
 
   res.json(response(data));
@@ -28,9 +29,8 @@ const postUserInfo = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const patchUserInfo = async (req, res) => {
-  console.log("00000000000000000000000000000000000000000000000000000000")
   const data = await updateUserInfo(req.body, req.user.id);
-  
+
   res.json(response(data));
 };
 
@@ -42,11 +42,9 @@ const patchUserInfo = async (req, res) => {
  */
 const getUserInfo = async (req, res) => {
   const { id } = req.params;
-  const data = await userInfoById(id);
 
-  if(!data){
-    throw new NotFound()
-  }
+  const data = await userInfoById(id);
+  if (!data) throw new NotFound();
 
   res.json(response(data));
 };
@@ -72,10 +70,9 @@ const getUsersInfo = async (req, res) => {
  */
 const deleteUserInfo = async (req, res) => {
   const valid = await destroyUserInfo(req.user.id);
-  if (valid) {
-    res.json(response(null, 200, 'User information deleted.'));
-  } else {
-    throw new NotFound('Company not exist!');
-  }
+  if (!valid) throw new NotFound();
+
+  res.json(response(null, 200, 'User information deleted.'));
 };
+
 module.exports = { deleteUserInfo, getUsersInfo, getUserInfo, postUserInfo, patchUserInfo };

@@ -3,19 +3,18 @@ const { Listing, User } = require('models');
 /**
  * Insert new list.
  *
- * @param {Object} values
+ * @param {Object} values New list data.
  *
  * @return {Promise<Object>}
  */
 const addList = async (values) => {
   const data = await Listing.create(values);
+
   return data.dataValues;
 };
 
 /**
  * Get listings.
- *
- * @param {Object}
  *
  * @return {Promise<Object>}
  */
@@ -23,13 +22,14 @@ const listings = async () => {
   const data = await Listing.findAndCountAll({
     include: [{ model: User, as: 'owner' }],
   });
+
   return data;
 };
 
 /**
  * Get List by id.
  *
- * @param {Object} values
+ * @param {String} id UUID for list.
  *
  * @return {Promise<Object>}
  */
@@ -38,25 +38,28 @@ const listById = async (id) => {
     include: [{ model: User, as: 'userOwner' }],
     where: { id },
   });
+
   return data;
 };
 
 /**
  * Delete List by id.
  *
- * @param {Object} values
+ * @param {String} ownerId UUID for the user who own the list.
  *
  * @return {Promise<Object>}
  */
 const removeListById = async (ownerId) => {
   const data = await Listing.destroy({ where: { ownerId }, returning: true });
+
   return data;
 };
 
 /**
  * Update  list.
  *
- * @param {Object} values
+ * @param {Object} values List data for updating list.
+ * @param {String} ownerId UUID for the user who own the list.
  *
  * @return {Promise<Object>}
  */

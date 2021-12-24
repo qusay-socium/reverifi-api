@@ -1,9 +1,9 @@
 const { NotFound } = require('lib/errors');
 const {
-  removeCompany,
   addCompany,
-  getCompanyById,
+  removeCompany,
   updateCompany,
+  getCompanyById,
   getAllCompanies,
 } = require('services/company');
 const response = require('utils/response');
@@ -30,6 +30,7 @@ const patchCompany = async (req, res) => {
   const { id } = req.params;
 
   const data = await updateCompany(req.body, id);
+  if (!data) throw new NotFound();
 
   res.json(response(data));
 };
@@ -44,6 +45,7 @@ const getCompany = async (req, res) => {
   const { id } = req.params;
 
   const data = await getCompanyById(id);
+  if (!data) throw new NotFound();
 
   res.json(response(data));
 };
@@ -56,6 +58,7 @@ const getCompany = async (req, res) => {
  */
 const getCompanies = async (req, res) => {
   const data = await getAllCompanies();
+
   res.json(response(data));
 };
 
@@ -69,9 +72,7 @@ const deleteCompany = async (req, res) => {
   const { id } = req.params;
 
   const valid = await removeCompany(id);
-  if (!valid) {
-    throw new NotFound('Company not exist.');
-  }
+  if (!valid) throw new NotFound();
 
   res.json(response(undefined, 200, 'Company Deleted'));
 };

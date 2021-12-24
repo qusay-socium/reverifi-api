@@ -11,6 +11,7 @@ const { addList, listings, listById, removeListById, updateList } = require('../
  */
 const postListing = async (req, res) => {
   req.body.ownerId = req.user.id;
+
   const data = await addList(req.body);
 
   res.json(response(data));
@@ -36,7 +37,9 @@ const getListings = async (req, res) => {
  */
 const getListing = async (req, res) => {
   const { id } = req.params;
+
   const data = await listById(id);
+  if (!data) throw new NotFound();
 
   res.json(response(data));
 };
@@ -51,6 +54,7 @@ const patchList = async (req, res) => {
   const userId = req.user.id;
 
   const data = await updateList(req.body, userId);
+  if (!data) throw new NotFound();
 
   res.json(response(data));
 };
@@ -62,11 +66,9 @@ const patchList = async (req, res) => {
  */
 const deleteListing = async (req, res) => {
   const valid = await removeListById(req.user.id);
-  if (valid) {
-    res.json(response(null, 200, 'List Deleted'));
-  } else {
-    throw new NotFound('List not exist!');
-  }
+  if (!valid) throw new NotFound();
+
+  res.json(response(null, 200, 'List deleted'));
 };
 
 module.exports = { patchList, deleteListing, getListing, getListings, postListing };

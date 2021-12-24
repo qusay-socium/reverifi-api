@@ -1,10 +1,10 @@
 const Router = require('express-promise-router');
 
 const authRouter = require('./auth');
-const companiesRouter = require('./companies');
-const listingsRouter = require('./listings');
 const usersRouter = require('./users');
 const docsRouter = require('./api-docs');
+const listingsRouter = require('./listings');
+const companiesRouter = require('./companies');
 
 const router = Router();
 

@@ -333,44 +333,102 @@ paths:
 
 
  /api/listings:
-     get:
+   get:
+     security:
+       - bearerAuth: []
+     tags:
+      - Listings
+     summary: Listings data
+     description: Get all Listings data
+     
+     responses: 
+       '200':
+         description: Listings data
+
+   post:
+     security:
+       - bearerAuth: []
+     tags:
+      - Listings
+     summary: Creating
+     description: Create new list
+     requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              images:
+                type: string
+                example: image url..
+              price:
+                type: number
+                example: 1.3
+              address:
+                type: object
+                example:
+                 Europe: England
+              
+     responses: 
+       '200':
+         description: Created company information
+    
+   patch:
+     security:
+       - bearerAuth: []
+     tags:
+      - Listings
+     summary: Updating
+     description: Update list
+     requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              images:
+                type: string
+                example: image url..
+              price:
+                type: number
+                example: 1.3
+              address:
+                type: object
+                example:
+                 Europe: England
+      responses: 
+        '200':
+          description: Updated company information  
+ 
+   delete:
+     security:
+       - bearerAuth: []
+     tags:
+      - Listings
+     summary: Delete list
+     description: Delete list by token
+     responses: 
+       '200':
+         description: Confirmation message for deleting 
+ 
+ /api/listings/{id}:
+    get:
       security:
         - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: UUID of the list
       tags:
        - Listings
-      summary: Listings data
-      description: Get all Listings data
+      summary: List information
+      description: List information by id
       
       responses: 
         '200':
-          description: Listings data
-
-     post:
-       security:
-         - bearerAuth: []
-       tags:
-        - Listings
-       summary: Creating
-       description: Create new list
-       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                images:
-                  type: string
-                  example: image url..
-                price:
-                  type: number
-                  example: 1.3
-                address:
-                  type: object
-                  example:
-                   Europe: England
-                
-       responses: 
-         '200':
-           description: Created company information  
-
+          description: List information
