@@ -1,0 +1,38 @@
+version: '2'
+services:
+  reverifi-api:
+    container_name: reverifi-api
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    environment:
+      - CORS_ORIGIN=*
+      - DB_HOST=reverifi-db
+      - DB_NAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - NODE_ENV=development
+      - PORT=3000
+      - SECRET=AK
+      - VIRTUAL_HOST=reverifi-api.docker
+    ports:
+      - 3000
+    volumes:
+      - ${PWD}:/app
+      - /app/node_modules/
+    depends_on:
+      - reverifi-db
+    command: ['bin/boot.sh']
+
+  reverifi-db:
+    container_name: reverifi-db
+    image: postgres:14.1
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      VIRTUAL_HOST: reverifi-db.docker
+    ports:
+      - 5432
