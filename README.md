@@ -12,4 +12,4 @@ Before running the app with docker make sure you have [docker](https://docs.dock
  docker-compose up
 ```
 
-2- Open <http://reverifi-api.docker/api-docs> to view the API docs.
+2- Open <http://reverifi-api.docker/api/api-docs> to view the API docs.

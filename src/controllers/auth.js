@@ -14,7 +14,8 @@ const response = require('utils/response');
  */
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const userData = await getUser(email);
+
+  const userData = await getUser(email.toLowerCase());
 
   if (!userData) {
     throw new Unauthorized('Invalid email or password');
@@ -57,7 +58,9 @@ const login = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const signup = async (req, res) => {
-  console.log(req.body);
+  const { email } = req.body;
+  req.body.email = email.toLowerCase();
+
   const hashPassword = await bcrypt.hash(req.body.password, 10);
   req.body.password = hashPassword;
 
