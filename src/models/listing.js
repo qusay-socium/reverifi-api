@@ -106,6 +106,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       propertyCondition: {
         type: DataTypes.STRING,
+        field: 'property_condition',
       },
       yearBuilt: {
         type: DataTypes.INTEGER,

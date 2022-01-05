@@ -7,9 +7,11 @@ module.exports = {
     await queryInterface.addColumn('listings', 'per_period', {
       type: Sequelize.STRING,
     });
+
     await queryInterface.addColumn('listings', 'offer_type', {
       type: Sequelize.STRING,
     });
+
     await queryInterface.addColumn('listings', 'lang', {
       type: Sequelize.STRING,
     });
