@@ -94,25 +94,9 @@ module.exports = {
       type: Sequelize.STRING,
     });
 
-    await queryInterface.changeColumn('listings', 'owner_id', {
-      type: Sequelize.UUID,
-      allowNull: false,
-      unique: false,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
-    });
+    await queryInterface.removeConstraint('listings', 'listings_agent_id_key');
 
-    await queryInterface.changeColumn('listings', 'agent_id', {
-      type: Sequelize.UUID,
-      allowNull: false,
-      unique: false,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
-    });
+    await queryInterface.removeConstraint('listings', 'listings_owner_id_key');
   },
 
   down: async (queryInterface, Sequelize) => {
