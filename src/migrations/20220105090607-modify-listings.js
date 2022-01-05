@@ -97,6 +97,24 @@ module.exports = {
     await queryInterface.removeConstraint('listings', 'listings_agent_id_key');
 
     await queryInterface.removeConstraint('listings', 'listings_owner_id_key');
+
+    await queryInterface.changeColumn('listings', 'agent_id', {
+      type: Sequelize.UUID,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    });
+
+    await queryInterface.changeColumn('listings', 'owner_id', {
+      type: Sequelize.UUID,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
