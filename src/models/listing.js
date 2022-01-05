@@ -46,10 +46,86 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DOUBLE,
         defaultValue: 0.0,
       },
-      description: {
+      country: {
+        type: DataTypes.STRING,
+      },
+      lang: {
+        type: DataTypes.STRING,
+      },
+      lat: {
+        type: DataTypes.STRING,
+      },
+      city: {
+        type: DataTypes.STRING,
+      },
+      zip_code: {
+        type: DataTypes.STRING,
+      },
+      street: {
+        type: DataTypes.STRING,
+      },
+      propertyType: {
+        type: DataTypes.STRING,
+        field: 'property_type',
+      },
+      listingType: {
+        type: DataTypes.STRING,
+        field: 'listing_type',
+      },
+      bedrooms: {
+        type: DataTypes.INTEGER,
+      },
+      fullBathrooms: {
+        type: DataTypes.INTEGER,
+        field: 'full_bathrooms',
+      },
+      partialBathrooms: {
+        type: DataTypes.INTEGER,
+        field: 'partial_bathrooms',
+      },
+      homeArea: {
+        type: DataTypes.JSON,
+        field: 'home_area',
+      },
+      lotArea: {
+        type: DataTypes.JSON,
+        field: 'lot_area',
+      },
+      lotDimensions: {
+        type: DataTypes.DOUBLE,
+        field: 'lot_dimensions',
+      },
+      rooms: {
+        type: DataTypes.INTEGER,
+      },
+      garage: {
+        type: DataTypes.INTEGER,
+      },
+      status: {
+        type: DataTypes.STRING,
+      },
+      propertyCondition: {
+        type: DataTypes.STRING,
+      },
+      yearBuilt: {
+        type: DataTypes.INTEGER,
+        field: 'year_built',
+      },
+      overview: {
         type: DataTypes.STRING,
       },
       address: {
+        type: DataTypes.STRING,
+      },
+      perPeriod: {
+        type: DataTypes.STRING,
+        field: 'per_period',
+      },
+      offerType: {
+        type: DataTypes.STRING,
+        field: 'offer_type',
+      },
+      analytics: {
         type: DataTypes.JSON,
       },
       ...getSharedColumns(sequelize, DataTypes),
