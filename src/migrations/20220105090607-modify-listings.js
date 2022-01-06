@@ -93,6 +93,28 @@ module.exports = {
     await queryInterface.changeColumn('listings', 'address', {
       type: Sequelize.STRING,
     });
+
+    await queryInterface.removeConstraint('listings', 'listings_agent_id_key');
+
+    await queryInterface.removeConstraint('listings', 'listings_owner_id_key');
+
+    await queryInterface.changeColumn('listings', 'agent_id', {
+      type: Sequelize.UUID,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    });
+
+    await queryInterface.changeColumn('listings', 'owner_id', {
+      type: Sequelize.UUID,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -123,5 +145,23 @@ module.exports = {
       type: Sequelize.JSON,
     });
     await queryInterface.renameColumn('listings', 'overview', 'description');
+    await queryInterface.changeColumn('listings', 'agent_id', {
+      type: Sequelize.UUID,
+      allowNull: false,
+      unique: true,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    });
+    await queryInterface.changeColumn('listings', 'owner_id', {
+      type: Sequelize.UUID,
+      allowNull: false,
+      unique: true,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    });
   },
 };
