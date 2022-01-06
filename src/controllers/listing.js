@@ -24,7 +24,7 @@ const postListing = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const getListings = async (req, res) => {
-  const data = await listings();
+  const data = await listings(req.query);
 
   res.json(response(data));
 };

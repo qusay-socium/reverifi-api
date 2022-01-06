@@ -1,5 +1,5 @@
 const { Listing, User } = require('models');
-
+const { Op } = require('sequelize');
 /**
  * Insert new list.
  *
@@ -16,11 +16,52 @@ const addList = async (values) => {
 /**
  * Get listings.
  *
+ * @param {String} location  Query Param(Optional) , could be address , country , city , street , zipcode
+ *
  * @return {Promise<Object>}
  */
-const listings = async () => {
+const listings = async ({ location }) => {
+  let filter = {};
+  if (location)
+    filter = {
+      [Op.or]: [
+        {
+          address: {
+            [Op.iLike]: `%${location}%`,
+          },
+        },
+        {
+          city: {
+            [Op.iLike]: `%${location}%`,
+          },
+        },
+        {
+          street: {
+            [Op.iLike]: `%${location}%`,
+          },
+        },
+        {
+          country: {
+            [Op.iLike]: `%${location}%`,
+          },
+        },
+        {
+          zip_code: {
+            [Op.iLike]: `%${location}%`,
+          },
+        },
+      ],
+    };
+
   const data = await Listing.findAndCountAll({
-    include: [{ model: User, as: 'owner' }],
+    where: filter,
+    include: [
+      {
+        model: User,
+        as: 'owner',
+        attributes: { exclude: ['password'] },
+      },
+    ],
   });
 
   return data;
