@@ -4,12 +4,14 @@ module.exports = {
       type: Sequelize.STRING,
     });
 
-    await queryInterface.addColumn('listings', 'per_period', {
+    await queryInterface.addColumn('listings', 'perPeriod', {
       type: Sequelize.STRING,
+      field: 'per_period',
     });
 
-    await queryInterface.addColumn('listings', 'offer_type', {
+    await queryInterface.addColumn('listings', 'offerType', {
       type: Sequelize.STRING,
+      field: 'offer_type',
     });
 
     await queryInterface.addColumn('listings', 'lang', {
@@ -24,48 +26,57 @@ module.exports = {
       type: Sequelize.STRING,
     });
 
-    await queryInterface.addColumn('listings', 'zip_code', {
+    await queryInterface.addColumn('listings', 'zipCode', {
       type: Sequelize.STRING,
+      field: 'zip_code',
     });
 
     await queryInterface.addColumn('listings', 'street', {
       type: Sequelize.STRING,
     });
 
-    await queryInterface.addColumn('listings', 'property_type', {
+    await queryInterface.addColumn('listings', 'propertyType', {
       type: Sequelize.STRING,
+      field: 'property_type',
     });
 
-    await queryInterface.addColumn('listings', 'listing_type', {
+    await queryInterface.addColumn('listings', 'listingType', {
       type: Sequelize.STRING,
+      field: 'listing_type',
     });
 
-    await queryInterface.addColumn('listings', 'year_built', {
+    await queryInterface.addColumn('listings', 'yearBuilt', {
       type: Sequelize.INTEGER,
+      field: 'year_built',
     });
 
     await queryInterface.addColumn('listings', 'bedrooms', {
       type: Sequelize.INTEGER,
     });
 
-    await queryInterface.addColumn('listings', 'full_bathrooms', {
+    await queryInterface.addColumn('listings', 'fullBathrooms', {
       type: Sequelize.INTEGER,
+      field: 'full_bathrooms',
     });
 
-    await queryInterface.addColumn('listings', 'partial_bathrooms', {
+    await queryInterface.addColumn('listings', 'partialBathrooms', {
       type: Sequelize.INTEGER,
+      field: 'partial_bathrooms',
     });
 
-    await queryInterface.addColumn('listings', 'home_area', {
+    await queryInterface.addColumn('listings', 'homeArea', {
       type: Sequelize.JSON,
+      field: 'home_area',
     });
 
-    await queryInterface.addColumn('listings', 'lot_area', {
+    await queryInterface.addColumn('listings', 'lotArea', {
       type: Sequelize.JSON,
+      field: 'lot_area',
     });
 
-    await queryInterface.addColumn('listings', 'lot_dimensions', {
+    await queryInterface.addColumn('listings', 'lotDimensions', {
       type: Sequelize.DOUBLE,
+      field: 'lot_dimensions',
     });
 
     await queryInterface.addColumn('listings', 'rooms', {
@@ -80,8 +91,9 @@ module.exports = {
       type: Sequelize.STRING,
     });
 
-    await queryInterface.addColumn('listings', 'property_condition', {
+    await queryInterface.addColumn('listings', 'propertyCondition', {
       type: Sequelize.STRING,
+      field: 'property_condition',
     });
 
     await queryInterface.addColumn('listings', 'analytics', {
@@ -98,22 +110,24 @@ module.exports = {
 
     await queryInterface.removeConstraint('listings', 'listings_owner_id_key');
 
-    await queryInterface.changeColumn('listings', 'agent_id', {
+    await queryInterface.changeColumn('listings', 'agentId', {
       type: Sequelize.UUID,
       allowNull: false,
       references: {
         model: 'users',
         key: 'id',
       },
+      field: 'agent_id',
     });
 
-    await queryInterface.changeColumn('listings', 'owner_id', {
+    await queryInterface.changeColumn('listings', 'ownerId', {
       type: Sequelize.UUID,
       allowNull: false,
       references: {
         model: 'users',
         key: 'id',
       },
+      field: 'owner_id',
     });
   },
 
