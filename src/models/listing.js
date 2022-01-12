@@ -1,11 +1,60 @@
 const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
+const UserModel = require('models/user');
 const getSharedColumns = require('models/shared-columns');
 
 class Listing extends BaseModel {
   static associate({ User }) {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
+  }
+
+  /**
+   * Update listing by owner ID.
+   *
+   * @param {string} ownerId The owner ID.
+   * @param {Object} values The new data for updating listing.
+   *
+   * @return {Promise<Object>} The updated listing data.
+   */
+  static async updateByOwnerId(ownerId, values) {
+    const [result] = await this.updateByCondition({ ownerId }, values);
+    return result;
+  }
+
+  /**
+   * Get listing with owner.
+   *
+   * @param {string} id The listing ID.
+   *
+   * @return {Promise<Object>} The listing data.
+   */
+  static async getOneWithOwner(id) {
+    const result = await this.getOne(id, { include: [{ model: UserModel, as: 'owner' }] });
+
+    return result;
+  }
+
+  /**
+   * Get all listing with owner.
+   *
+   * @return {Promise<Object[]>} All listing data.
+   */
+  static async getAllWithOwner() {
+    const result = await this.getAll({ include: [{ model: UserModel, as: 'owner' }] });
+    return result;
+  }
+
+  /**
+   * Delete listing by owner ID.
+   *
+   * @param {string} ownerId The owner ID.
+   *
+   * @return {Promise<number>} The number of deleted items.
+   */
+  static async deleteByOwnerId(ownerId) {
+    const result = await this.deleteByCondition({ ownerId });
+    return result;
   }
 }
 
@@ -58,8 +107,9 @@ module.exports = (sequelize, DataTypes) => {
       city: {
         type: DataTypes.STRING,
       },
-      zip_code: {
+      zipCode: {
         type: DataTypes.STRING,
+        field: 'zip_code',
       },
       street: {
         type: DataTypes.STRING,

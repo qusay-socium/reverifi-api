@@ -1,101 +1,93 @@
+const { Listing } = require('models');
 const { NotFound } = require('lib/errors');
 const response = require('utils/response');
 
-const {
-  listingsFeature,
-  addList,
-  listings,
-  listById,
-  removeListById,
-  updateList,
-} = require('../services/listing');
+/**
+ * Remove password field from listing owner object.
+ *
+ * @param {Object} listing Listing object.
+ */
+const removeOwnerPassword = (listing) => {
+  if (listing && listing.owner) {
+    delete listing.owner.password;
+  }
+};
 
 /**
- * Create new list.
+ * Get all listings.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const postListing = async (req, res) => {
+const getAllListings = async (req, res) => {
+  const data = await Listing.getAllWithOwner();
+
+  data.forEach(removeOwnerPassword);
+
+  res.json(response({ data }));
+};
+
+/**
+ * Create new listing.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const createListing = async (req, res) => {
   req.body.ownerId = req.user.id;
 
-  const data = await addList(req.body);
+  const data = await Listing.createOne(req.body);
 
-  res.json(response(data));
+  res.json(response({ data }));
 };
 
 /**
- * Get lists.
+ * Update listing.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getListings = async (req, res) => {
-  const data = await listings();
+const updateListing = async (req, res) => {
+  const data = await Listing.updateByOwnerId(req.user.id, req.body);
+  if (!data) {
+    throw new NotFound();
+  }
 
-  res.json(response(data));
+  res.json(response({ data }));
 };
 
 /**
- * Get three listings data per page.
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const getListingsFeature = async (req, res) => {
-  const { page, limit } = req.params;
-  const data = await listingsFeature(page, limit);
-
-  res.json(response(data));
-};
-
-/**
- * Get list by id.
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const getListing = async (req, res) => {
-  const { id } = req.params;
-
-  const data = await listById(id);
-  if (!data) throw new NotFound();
-
-  res.json(response(data));
-};
-
-/**
- * Update  list by id.
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const patchList = async (req, res) => {
-  const userId = req.user.id;
-
-  const data = await updateList(req.body, userId);
-  if (!data) throw new NotFound();
-
-  res.json(response(data));
-};
-/**
- * Delete list by id.
+ * Delete listing by id.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
 const deleteListing = async (req, res) => {
-  const valid = await removeListById(req.user.id);
-  if (!valid) throw new NotFound();
+  const valid = await Listing.deleteByOwnerId(req.user.id);
+  if (!valid) {
+    throw new NotFound();
+  }
 
-  res.json(response(null, 200, 'List deleted'));
+  res.json(response());
 };
 
-module.exports = {
-  getListingsFeature,
-  patchList,
-  deleteListing,
-  getListing,
-  getListings,
-  postListing,
+/**
+ * Get listing by ID.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getListingById = async (req, res) => {
+  const { id } = req.params;
+
+  const data = await Listing.getOneWithOwner(id);
+  if (!data) {
+    throw new NotFound();
+  }
+
+  removeOwnerPassword(data);
+
+  res.json(response({ data }));
 };
+
+module.exports = { getAllListings, updateListing, createListing, getListingById, deleteListing };
