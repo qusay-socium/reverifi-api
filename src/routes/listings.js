@@ -7,6 +7,7 @@ const {
   getListings,
   getListing,
   deleteListing,
+  getListingsFeature,
 } = require('controllers/listing');
 
 const router = Router({ mergeParams: true });
@@ -19,6 +20,7 @@ router.patch('/', auth, patchList);
 router.post('/', auth, postListing);
 router.delete('/', auth, deleteListing);
 
+router.get('/feature/:page', getListingsFeature);
 router.get('/:id', auth, getListing);
 
 module.exports = router;

@@ -1,7 +1,14 @@
 const { NotFound } = require('lib/errors');
 const response = require('utils/response');
 
-const { addList, listings, listById, removeListById, updateList } = require('../services/listing');
+const {
+  listingsFeature,
+  addList,
+  listings,
+  listById,
+  removeListById,
+  updateList,
+} = require('../services/listing');
 
 /**
  * Create new list.
@@ -25,6 +32,19 @@ const postListing = async (req, res) => {
  */
 const getListings = async (req, res) => {
   const data = await listings();
+
+  res.json(response(data));
+};
+
+/**
+ * Get three listings data per page.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getListingsFeature = async (req, res) => {
+  const { page, limit } = req.params;
+  const data = await listingsFeature(page, limit);
 
   res.json(response(data));
 };
@@ -71,4 +91,11 @@ const deleteListing = async (req, res) => {
   res.json(response(null, 200, 'List deleted'));
 };
 
-module.exports = { patchList, deleteListing, getListing, getListings, postListing };
+module.exports = {
+  getListingsFeature,
+  patchList,
+  deleteListing,
+  getListing,
+  getListings,
+  postListing,
+};

@@ -27,6 +27,26 @@ const listings = async () => {
 };
 
 /**
+ * Get listings.
+ * Handle pagination (3 listings per page).
+ *
+ * @return {Promise<Object>}
+ */
+const listingsFeature = async (offset, limit = 3) => {
+  const data = await Listing.findAndCountAll({
+    include: [
+      { model: User, as: 'owner' },
+      { model: User, as: 'agent' },
+    ],
+    distinct: true,
+    offset,
+    limit,
+  });
+
+  return { ...data, count: data.rows.length };
+};
+
+/**
  * Get List by id.
  *
  * @param {String} id UUID for list.
@@ -69,4 +89,4 @@ const updateList = async (values, ownerId) => {
   return createCompany;
 };
 
-module.exports = { updateList, removeListById, addList, listings, listById };
+module.exports = { listingsFeature, updateList, removeListById, addList, listings, listById };
