@@ -24,12 +24,12 @@ router.post('/', auth, createListing);
 /**
  * Handle PATCH to /api/listings route.
  */
-router.patch('/', auth, updateListing);
+router.patch('/:id', auth, updateListing);
 
 /**
  * Handle DELETE to /api/listings route.
  */
-router.delete('/', auth, deleteListing);
+router.delete('/:id', auth, deleteListing);
 
 /**
  * Handle GET to /api/listings/:id route.

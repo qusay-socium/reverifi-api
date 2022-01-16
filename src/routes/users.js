@@ -15,6 +15,7 @@ const router = Router({ mergeParams: true });
  * Handle GET to /api/listings route.
  */
 router.get('/', auth, getAllUserInfo);
+
 /**
  * Handle POST to /api/listings route.
  */

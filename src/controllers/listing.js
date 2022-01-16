@@ -1,5 +1,5 @@
 const { Listing } = require('models');
-const { NotFound } = require('lib/errors');
+const { NotFound, Unauthorized, InternalError } = require('lib/errors');
 const response = require('utils/response');
 
 /**
@@ -20,7 +20,7 @@ const removeOwnerPassword = (listing) => {
  * @param {import('express').Response} res Express response object.
  */
 const getAllListings = async (req, res) => {
-  const data = await Listing.getAllWithOwner();
+  const data = await Listing.getAllWithOwnerAndAgent();
 
   data.forEach(removeOwnerPassword);
 
@@ -34,7 +34,8 @@ const getAllListings = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const createListing = async (req, res) => {
-  req.body.ownerId = req.user.id;
+  if (req.body.isAgent) req.body.agentId = req.user.id;
+  if (req.body.isOwner) req.body.ownerId = req.user.id;
 
   const data = await Listing.createOne(req.body);
 
@@ -48,7 +49,14 @@ const createListing = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const updateListing = async (req, res) => {
-  const data = await Listing.updateByOwnerId(req.user.id, req.body);
+  const { id } = req.params;
+  const listing = await Listing.getOne(id);
+
+  if ((listing.ownerId || listing.agentId) !== (req.user.id || null)) {
+    throw new Unauthorized();
+  }
+
+  const data = await Listing.updateByCondition({ id }, req.body);
   if (!data) {
     throw new NotFound();
   }
@@ -63,9 +71,20 @@ const updateListing = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const deleteListing = async (req, res) => {
-  const valid = await Listing.deleteByOwnerId(req.user.id);
-  if (!valid) {
+  const { id } = req.params;
+  const listing = await Listing.getOne(id);
+
+  if (!listing) {
     throw new NotFound();
+  }
+
+  if ((listing.ownerId || listing.agentId) !== (req.user.id || null)) {
+    throw new Unauthorized();
+  }
+
+  const valid = await Listing.deleteByCondition({ id });
+  if (!valid) {
+    throw new InternalError();
   }
 
   res.json(response());
@@ -80,7 +99,7 @@ const deleteListing = async (req, res) => {
 const getListingById = async (req, res) => {
   const { id } = req.params;
 
-  const data = await Listing.getOneWithOwner(id);
+  const data = await Listing.getOneWithOwnerAndAgent(id);
   if (!data) {
     throw new NotFound();
   }

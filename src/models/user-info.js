@@ -1,7 +1,5 @@
 const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
-const UserModel = require('models/user');
-const CompanyModel = require('models/company');
 const getSharedColumns = require('models/shared-columns');
 
 class UserInfo extends BaseModel {
@@ -32,10 +30,7 @@ class UserInfo extends BaseModel {
    */
   static async getOneWithUserAndCompany(id) {
     const result = await this.getOne(id, {
-      include: [
-        { model: UserModel, as: 'user' },
-        { model: CompanyModel, as: 'company' },
-      ],
+      include: ['user', 'company'],
     });
     return result;
   }
@@ -47,10 +42,7 @@ class UserInfo extends BaseModel {
    */
   static async getAllWithUserAndCompany() {
     const result = await this.getAll({
-      include: [
-        { model: UserModel, as: 'user' },
-        { model: CompanyModel, as: 'company' },
-      ],
+      include: ['user', 'company'],
     });
     return result;
   }

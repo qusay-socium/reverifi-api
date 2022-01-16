@@ -1,6 +1,5 @@
 const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
-const UserModel = require('models/user');
 const getSharedColumns = require('models/shared-columns');
 
 class Listing extends BaseModel {
@@ -10,27 +9,14 @@ class Listing extends BaseModel {
   }
 
   /**
-   * Update listing by owner ID.
-   *
-   * @param {string} ownerId The owner ID.
-   * @param {Object} values The new data for updating listing.
-   *
-   * @return {Promise<Object>} The updated listing data.
-   */
-  static async updateByOwnerId(ownerId, values) {
-    const [result] = await this.updateByCondition({ ownerId }, values);
-    return result;
-  }
-
-  /**
    * Get listing with owner.
    *
    * @param {string} id The listing ID.
    *
    * @return {Promise<Object>} The listing data.
    */
-  static async getOneWithOwner(id) {
-    const result = await this.getOne(id, { include: [{ model: UserModel, as: 'owner' }] });
+  static async getOneWithOwnerAndAgent(id) {
+    const result = await this.getOne(id, { include: ['owner', 'agent'] });
 
     return result;
   }
@@ -40,20 +26,8 @@ class Listing extends BaseModel {
    *
    * @return {Promise<Object[]>} All listing data.
    */
-  static async getAllWithOwner() {
-    const result = await this.getAll({ include: [{ model: UserModel, as: 'owner' }] });
-    return result;
-  }
-
-  /**
-   * Delete listing by owner ID.
-   *
-   * @param {string} ownerId The owner ID.
-   *
-   * @return {Promise<number>} The number of deleted items.
-   */
-  static async deleteByOwnerId(ownerId) {
-    const result = await this.deleteByCondition({ ownerId });
+  static async getAllWithOwnerAndAgent() {
+    const result = await this.getAll({ include: ['owner', 'agent'] });
     return result;
   }
 }
