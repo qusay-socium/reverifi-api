@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { Unauthorized } = require('lib/errors');
-const { getUser } = require('services/user');
+const { User } = require('models');
 const { secret } = require('config/config');
 
 /**
@@ -17,7 +17,8 @@ module.exports = async (req, res, next) => {
   }
 
   const parsedToken = jwt.verify(authorization.split(' ').pop(), secret);
-  const user = await getUser(parsedToken.email);
+  const user = await User.getOneByCondition({ email: parsedToken.email });
+
   if (!user) {
     throw new Unauthorized('Invalid token');
   }

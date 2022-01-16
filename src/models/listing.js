@@ -7,6 +7,29 @@ class Listing extends BaseModel {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
   }
+
+  /**
+   * Get listing with owner.
+   *
+   * @param {string} id The listing ID.
+   *
+   * @return {Promise<Object>} The listing data.
+   */
+  static async getOneWithOwnerAndAgent(id) {
+    const result = await this.getOne(id, { include: ['owner', 'agent'] });
+
+    return result;
+  }
+
+  /**
+   * Get all listing with owner.
+   *
+   * @return {Promise<Object[]>} All listing data.
+   */
+  static async getAllWithOwnerAndAgent() {
+    const result = await this.getAll({ include: ['owner', 'agent'] });
+    return result;
+  }
 }
 
 /**
@@ -58,8 +81,9 @@ module.exports = (sequelize, DataTypes) => {
       city: {
         type: DataTypes.STRING,
       },
-      zip_code: {
+      zipCode: {
         type: DataTypes.STRING,
+        field: 'zip_code',
       },
       street: {
         type: DataTypes.STRING,

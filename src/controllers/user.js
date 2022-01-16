@@ -1,12 +1,31 @@
 const { NotFound } = require('lib/errors');
-const {
-  usersInfo,
-  userInfoById,
-  createUserInfo,
-  updateUserInfo,
-  destroyUserInfo,
-} = require('services/user-info');
+const { UserInfo } = require('models');
 const response = require('utils/response');
+
+/**
+ * Remove password field from user info user object.
+ *
+ * @param {Object} userInfo User info object.
+ */
+const removeUserPassword = (userInfo) => {
+  if (userInfo && userInfo.user) {
+    delete userInfo.user.password;
+  }
+};
+
+/**
+ * Get user info.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getAllUserInfo = async (req, res) => {
+  const data = await UserInfo.getAllWithUserAndCompany();
+
+  data.forEach(removeUserPassword);
+
+  res.json(response({ data }));
+};
 
 /**
  * Create new user info.
@@ -14,12 +33,12 @@ const response = require('utils/response');
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const postUserInfo = async (req, res) => {
+const createUserInfo = async (req, res) => {
   req.body.userId = req.user.id;
 
-  const data = await createUserInfo(req.body);
+  const data = await UserInfo.createOne(req.body);
 
-  res.json(response(data));
+  res.json(response({ data }));
 };
 
 /**
@@ -28,10 +47,25 @@ const postUserInfo = async (req, res) => {
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const patchUserInfo = async (req, res) => {
-  const data = await updateUserInfo(req.body, req.user.id);
+const updateUserInfo = async (req, res) => {
+  const data = await UserInfo.updateByUserId(req.user.id, req.body);
 
-  res.json(response(data));
+  res.json(response({ data }));
+};
+
+/**
+ * Delete user info by id.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const deleteUserInfo = async (req, res) => {
+  const valid = await UserInfo.deleteByUserId(req.user.id);
+  if (!valid) {
+    throw new NotFound();
+  }
+
+  res.json(response());
 };
 
 /**
@@ -40,39 +74,23 @@ const patchUserInfo = async (req, res) => {
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getUserInfo = async (req, res) => {
+const getUserInfoById = async (req, res) => {
   const { id } = req.params;
 
-  const data = await userInfoById(id);
-  if (!data) throw new NotFound();
+  const data = await UserInfo.getOneWithUserAndCompany(id);
+  if (!data) {
+    throw new NotFound();
+  }
 
-  res.json(response(data));
+  removeUserPassword(data);
+
+  res.json(response({ data }));
 };
 
-/**
- * Get users info .
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const getUsersInfo = async (req, res) => {
-  const data = await usersInfo();
-
-  res.json(response(data));
+module.exports = {
+  getAllUserInfo,
+  createUserInfo,
+  updateUserInfo,
+  deleteUserInfo,
+  getUserInfoById,
 };
-
-/**
- * Delete user info  by id.
- * Check if the user have same user info.
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const deleteUserInfo = async (req, res) => {
-  const valid = await destroyUserInfo(req.user.id);
-  if (!valid) throw new NotFound();
-
-  res.json(response(null, 200, 'User information deleted.'));
-};
-
-module.exports = { deleteUserInfo, getUsersInfo, getUserInfo, postUserInfo, patchUserInfo };

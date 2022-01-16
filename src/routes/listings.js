@@ -2,25 +2,38 @@ const Router = require('express-promise-router');
 
 const auth = require('middleware/auth');
 const {
-  postListing,
-  patchList,
-  getListings,
-  getListing,
+  getAllListings,
+  createListing,
+  updateListing,
   deleteListing,
-  getListingsFeature,
+  getListingById,
 } = require('controllers/listing');
 
 const router = Router({ mergeParams: true });
 
 /**
- * Listing routes.
+ * Handle GET to /api/listings route.
  */
-router.get('/', auth, getListings);
-router.patch('/', auth, patchList);
-router.post('/', auth, postListing);
-router.delete('/', auth, deleteListing);
+router.get('/', auth, getAllListings);
 
-router.get('/feature/:page', getListingsFeature);
-router.get('/:id', auth, getListing);
+/**
+ * Handle POST to /api/listings route.
+ */
+router.post('/', auth, createListing);
+
+/**
+ * Handle PATCH to /api/listings route.
+ */
+router.patch('/:id', auth, updateListing);
+
+/**
+ * Handle DELETE to /api/listings route.
+ */
+router.delete('/:id', auth, deleteListing);
+
+/**
+ * Handle GET to /api/listings/:id route.
+ */
+router.get('/:id', auth, getListingById);
 
 module.exports = router;

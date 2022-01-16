@@ -7,6 +7,57 @@ class UserInfo extends BaseModel {
     this.belongsTo(User, { as: 'user', foreignKey: 'userId' });
     this.belongsTo(Company, { as: 'company', foreignKey: 'companyId' });
   }
+
+  /**
+   * Update user info by user ID.
+   *
+   * @param {string} userId The user ID.
+   * @param {Object} values The new data for updating user-info.
+   *
+   * @return {Promise<Object>} The updated user info data.
+   */
+  static async updateByUserId(userId, values) {
+    const [result] = await this.updateByCondition({ userId }, values);
+    return result;
+  }
+
+  /**
+   * Get user info with user and company.
+   *
+   * @param {string} id The user info ID.
+   *
+   * @return {Promise<Object>} The user info data.
+   */
+  static async getOneWithUserAndCompany(id) {
+    const result = await this.getOne(id, {
+      include: ['user', 'company'],
+    });
+    return result;
+  }
+
+  /**
+   * Get all user info with user and company.
+   *
+   * @return {Promise<Object[]>} All user info data.
+   */
+  static async getAllWithUserAndCompany() {
+    const result = await this.getAll({
+      include: ['user', 'company'],
+    });
+    return result;
+  }
+
+  /**
+   * Delete user info by user ID.
+   *
+   * @param {string} userId The user ID.
+   *
+   * @return {Promise<number>} The number of deleted items.
+   */
+  static async deleteByUserId(userId) {
+    const result = await this.deleteByCondition({ userId });
+    return result;
+  }
 }
 
 /**

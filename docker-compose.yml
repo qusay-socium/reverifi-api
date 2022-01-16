@@ -35,4 +35,4 @@ services:
       POSTGRES_PASSWORD: postgres
       VIRTUAL_HOST: reverifi-db.docker
     ports:
-      - 5432
+      - "44422:5432"

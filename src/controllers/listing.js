@@ -1,101 +1,112 @@
-const { NotFound } = require('lib/errors');
+const { Listing } = require('models');
+const { NotFound, Unauthorized, InternalError } = require('lib/errors');
 const response = require('utils/response');
 
-const {
-  listingsFeature,
-  addList,
-  listings,
-  listById,
-  removeListById,
-  updateList,
-} = require('../services/listing');
-
 /**
- * Create new list.
+ * Remove password field from listing owner object.
  *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
+ * @param {Object} listing Listing object.
  */
-const postListing = async (req, res) => {
-  req.body.ownerId = req.user.id;
-
-  const data = await addList(req.body);
-
-  res.json(response(data));
+const removeOwnerPassword = (listing) => {
+  if (listing && listing.owner) {
+    delete listing.owner.password;
+  }
 };
 
 /**
- * Get lists.
+ * Get all listings.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getListings = async (req, res) => {
-  const data = await listings();
+const getAllListings = async (req, res) => {
+  const data = await Listing.getAllWithOwnerAndAgent();
 
-  res.json(response(data));
+  data.forEach(removeOwnerPassword);
+
+  res.json(response({ data }));
 };
 
 /**
- * Get three listings data per page.
+ * Create new listing.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getListingsFeature = async (req, res) => {
-  const { page, limit } = req.params;
-  const data = await listingsFeature(page, limit);
+const createListing = async (req, res) => {
+  if (req.body.isAgent) req.body.agentId = req.user.id;
+  if (req.body.isOwner) req.body.ownerId = req.user.id;
 
-  res.json(response(data));
+  const data = await Listing.createOne(req.body);
+
+  res.json(response({ data }));
 };
 
 /**
- * Get list by id.
+ * Update listing.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getListing = async (req, res) => {
+const updateListing = async (req, res) => {
   const { id } = req.params;
+  const listing = await Listing.getOne(id);
 
-  const data = await listById(id);
-  if (!data) throw new NotFound();
+  if ((listing.ownerId || listing.agentId) !== (req.user.id || null)) {
+    throw new Unauthorized();
+  }
 
-  res.json(response(data));
+  const data = await Listing.updateByCondition({ id }, req.body);
+  if (!data) {
+    throw new NotFound();
+  }
+
+  res.json(response({ data }));
 };
 
 /**
- * Update  list by id.
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const patchList = async (req, res) => {
-  const userId = req.user.id;
-
-  const data = await updateList(req.body, userId);
-  if (!data) throw new NotFound();
-
-  res.json(response(data));
-};
-/**
- * Delete list by id.
+ * Delete listing by id.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
 const deleteListing = async (req, res) => {
-  const valid = await removeListById(req.user.id);
-  if (!valid) throw new NotFound();
+  const { id } = req.params;
+  const listing = await Listing.getOne(id);
 
-  res.json(response(null, 200, 'List deleted'));
+  if (!listing) {
+    throw new NotFound();
+  }
+
+  if ((listing.ownerId || listing.agentId) !== (req.user.id || null)) {
+    throw new Unauthorized();
+  }
+
+  const valid = await Listing.deleteByCondition({ id });
+  if (!valid) {
+    throw new InternalError();
+  }
+
+  res.json(response());
 };
 
-module.exports = {
-  getListingsFeature,
-  patchList,
-  deleteListing,
-  getListing,
-  getListings,
-  postListing,
+/**
+ * Get listing by ID.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getListingById = async (req, res) => {
+  const { id } = req.params;
+
+  const data = await Listing.getOneWithOwnerAndAgent(id);
+  if (!data) {
+    throw new NotFound();
+  }
+
+  removeOwnerPassword(data);
+
+  res.json(response({ data }));
 };
+
+module.exports = { getAllListings, updateListing, createListing, getListingById, deleteListing };
