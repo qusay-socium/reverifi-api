@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const { Unauthorized, BadRequest } = require('lib/errors');
 const { secret } = require('config/config');
-const { getUser, createUser } = require('services/user');
+const { User } = require('models');
 const response = require('utils/response');
 
 /**
@@ -26,7 +26,7 @@ const getTokenResponse = ({ id, email, name }) => ({
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await getUser(email.toLowerCase());
+  const user = await User.getOneByCondition({ email: email.toLowerCase() });
 
   if (!user) {
     throw new Unauthorized('Invalid email or password');
@@ -36,7 +36,7 @@ const login = async (req, res) => {
   if (!valid) {
     throw new Unauthorized('Invalid email or password');
   }
-  res.json(response(getTokenResponse(user)));
+  res.json(response({ data: getTokenResponse(user) }));
 };
 
 /**
@@ -47,7 +47,7 @@ const login = async (req, res) => {
  */
 const signup = async (req, res) => {
   const { name, email, password, phone } = req.body;
-  const dbUser = await getUser(email.toLowerCase());
+  const dbUser = await User.getOneByCondition({ email: email.toLowerCase() });
 
   if (dbUser) {
     throw new BadRequest('Email already in use');
@@ -57,14 +57,14 @@ const signup = async (req, res) => {
 
   const passwordHash = await bcrypt.hash(password, 10);
 
-  const user = await createUser({
+  const user = await User.createOne({
     name,
     email: email.toLowerCase(),
     password: passwordHash,
     phone,
   });
 
-  res.json(response(getTokenResponse(user)));
+  res.json(response({ data: getTokenResponse(user) }));
 };
 
 module.exports = { signup, login };
