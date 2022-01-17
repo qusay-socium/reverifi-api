@@ -76,6 +76,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         primaryKey: true,
         allowNull: false,
+        unique: true,
         onUpdate: 'cascade',
         onDelete: 'cascade ',
         field: 'user_id',

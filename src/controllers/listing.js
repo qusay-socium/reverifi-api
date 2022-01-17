@@ -58,6 +58,8 @@ const createListing = async (req, res) => {
  */
 const updateListing = async (req, res) => {
   const { id } = req.params;
+  console.log(id, '------------');
+
   const listing = await Listing.getOne(id);
   if (!listing) {
     throw new NotFound();
