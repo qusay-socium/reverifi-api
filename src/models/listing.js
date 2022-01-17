@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, Op } = require('sequelize');
 const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
@@ -22,12 +22,17 @@ class Listing extends BaseModel {
   }
 
   /**
-   * Get all listing with owner.
+   * Get all listing with owner and agent.
+   *
+   * @param {string} [userId=null] The listing owner or agent ID, if provided only listing for this user will be retrieved.
    *
    * @return {Promise<Object[]>} All listing data.
    */
-  static async getAllWithOwnerAndAgent() {
-    const result = await this.getAll({ include: ['owner', 'agent'] });
+  static async getAllWithOwnerAndAgent(userId = null) {
+    const result = await this.getAll({
+      where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] },
+      include: ['owner', 'agent'],
+    });
     return result;
   }
 }
@@ -46,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       agentId: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'User',
           key: 'id',
@@ -55,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       ownerId: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'User',
           key: 'id',

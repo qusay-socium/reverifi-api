@@ -12,27 +12,27 @@ const {
 const router = Router({ mergeParams: true });
 
 /**
- * Handle GET to /api/listings route.
+ * Handle GET to /api/users route.
  */
 router.get('/', auth, getAllUserInfo);
 
 /**
- * Handle POST to /api/listings route.
+ * Handle POST to /api/users route.
  */
 router.post('/', auth, createUserInfo);
 
 /**
- * Handle PATCH to /api/listings route.
+ * Handle PATCH to /api/users route.
  */
 router.patch('/', auth, updateUserInfo);
 
 /**
- * Handle DELETE to /api/listings route.
+ * Handle DELETE to /api/users route.
  */
 router.delete('/', auth, deleteUserInfo);
 
 /**
- * Handle GET to /api/listings/:id route.
+ * Handle GET to /api/users/:id route.
  */
 router.get('/:id', auth, getUserInfoById);
 

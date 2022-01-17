@@ -9,23 +9,21 @@ tags:
     description: Authentication endpoints
   - name: User information
     description: User information endpoints
-  - name: Companies
-    description: Companies endpoints
   - name: Listings
     description: Listings endpoints
 
 components:
   securitySchemes:
-    bearerAuth: 
+    bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT    
+      bearerFormat: JWT
 
 paths:
- /api/auth/signup:
+  /api/auth/signup:
     post:
       tags:
-       - Authentication
+        - Authentication
       summary: Creates a user.
       description: Sign up user
       requestBody:
@@ -48,21 +46,20 @@ paths:
                   type: boolean
                   example: true
                 phone:
-                 type: string
-                 example: 0092xxxxxx        
+                  type: string
+                  example: 0092xxxxxx
 
-
-      responses: 
+      responses:
         '200':
-          description: Created user information's
+          description: Token
 
- /api/auth/login:
+  /api/auth/login:
     post:
-       tags:
+      tags:
         - Authentication
-       summary: Login
-       description: Login by email and password
-       requestBody:
+      summary: Login
+      description: Login by email and password
+      requestBody:
         required: true
         content:
           application/json:
@@ -76,33 +73,31 @@ paths:
                   type: string
                   example: x@adek1e$
 
-       responses: 
-         '200':
-           description: user information's related to sign up data with token
+      responses:
+        '200':
+          description: Token
 
-          
- /api/users:
+  /api/users:
     get:
       security:
         - bearerAuth: []
       tags:
-       - User information
+        - User information
       summary: User information
       description: Get all users information
-      
-      responses: 
+
+      responses:
         '200':
           description: Users information
 
-
     post:
-       security:
-         - bearerAuth: []
-       tags:
+      security:
+        - bearerAuth: []
+      tags:
         - User information
-       summary: Create user information
-       description: Create user information by token
-       requestBody:
+      summary: Create user information
+      description: Create user information by token
+      requestBody:
         required: true
         content:
           application/json:
@@ -112,38 +107,38 @@ paths:
                 address:
                   type: object
                   example:
-                   england: london
+                    england: london
                 website:
                   type: string
                   example: www.england.com
                 languages:
                   type: array
                   example:
-                   - eng
-                   - ar
+                    - eng
+                    - ar
                 serviceAreas:
                   type: array
                   example:
-                   - Europe
+                    - Europe
                 socials:
                   type: object
                   example:
-                   FB: www.fb.com/england 
+                    FB: www.fb.com/england
                 aboutMe:
                   type: string
                   example: Broker
 
-       responses: 
-         '200':
-           description: User information related by request body
+      responses:
+        '200':
+          description: User information related by request body
     patch:
-       security:
-         - bearerAuth: []
-       tags:
+      security:
+        - bearerAuth: []
+      tags:
         - User information
-       summary: Update user information
-       description: Update user information by token
-       requestBody:
+      summary: Update user information
+      description: Update user information by token
+      requestBody:
         required: true
         content:
           application/json:
@@ -153,43 +148,43 @@ paths:
                 address:
                   type: object
                   example:
-                   england: london
+                    england: london
                 website:
                   type: string
                   example: www.england.com
                 languages:
                   type: array
                   example:
-                   - eng
-                   - ar
+                    - eng
+                    - ar
                 serviceAreas:
                   type: array
                   example:
-                   - Europe
+                    - Europe
                 socials:
                   type: object
                   example:
-                   FB: www.fb.com/england 
+                    FB: www.fb.com/england
                 aboutMe:
                   type: string
                   example: Broker
 
-       responses: 
-         '200':
-           description: Updated user information 
+      responses:
+        '200':
+          description: Updated user information
 
     delete:
-       security:
-         - bearerAuth: []
-       tags:
+      security:
+        - bearerAuth: []
+      tags:
         - User information
-       summary: Delete user information
-       description: Delete user information by token
-       responses: 
-         '200':
-           description: Confirmation message for deleting 
+      summary: Delete user information
+      description: Delete user information by token
+      responses:
+        '200':
+          description: Confirmation message for deleting
 
- /api/users/{id}:
+  /api/users/{id}:
     get:
       security:
         - bearerAuth: []
@@ -201,60 +196,127 @@ paths:
           required: true
           description: UUID of the user
       tags:
-       - User information
+        - User information
       summary: User information
       description: user information by id
-      
-      responses: 
+
+      responses:
         '200':
           description: User information
 
- /api/companies:
+  /api/listings:
     get:
       security:
         - bearerAuth: []
       tags:
-       - Companies
-      summary: Companies information's
-      description: Get all companies information's
-      responses: 
+        - Listings
+      summary: Listings data
+      description: Get all Listings data
+
+      responses:
         '200':
-          description: companies information's
+          description: Listings data
 
     post:
-       security:
-         - bearerAuth: []
-       tags:
-        - Companies
-       summary: Creating
-       description: Create new company
-       requestBody:
+      security:
+        - bearerAuth: []
+      tags:
+        - Listings
+      summary: Creating
+      description: Create new list
+      requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                name:
+                isAgent:
+                  type: boolean
+                isOwner:
+                  type: boolean
+                  example: true
+                overview:
                   type: string
-                  example: xyz company
-                website:
+                  example: John listing
+                images:
+                  type: array
+                  example:
+                    - image url ...
+                    - image url ...
+                country:
                   type: string
-                  example: www.company.com
+                  example: New york
+                lang:
+                  type: string
+                  example: 34
+                lat:
+                  type: string
+                  example: 11
+                city:
+                  type: string
+                  example: Albany
+                zipCode:
+                  type: string
+                  example: 12345
+                street:
+                  type: string
+                  example: str 91
+                propertyType:
+                  type: string
+                  example: test
+                listingType:
+                  type: string
+                  example: test
+                status:
+                  type: string
+                  example: test
+                propertyCondition:
+                  type: string
+                  example: test
                 address:
+                  type: string
+                  example: 638 Western Ave, Albany, NY 12203, United States
+                offerType:
+                  type: string
+                  example: sell
+                price:
+                  type: number
+                  example: 1
+                bedrooms:
+                  type: number
+                  example: 1
+                fullBathrooms:
+                  type: number
+                  example: 1
+                rooms:
+                  type: number
+                  example: 1
+                garage:
+                  type: number
+                  example: 1
+                partialBathrooms:
+                  type: number
+                  example: 1
+                homeArea:
                   type: object
                   example:
-                   Europe: England
-                metadata:
+                    ft: 225
+                lotArea:
                   type: object
                   example:
-                   title: company name
-       responses: 
-         '200':
-           description: Created company information  
+                    ft: 225
+                lotDimensions:
+                  type: object
+                  example:
+                    ft: 225
 
- /api/companies/{id}:
-     get:
+      responses:
+        '200':
+          description: Created company information
+
+  /api/listings/{id}:
+    patch:
       security:
         - bearerAuth: []
       parameters:
@@ -263,157 +325,120 @@ paths:
           schema:
             type: string
           required: true
-          description: UUID of the company
+          description: UUID of the list
       tags:
-       - Companies
-      summary: Company information
-      description: Company information by id
-      
-      responses: 
-        '200':
-          description: Company information
-
-     patch:
-       security:
-         - bearerAuth: []
-       tags:
-        - Companies
-       summary: Updating
-       description: Update company by id
-       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
-          description: UUID of the company
-
-       requestBody:
+        - Listings
+      summary: Updating
+      description: Update list
+      requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                name:
+                isAgent:
+                  type: boolean
+                isOwner:
+                  type: boolean
+                  example: true
+                overview:
                   type: string
-                  example: xyz company
-                website:
+                  example: John listing
+                images:
+                  type: array
+                  example:
+                    - image url ...
+                    - image url ...
+                country:
                   type: string
-                  example: www.company.com
+                  example: New york
+                lang:
+                  type: string
+                  example: 34
+                lat:
+                  type: string
+                  example: 11
+                city:
+                  type: string
+                  example: Albany
+                zipCode:
+                  type: string
+                  example: 12345
+                street:
+                  type: string
+                  example: str 91
+                propertyType:
+                  type: string
+                  example: test
+                listingType:
+                  type: string
+                  example: test
+                status:
+                  type: string
+                  example: test
+                propertyCondition:
+                  type: string
+                  example: test
                 address:
+                  type: string
+                  example: 638 Western Ave, Albany, NY 12203, United States
+                offerType:
+                  type: string
+                  example: sell
+                price:
+                  type: number
+                  example: 1
+                bedrooms:
+                  type: number
+                  example: 1
+                fullBathrooms:
+                  type: number
+                  example: 1
+                rooms:
+                  type: number
+                  example: 1
+                garage:
+                  type: number
+                  example: 1
+                partialBathrooms:
+                  type: number
+                  example: 1
+                homeArea:
                   type: object
                   example:
-                   Europe: England
-                metadata:
+                    ft: 225
+                lotArea:
                   type: object
                   example:
-                   title: company name
-       responses: 
-         '200':
-           description: Updated company information
-     delete:
-       security:
-         - bearerAuth: []
-       tags:
-        - Companies
-       parameters:
+                    ft: 225
+                lotDimensions:
+                  type: object
+                  example:
+                    ft: 225
+
+      responses:
+        '200':
+          description: Updated company information
+
+    delete:
+      security:
+        - bearerAuth: []
+      parameters:
         - in: path
           name: id
           schema:
             type: string
           required: true
-          description: UUID of the company
-
-       summary: Delete Company
-       description: Delete Company by id with token auth
-       responses: 
-         '200':
-           description: Confirmation message for deleting 
-
-
- /api/listings:
-   get:
-     security:
-       - bearerAuth: []
-     tags:
-      - Listings
-     summary: Listings data
-     description: Get all Listings data
-     
-     responses: 
-       '200':
-         description: Listings data
-
-   post:
-     security:
-       - bearerAuth: []
-     tags:
-      - Listings
-     summary: Creating
-     description: Create new list
-     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              images:
-                type: string
-                example: image url..
-              price:
-                type: number
-                example: 1.3
-              address:
-                type: object
-                example:
-                 Europe: England
-              
-     responses: 
-       '200':
-         description: Created company information
-    
-   patch:
-     security:
-       - bearerAuth: []
-     tags:
-      - Listings
-     summary: Updating
-     description: Update list
-     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              images:
-                type: string
-                example: image url..
-              price:
-                type: number
-                example: 1.3
-              address:
-                type: object
-                example:
-                 Europe: England
-      responses: 
+          description: UUID of the list
+      tags:
+        - Listings
+      summary: Delete list
+      description: Delete list by token
+      responses:
         '200':
-          description: Updated company information  
- 
-   delete:
-     security:
-       - bearerAuth: []
-     tags:
-      - Listings
-     summary: Delete list
-     description: Delete list by token
-     responses: 
-       '200':
-         description: Confirmation message for deleting 
- 
- /api/listings/{id}:
+          description: Confirmation message for deleting
+
     get:
       security:
         - bearerAuth: []
@@ -425,10 +450,10 @@ paths:
           required: true
           description: UUID of the list
       tags:
-       - Listings
+        - Listings
       summary: List information
       description: List information by id
-      
-      responses: 
+
+      responses:
         '200':
           description: List information
