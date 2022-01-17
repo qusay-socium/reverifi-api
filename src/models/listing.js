@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       agentId: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'User',
           key: 'id',
@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       ownerId: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'User',
           key: 'id',

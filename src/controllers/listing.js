@@ -7,9 +7,12 @@ const response = require('utils/response');
  *
  * @param {Object} listing Listing object.
  */
-const removeOwnerPassword = (listing) => {
+const removeOwnerAndAgentPassword = (listing) => {
   if (listing && listing.owner) {
     delete listing.owner.password;
+  }
+  if (listing && listing.agent) {
+    delete listing.agent.password;
   }
 };
 
@@ -22,7 +25,7 @@ const removeOwnerPassword = (listing) => {
 const getAllListings = async (req, res) => {
   const data = await Listing.getAllWithOwnerAndAgent();
 
-  data.forEach(removeOwnerPassword);
+  data.forEach(removeOwnerAndAgentPassword);
 
   res.json(response({ data }));
 };
@@ -34,12 +37,17 @@ const getAllListings = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const createListing = async (req, res) => {
-  if (req.body.isAgent) req.body.agentId = req.user.id;
-  if (req.body.isOwner) req.body.ownerId = req.user.id;
+  const { isAgent, isOwner, ...data } = req.body;
+  if (isAgent) {
+    data.agentId = req.user.id;
+  }
+  if (isOwner) {
+    data.ownerId = req.user.id;
+  }
 
-  const data = await Listing.createOne(req.body);
+  const listing = await Listing.createOne(data);
 
-  res.json(response({ data }));
+  res.json(response({ data: listing }));
 };
 
 /**
@@ -51,8 +59,11 @@ const createListing = async (req, res) => {
 const updateListing = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.getOne(id);
+  if (!listing) {
+    throw new NotFound();
+  }
 
-  if ((listing.ownerId || listing.agentId) !== (req.user.id || null)) {
+  if (!(listing.ownerId === req.user.id || listing.agentId === req.user.id)) {
     throw new Unauthorized();
   }
 
@@ -78,7 +89,7 @@ const deleteListing = async (req, res) => {
     throw new NotFound();
   }
 
-  if ((listing.ownerId || listing.agentId) !== (req.user.id || null)) {
+  if (!(listing.ownerId === req.user.id || listing.agentId === req.user.id)) {
     throw new Unauthorized();
   }
 
@@ -104,7 +115,7 @@ const getListingById = async (req, res) => {
     throw new NotFound();
   }
 
-  removeOwnerPassword(data);
+  removeOwnerAndAgentPassword(data);
 
   res.json(response({ data }));
 };
