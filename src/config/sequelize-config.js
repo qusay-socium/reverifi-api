@@ -9,6 +9,7 @@ const defaultConfig = {
   password: dbPassword,
   port: dbPort,
   username: dbUsername,
+  seederStorage: 'sequelize',
 };
 
 /**
