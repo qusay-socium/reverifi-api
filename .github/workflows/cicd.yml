@@ -1,0 +1,24 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: docker run
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_IP }}
+        username: reverifi-backend
+        key: ${{ secrets.BACKEND_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd /home/reverifi-backend/reverifi-api && git pull origin main
+          cd /home/reverifi-backend/reverifi-api && sed -i 's/\${PWD}/\/home\/reverifi-backend\/reverifi-api/' docker-compose.yml
+          /usr/bin/npm install
+          docker-compose ps
+          docker-compose up --build -d 
