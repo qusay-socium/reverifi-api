@@ -13,8 +13,8 @@ const response = require('utils/response');
  *
  * @return {Object} Object contain the token.
  */
-const getTokenResponse = ({ id, email, name }) => ({
-  token: jwt.sign({ id, email, name }, secret),
+const getTokenResponse = ({ id, email, name, roles }) => ({
+  token: jwt.sign({ id, email, name, roles }, secret),
 });
 
 /**
@@ -26,7 +26,7 @@ const getTokenResponse = ({ id, email, name }) => ({
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.getOneByCondition({ email: email.toLowerCase() });
+  const user = await User.getUserWithRoles(email.toLowerCase());
 
   if (!user) {
     throw new Unauthorized('Invalid email or password');

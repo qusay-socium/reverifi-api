@@ -1,12 +1,25 @@
-'use strict';
 const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
-const getSharedColumns = require('models/shared-columns');
 
-class listingFeatures extends BaseModel {}
+class ListingFeatures extends BaseModel {
+  /**
+   * Insert bulk.
+   *
+   * @param {Array} listingFeaturesId listingId & featureId.
+   *
+   * @return {Promise<Object[]>} Listing & features id.
+   */
+  static async createGroupe(listingFeaturesId) {
+    const result = await this.bulkCreate(listingFeaturesId);
+    return result;
+  }
+}
 
+/**
+ * @type {typeof ListingFeatures}
+ */
 module.exports = (sequelize, DataTypes) => {
-  listingFeatures.init(
+  ListingFeatures.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -31,13 +44,22 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
-      ...getSharedColumns(sequelize, DataTypes),
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at',
+        defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at',
+        defaultValue: null,
+      },
     },
     {
       sequelize,
-      modelName: 'listingFeatures',
+      modelName: 'ListingFeatures',
       tableName: 'listing_features',
     }
   );
-  return listingFeatures;
+  return ListingFeatures;
 };

@@ -1,13 +1,12 @@
-'use strict';
 const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
-const getSharedColumns = require('models/shared-columns');
 
 class Features extends BaseModel {
   static associate({ Listing }) {
     this.belongsToMany(Listing, {
-      through: 'listingFeatures',
+      through: 'ListingFeatures',
       foreignKey: 'featureId',
+      as: 'features',
     });
   }
 }
@@ -23,12 +22,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      name: {
+      feature: {
         allowNull: false,
         type: DataTypes.STRING,
         unique: true,
       },
-      ...getSharedColumns(sequelize, DataTypes),
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'created_at',
+        defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: 'updated_at',
+        defaultValue: null,
+      },
     },
     {
       sequelize,

@@ -1,5 +1,5 @@
 const { NotFound } = require('lib/errors');
-const { UserInfo } = require('models');
+const { UserInfo, UserRoles, User } = require('models');
 const response = require('utils/response');
 
 /**
@@ -54,6 +54,28 @@ const updateUserInfo = async (req, res) => {
 };
 
 /**
+ * Update user roles.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const updateUserRoles = async (req, res) => {
+  const { roles } = req.body;
+  const userId = req.user.id;
+
+  await UserRoles.deleteByCondition({ userId });
+
+  if (roles.length) {
+    const userRolesId = roles.map((role) => {
+      return { userId, roleId: role };
+    });
+    await UserRoles.createGroupe(userRolesId);
+  }
+
+  res.json(response());
+};
+
+/**
  * Delete user info by id.
  *
  * @param {import('express').Request} req Express request object.
@@ -93,4 +115,5 @@ module.exports = {
   updateUserInfo,
   deleteUserInfo,
   getUserInfoById,
+  updateUserRoles,
 };

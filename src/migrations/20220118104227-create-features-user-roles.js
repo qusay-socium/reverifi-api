@@ -20,7 +20,7 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      name: {
+      feature: {
         allowNull: false,
         type: Sequelize.STRING,
         unique: true,
@@ -42,6 +42,8 @@ module.exports = {
           model: 'listings',
           key: 'id',
         },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
       featureId: {
         type: Sequelize.UUID,
@@ -51,11 +53,13 @@ module.exports = {
           model: 'features',
           key: 'id',
         },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
       ...sharedColumns,
     });
 
-    await queryInterface.createTable('user_roles', {
+    await queryInterface.createTable('roles', {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -68,10 +72,43 @@ module.exports = {
       },
       ...sharedColumns,
     });
+
+    await queryInterface.createTable('user_roles', {
+      id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
+      },
+      userId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        field: 'user_id',
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      },
+
+      roleId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        field: 'role_id',
+        references: {
+          model: 'roles',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      },
+      ...sharedColumns,
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('user_roles');
+    await queryInterface.dropTable('roles');
     await queryInterface.dropTable('listing_features');
     await queryInterface.dropTable('features');
   },

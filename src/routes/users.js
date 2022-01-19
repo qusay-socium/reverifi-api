@@ -7,6 +7,7 @@ const {
   updateUserInfo,
   deleteUserInfo,
   getUserInfoById,
+  updateUserRoles,
 } = require('controllers/user');
 
 const router = Router({ mergeParams: true });
@@ -25,6 +26,11 @@ router.post('/', auth, createUserInfo);
  * Handle PATCH to /api/users route.
  */
 router.patch('/', auth, updateUserInfo);
+
+/**
+ * Handle PATCH to /api/users route.
+ */
+router.patch('/roles', auth, updateUserRoles);
 
 /**
  * Handle DELETE to /api/users route.

@@ -3,12 +3,31 @@ const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
 class User extends BaseModel {
-  static associate({ UserInfo, Listing }) {
+  static associate({ UserInfo, Listing, Roles }) {
     this.hasOne(UserInfo, { as: 'userInfo', foreignKey: 'userId' });
     this.hasOne(Listing, { as: 'agent', foreignKey: 'agentId' });
     this.hasOne(Listing, { as: 'ownedListing', foreignKey: 'ownerId' });
+    this.belongsToMany(Roles, {
+      through: 'UserRoles',
+      foreignKey: 'userId',
+      as: 'roles',
+    });
+  }
+
+  /**
+   * Get user with roles.
+   *
+   * @param {string} email User email.
+   *
+   * @return {Promise<Object>} The user data.
+   */
+  static async getUserWithRoles(email) {
+    const result = await this.getOneByCondition({ email }, { include: ['roles'] });
+
+    return result;
   }
 }
+
 /**
  * @type {typeof User}
  */
