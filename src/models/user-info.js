@@ -109,6 +109,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         field: 'about_me',
       },
+      image: {
+        type: DataTypes.STRING,
+      },
       ...getSharedColumns(sequelize, DataTypes),
     },
     {

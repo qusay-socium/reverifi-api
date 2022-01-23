@@ -1,6 +1,7 @@
 const { Sequelize, Op } = require('sequelize');
 const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
+const { User } = require('models');
 
 class Listing extends BaseModel {
   static associate({ User, Features }) {
@@ -21,7 +22,13 @@ class Listing extends BaseModel {
    * @return {Promise<Object>} The listing data.
    */
   static async getOneWithOwnerAndAgent(id) {
-    const result = await this.getOne(id, { include: ['owner', 'agent', 'features'] });
+    const result = await this.getOne(id, {
+      include: [
+        { model: User, as: 'owner', attributes: { exclude: ['password'] } },
+        { model: User, as: 'agent', attributes: { exclude: ['password'] } },
+        'features',
+      ],
+    });
 
     return result;
   }
@@ -36,7 +43,11 @@ class Listing extends BaseModel {
   static async getAllWithRelations(userId = null) {
     const result = await this.getAll({
       ...(userId ? { where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] } } : {}),
-      include: ['owner', 'agent', 'features'],
+      include: [
+        { model: User, as: 'owner', attributes: { exclude: ['password'] } },
+        { model: User, as: 'agent', attributes: { exclude: ['password'] } },
+        'features',
+      ],
     });
     return result;
   }
@@ -135,8 +146,8 @@ module.exports = (sequelize, DataTypes) => {
       garage: {
         type: DataTypes.INTEGER,
       },
-      status: {
-        type: DataTypes.STRING,
+      tags: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
       },
       propertyCondition: {
         type: DataTypes.STRING,
