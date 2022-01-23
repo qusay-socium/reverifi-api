@@ -13,7 +13,6 @@ const getAllListings = async (req, res) => {
 
   res.json(response({ data }));
 };
-
 /**
  * Create new listing.
  *
@@ -113,6 +112,20 @@ const getListingById = async (req, res) => {
 };
 
 /**
+ * Get all listings.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getListingSearch = async (req, res) => {
+  const { key } = req.query;
+  const data = await Listing.getAllByCondition(
+    Number.isNaN(Number.parseInt(key, 10)) ? { city: key } : { zipCode: key }
+  );
+
+  res.json(response({ data }));
+};
+/**
  * Get featured listings.
  *
  * @param {import('express').Request} req Express request object.
@@ -148,6 +161,7 @@ const getFeaturedListings = async (req, res) => {
 
 module.exports = {
   getAllListings,
+  getListingSearch,
   updateListing,
   createListing,
   getListingById,
