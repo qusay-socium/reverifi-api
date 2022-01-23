@@ -1,4 +1,4 @@
-const { Listing } = require('models');
+const { Listing, ListingFeatures } = require('models');
 const { NotFound, Unauthorized, InternalError } = require('lib/errors');
 const response = require('utils/response');
 
@@ -23,7 +23,7 @@ const removeOwnerAndAgentPassword = (listing) => {
  * @param {import('express').Response} res Express response object.
  */
 const getAllListings = async (req, res) => {
-  const data = await Listing.getAllWithOwnerAndAgent(req.user.id);
+  const data = await Listing.getAllWithRelations(req.user.id);
 
   data.forEach(removeOwnerAndAgentPassword);
 
@@ -37,16 +37,23 @@ const getAllListings = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const createListing = async (req, res) => {
-  const { isAgent, isOwner, ...data } = req.body;
+  const { isAgent, isOwner, features, ...data } = req.body;
   if (isAgent) {
     data.agentId = req.user.id;
   }
   if (isOwner) {
     data.ownerId = req.user.id;
   }
-
   const listing = await Listing.createOne(data);
 
+  if (features.length) {
+    await ListingFeatures.createAll(
+      features.map((feature) => ({
+        featureId: feature,
+        listingId: listing.id,
+      }))
+    );
+  }
   res.json(response({ data: listing }));
 };
 
@@ -58,15 +65,29 @@ const createListing = async (req, res) => {
  */
 const updateListing = async (req, res) => {
   const { id } = req.params;
+  const { isAgent, isOwner, features, ...data } = req.body;
+
+  data.agentId = isAgent ? req.user.id : undefined;
+  data.ownerId = isOwner ? req.user.id : undefined;
 
   const listing = await Listing.getOne(id);
   if (!listing || !(listing.ownerId === req.user.id || listing.agentId === req.user.id)) {
     throw new NotFound();
   }
 
-  const data = await Listing.updateByCondition({ id }, req.body);
+  if (features) {
+    await ListingFeatures.deleteByCondition({ listingId: id });
 
-  res.json(response({ data }));
+    if (features.length) {
+      await ListingFeatures.createAll(
+        features.map((feature) => ({ featureId: feature, listingId: listing.id }))
+      );
+    }
+  }
+
+  const updatedListing = await Listing.updateOne(id, data);
+
+  res.json(response({ updatedListing }));
 };
 
 /**

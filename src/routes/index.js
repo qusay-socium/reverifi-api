@@ -8,10 +8,10 @@ const companiesRouter = require('./companies');
 
 const router = Router();
 
-router.use('/auth', authRouter);
-router.use('/users', usersRouter);
 router.use('/api-docs', docsRouter);
-router.use('/listings', listingsRouter);
-router.use('/companies', companiesRouter);
+router.use('/api/auth', authRouter);
+router.use('/api/users', usersRouter);
+router.use('/api/listings', listingsRouter);
+router.use('/api/companies', companiesRouter);
 
 module.exports = router;

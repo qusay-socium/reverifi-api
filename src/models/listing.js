@@ -3,9 +3,14 @@ const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
 class Listing extends BaseModel {
-  static associate({ User }) {
+  static associate({ User, Features }) {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
+    this.belongsToMany(Features, {
+      through: 'ListingFeatures',
+      foreignKey: 'listingId',
+      as: 'features',
+    });
   }
 
   /**
@@ -16,22 +21,22 @@ class Listing extends BaseModel {
    * @return {Promise<Object>} The listing data.
    */
   static async getOneWithOwnerAndAgent(id) {
-    const result = await this.getOne(id, { include: ['owner', 'agent'] });
+    const result = await this.getOne(id, { include: ['owner', 'agent', 'features'] });
 
     return result;
   }
 
   /**
-   * Get all listing with owner and agent.
+   * Get all listing with owner,agent & features.
    *
    * @param {string} [userId=null] The listing owner or agent ID, if provided only listing for this user will be retrieved.
    *
    * @return {Promise<Object[]>} All listing data.
    */
-  static async getAllWithOwnerAndAgent(userId = null) {
+  static async getAllWithRelations(userId = null) {
     const result = await this.getAll({
-      where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] },
-      include: ['owner', 'agent'],
+      ...(userId ? { where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] } } : {}),
+      include: ['owner', 'agent', 'features'],
     });
     return result;
   }
@@ -121,7 +126,7 @@ module.exports = (sequelize, DataTypes) => {
         field: 'lot_area',
       },
       lotDimensions: {
-        type: DataTypes.DOUBLE,
+        type: DataTypes.JSON,
         field: 'lot_dimensions',
       },
       rooms: {
