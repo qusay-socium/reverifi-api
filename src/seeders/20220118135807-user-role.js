@@ -41,8 +41,7 @@ module.exports = {
           id: '1a757bc6-89de-4656-af74-f7f9fbd74d62',
           role: 'reverifi+',
         },
-      ],
-      {}
+      ].map((item) => ({ ...item, created_at: Sequelize.fn('now') }))
     );
   },
 

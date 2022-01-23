@@ -3,7 +3,7 @@ const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
 class Listing extends BaseModel {
-  static associate({ User, Features, ListingFeatures }) {
+  static associate({ User, Features }) {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
     this.belongsToMany(Features, {
@@ -35,7 +35,7 @@ class Listing extends BaseModel {
    */
   static async getAllWithRelations(userId = null) {
     const result = await this.getAll({
-      where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] },
+      ...(userId ? { where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] } } : {}),
       include: ['owner', 'agent', 'features'],
     });
     return result;
@@ -126,7 +126,7 @@ module.exports = (sequelize, DataTypes) => {
         field: 'lot_area',
       },
       lotDimensions: {
-        type: DataTypes.DOUBLE,
+        type: DataTypes.JSON,
         field: 'lot_dimensions',
       },
       rooms: {

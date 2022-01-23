@@ -12,6 +12,13 @@ router.use('/', swaggerUi.serve);
 /**
  * Handle GET to /api-docs route.
  */
-router.get('/', swaggerUi.setup(YAML.load('./src/swagger.yml')));
+router.get(
+  '/',
+  (req, res, next) => {
+    res.removeHeader('Content-Security-Policy');
+    next();
+  },
+  swaggerUi.setup(YAML.load('./src/swagger.yml'))
+);
 
 module.exports = router;

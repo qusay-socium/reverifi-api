@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
+const getSharedColumns = require('models/shared-columns');
 
 class Roles extends BaseModel {
   static associate({ User }) {
@@ -25,8 +26,9 @@ module.exports = (sequelize, DataTypes) => {
       role: {
         allowNull: false,
         type: DataTypes.STRING,
-        unique: true,
+        unique: false,
       },
+      ...getSharedColumns(sequelize, DataTypes),
     },
     {
       sequelize,

@@ -17,7 +17,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(cors({ origin: corsOrigin }));
 
-app.use('/api', routes);
+app.use('/', routes);
 
 app.use('*', (req, res, next) => {
   throw new NotFound();

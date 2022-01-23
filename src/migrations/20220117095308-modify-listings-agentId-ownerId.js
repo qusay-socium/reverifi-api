@@ -5,10 +5,6 @@ module.exports = {
     await queryInterface.removeConstraint('listings', 'listings_agent_id_fkey1');
     await queryInterface.removeConstraint('listings', 'listings_owner_id_fkey1');
 
-    await queryInterface.changeColumn('listings', 'lot_dimensions', {
-      type: Sequelize.JSON,
-    });
-
     await queryInterface.changeColumn('listings', 'agentId', {
       type: Sequelize.UUID,
       allowNull: true,

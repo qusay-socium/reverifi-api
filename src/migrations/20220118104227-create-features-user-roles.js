@@ -5,12 +5,27 @@ module.exports = {
       createdAt: {
         type: Sequelize.DATE,
         field: 'created_at',
+        allowNull: false,
         defaultValue: Sequelize.NOW,
+      },
+      createdBy: {
+        type: Sequelize.UUID,
+        field: 'created_by',
       },
       updatedAt: {
         type: Sequelize.DATE,
         field: 'updated_at',
         defaultValue: null,
+      },
+      updatedBy: {
+        type: Sequelize.UUID,
+        field: 'updated_by',
+      },
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        field: 'is_deleted',
+        defaultValue: false,
+        allowNull: false,
       },
     };
 
@@ -23,7 +38,7 @@ module.exports = {
       feature: {
         allowNull: false,
         type: Sequelize.STRING,
-        unique: true,
+        unique: false,
       },
       ...sharedColumns,
     });
@@ -56,7 +71,12 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      ...sharedColumns,
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        field: 'is_deleted',
+        defaultValue: false,
+        allowNull: false,
+      },
     });
 
     await queryInterface.createTable('roles', {
@@ -68,7 +88,7 @@ module.exports = {
       role: {
         allowNull: false,
         type: Sequelize.STRING,
-        unique: true,
+        unique: false,
       },
       ...sharedColumns,
     });
@@ -102,7 +122,12 @@ module.exports = {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-      ...sharedColumns,
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        field: 'is_deleted',
+        defaultValue: false,
+        allowNull: false,
+      },
     });
   },
 

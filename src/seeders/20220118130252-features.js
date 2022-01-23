@@ -47,8 +47,7 @@ module.exports = {
           id: 'fbb8463a-5b36-40f6-a3f2-90669f4b389a',
           feature: 'Parking',
         },
-      ],
-      {}
+      ].map((item) => ({ ...item, created_at: Sequelize.fn('now') }))
     );
   },
 

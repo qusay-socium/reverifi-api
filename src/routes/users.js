@@ -28,7 +28,7 @@ router.post('/', auth, createUserInfo);
 router.patch('/', auth, updateUserInfo);
 
 /**
- * Handle PATCH to /api/users route.
+ * Handle PATCH to /api/users/roles route.
  */
 router.patch('/roles', auth, updateUserRoles);
 

@@ -1,19 +1,7 @@
 const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
 
-class UserRoles extends BaseModel {
-  /**
-   * Insert bulk.
-   *
-   * @param {Array} listingFeaturesId userId & roleId.
-   *
-   * @return {Promise<Object[]>} User & roles id.
-   */
-  static async createGroupe(userRolesId) {
-    const result = await this.bulkCreate(userRolesId);
-    return result;
-  }
-}
+class UserRoles extends BaseModel {}
 
 /**
  * @type {typeof UserRoles}
@@ -44,15 +32,11 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-        defaultValue: DataTypes.NOW,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-        defaultValue: null,
+      isDeleted: {
+        type: DataTypes.BOOLEAN,
+        field: 'is_deleted',
+        defaultValue: false,
+        allowNull: false,
       },
     },
     {

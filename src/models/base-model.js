@@ -27,6 +27,20 @@ class BaseModel extends Model {
   }
 
   /**
+   * Create multiple records.
+   *
+   * @param {Object[]} data A list data objects to insert.
+   * @param {import("sequelize").BulkCreateOptions} [options={}] Query options.
+   *
+   * @return {Object[]} A list of created data.
+   */
+  static async createAll(data, options = {}) {
+    const results = await this.bulkCreate(data, options);
+
+    return results ? results.map((result) => result.toJSON()) : [];
+  }
+
+  /**
    * Update an existing records by condition.
    *
    * @param {import("sequelize").WhereOptions} condition The Query where condition.

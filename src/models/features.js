@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
+const getSharedColumns = require('models/shared-columns');
 
 class Features extends BaseModel {
   static associate({ Listing }) {
@@ -25,18 +26,9 @@ module.exports = (sequelize, DataTypes) => {
       feature: {
         allowNull: false,
         type: DataTypes.STRING,
-        unique: true,
+        unique: false,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: 'created_at',
-        defaultValue: DataTypes.NOW,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: 'updated_at',
-        defaultValue: null,
-      },
+      ...getSharedColumns(sequelize, DataTypes),
     },
     {
       sequelize,

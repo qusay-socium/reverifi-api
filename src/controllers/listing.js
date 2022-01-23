@@ -47,11 +47,12 @@ const createListing = async (req, res) => {
   const listing = await Listing.createOne(data);
 
   if (features.length) {
-    const listingFeatures = features.map((feature) => {
-      return { featureId: feature, listingId: listing.id };
-    });
-
-    await ListingFeatures.createGroupe(listingFeatures);
+    await ListingFeatures.createAll(
+      features.map((feature) => ({
+        featureId: feature,
+        listingId: listing.id,
+      }))
+    );
   }
   res.json(response({ data: listing }));
 };
@@ -66,16 +67,8 @@ const updateListing = async (req, res) => {
   const { id } = req.params;
   const { isAgent, isOwner, features, ...data } = req.body;
 
-  if (isAgent) {
-    data.agentId = req.user.id;
-  } else {
-    data.agentId = null;
-  }
-  if (isOwner) {
-    data.ownerId = req.user.id;
-  } else {
-    data.ownerId = null;
-  }
+  data.agentId = isAgent ? req.user.id : undefined;
+  data.ownerId = isOwner ? req.user.id : undefined;
 
   const listing = await Listing.getOne(id);
   if (!listing || !(listing.ownerId === req.user.id || listing.agentId === req.user.id)) {
@@ -86,15 +79,13 @@ const updateListing = async (req, res) => {
     await ListingFeatures.deleteByCondition({ listingId: id });
 
     if (features.length) {
-      const listingFeaturesId = features.map((feature) => {
-        return { featureId: feature, listingId: listing.id };
-      });
-
-      await ListingFeatures.createGroupe(listingFeaturesId);
+      await ListingFeatures.createAll(
+        features.map((feature) => ({ featureId: feature, listingId: listing.id }))
+      );
     }
   }
 
-  const updatedListing = await Listing.updateByCondition({ id }, data);
+  const updatedListing = await Listing.updateOne(id, data);
 
   res.json(response({ updatedListing }));
 };

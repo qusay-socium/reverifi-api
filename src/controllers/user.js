@@ -66,10 +66,7 @@ const updateUserRoles = async (req, res) => {
   await UserRoles.deleteByCondition({ userId });
 
   if (roles.length) {
-    const userRolesId = roles.map((role) => {
-      return { userId, roleId: role };
-    });
-    await UserRoles.createGroupe(userRolesId);
+    await UserRoles.createAll(roles.map((role) => ({ userId, roleId: role })));
   }
 
   res.json(response());
