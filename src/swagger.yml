@@ -222,6 +222,9 @@ paths:
     patch:
       description: Update user roles
       summary: Update user roles
+    patch:
+      description: Update user roles
+
       security:
         - bearerAuth: []
       tags:
@@ -527,3 +530,35 @@ paths:
       responses:
         '200':
           description: Roles
+  /api/property-types:
+    get:
+      tags:
+        - Listings
+      summary: Property Types
+      description: All Property Types
+
+      responses:
+        '200':
+          description: Property Types
+
+  /api/listing-types:
+    get:
+      tags:
+        - Listings
+      summary: Listing Types
+      description: All Listing Types
+
+      responses:
+        '200':
+          description: Listing Types
+
+  /api/features:
+    get:
+      tags:
+        - Listings
+      summary: Features
+      description: All Features
+
+      responses:
+        '200':
+          description: Features

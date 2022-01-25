@@ -21,6 +21,8 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * ListingFeatures: import('./listing-features')
  * Roles: import('./roles')
  * UserRoles: import('./user-roles')
+ * PropertyType: import('./property-type')
+ * ListingType: import('./listing-type')
  * }}
  */
 const db = {};
