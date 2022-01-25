@@ -1,5 +1,5 @@
 const { NotFound } = require('lib/errors');
-const { UserInfo, UserRoles, User } = require('models');
+const { UserInfo, UserRoles, User, Roles } = require('models');
 const response = require('utils/response');
 
 /**
@@ -54,25 +54,6 @@ const updateUserInfo = async (req, res) => {
 };
 
 /**
- * Update user roles.
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const updateUserRoles = async (req, res) => {
-  const { roles } = req.body;
-  const userId = req.user.id;
-
-  await UserRoles.deleteByCondition({ userId });
-
-  if (roles.length) {
-    await UserRoles.createAll(roles.map((role) => ({ userId, roleId: role })));
-  }
-
-  res.json(response());
-};
-
-/**
  * Delete user info by id.
  *
  * @param {import('express').Request} req Express request object.
@@ -106,6 +87,48 @@ const getUserInfoById = async (req, res) => {
   res.json(response({ data }));
 };
 
+/**
+ * Update user roles.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const updateUserRoles = async (req, res) => {
+  const { roles } = req.body;
+  const userId = req.user.id;
+
+  await UserRoles.deleteByCondition({ userId });
+
+  if (roles.length) {
+    await UserRoles.createAll(roles.map((role) => ({ userId, roleId: role })));
+  }
+
+  res.json(response());
+};
+
+/**
+ * get user roles.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getUserRoles = async (req, res) => {
+  const userId = req.user.id;
+
+  const data = (
+    await User.getOne(userId, {
+      include: {
+        model: Roles,
+        as: 'roles',
+        attributes: ['id', 'role'],
+        through: { attributes: [] },
+      },
+    })
+  ).roles;
+
+  res.json(response({ data }));
+};
+
 module.exports = {
   getAllUserInfo,
   createUserInfo,
@@ -113,4 +136,5 @@ module.exports = {
   deleteUserInfo,
   getUserInfoById,
   updateUserRoles,
+  getUserRoles,
 };

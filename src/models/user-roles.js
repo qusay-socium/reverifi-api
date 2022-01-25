@@ -1,7 +1,18 @@
 const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
 
-class UserRoles extends BaseModel {}
+class UserRoles extends BaseModel {
+  static associate({ User, Roles }) {
+    this.belongsTo(User, {
+      foreignKey: 'userId',
+      as: 'user',
+    });
+    this.belongsTo(Roles, {
+      foreignKey: 'roleId',
+      as: 'role',
+    });
+  }
+}
 
 /**
  * @type {typeof UserRoles}

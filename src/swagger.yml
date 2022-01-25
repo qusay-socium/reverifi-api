@@ -203,31 +203,43 @@ paths:
       responses:
         '200':
           description: User information
-     
-  /api/users/roles:
-     patch:
-       description: Update user roles
 
-       security:
-         - bearerAuth: []
-       tags:
-         - User information
-       requestBody:
-         required: true
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 roles:
-                   type: array
-                   example:
+  /api/users/roles:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - User information
+      summary: Get user Roles
+      description: Get user roles
+
+      responses:
+        '200':
+          description: Users information
+
+    patch:
+      description: Update user roles
+      summary: Update user roles
+      security:
+        - bearerAuth: []
+      tags:
+        - User information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roles:
+                  type: array
+                  example:
                     - a784ef06-781a-4ea2-9323-eb77a543293a
                     - 695d7d66-135d-437b-b0d8-7fe37e831136
-       responses:
-         '200':
-           description: Confirmation message.
-           
+      responses:
+        '200':
+          description: Confirmation message.
+
   /api/listings:
     get:
       security:
@@ -491,3 +503,16 @@ paths:
       responses:
         '200':
           description: List information
+
+  /api/roles:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Roles
+      summary: Get Roles
+      description: Get roles
+
+      responses:
+        '200':
+          description: Roles
