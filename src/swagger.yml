@@ -521,6 +521,23 @@ paths:
         '200':
           description: List information
 
+  /api/listings/search:
+    get:
+      parameters:
+        - in: query
+          name: key
+          schema:
+            type: string
+          description: Search key
+      tags:
+        - Listings
+      summary: Search listings by city or zip code
+      description: Search listings by city or zip code
+
+      responses:
+        '200':
+          description: Listings data
+
   /api/listing-types:
     get:
       tags:

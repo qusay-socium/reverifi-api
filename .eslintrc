@@ -14,6 +14,7 @@
   "extends": ["airbnb-base", "prettier"],
   "plugins": ["import", "prettier"],
   "root": true,
+  "ignorePatterns": ["src/seeders/*.js", "src/migrations/*.js"],
   "rules": {
     "prettier/prettier": "error",
     "max-len": ["error", { "code": 100 }],
