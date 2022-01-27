@@ -1,0 +1,22 @@
+name: Check PR
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+
+      - name: Eslint
+        id: eslint
+        if: "github.event_name == 'pull_request'"
+        run: |
+          npm ci && npm cache clean --force --production=false
+          npx eslint server --config .eslintrc
+          npx eslint src --config .eslintrc

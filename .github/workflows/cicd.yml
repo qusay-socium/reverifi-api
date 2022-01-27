@@ -9,28 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v2
-
-      - name: Eslint
-        id: eslint
-        if: "github.event_name == 'pull_request'"
-        run: |
-          npm ci && npm cache clean --force --production=false
-          npx eslint server --config .eslintrc
-          npx eslint src --config .eslintrc
-
-      - name: docker run
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST_IP }}
-          username: reverifi-backend
-          key: ${{ secrets.BACKEND_KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            cd /home/reverifi-backend/reverifi-api && git pull origin main
-            cd /home/reverifi-backend/reverifi-api && sed -i 's/\${PWD}/\/home\/reverifi-backend\/reverifi-api/' docker-compose.yml
-            /usr/bin/npm install
-            docker-compose ps
-            docker-compose up --build -d
+    - name: docker run
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_IP }}
+        username: reverifi-backend
+        key: ${{ secrets.BACKEND_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd /home/reverifi-backend/reverifi-api && git pull origin main
+          cd /home/reverifi-backend/reverifi-api && sed -i 's/\${PWD}/\/home\/reverifi-backend\/reverifi-api/' docker-compose.yml
+          /usr/bin/npm install
+          docker-compose ps
+          docker-compose up --build -d 
