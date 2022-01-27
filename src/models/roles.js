@@ -3,9 +3,9 @@ const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
 class Roles extends BaseModel {
-  static associate({ User }) {
+  static associate({ User, UserRoles }) {
     this.belongsToMany(User, {
-      through: 'UserRoles',
+      through: UserRoles,
       foreignKey: 'roleId',
       as: 'roles',
     });
