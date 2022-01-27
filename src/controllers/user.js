@@ -107,7 +107,7 @@ const updateUserRoles = async (req, res) => {
 };
 
 /**
- * get user roles.
+ * Get user roles.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
