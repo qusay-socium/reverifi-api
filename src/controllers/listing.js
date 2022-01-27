@@ -112,16 +112,13 @@ const getListingById = async (req, res) => {
 };
 
 /**
- * Get all listings.
+ * Search listings by city or zip code.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getListingSearch = async (req, res) => {
-  const { key } = req.query;
-  const data = await Listing.getAllByCondition(
-    Number.isNaN(Number.parseInt(key, 10)) ? { city: key } : { zipCode: key }
-  );
+const searchListingsByCityOrZipCode = async (req, res) => {
+  const data = await Listing.searchByCityOrZipCode(req.query.key);
 
   res.json(response({ data }));
 };
@@ -161,10 +158,10 @@ const getFeaturedListings = async (req, res) => {
 
 module.exports = {
   getAllListings,
-  getListingSearch,
   updateListing,
   createListing,
   getListingById,
   deleteListing,
+  searchListingsByCityOrZipCode,
   getFeaturedListings,
 };

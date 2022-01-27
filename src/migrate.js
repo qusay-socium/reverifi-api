@@ -17,6 +17,7 @@ const umzug = new Umzug({
       db.sequelize.constructor, // DataTypes
       () => {
         throw new Error(
+          // eslint-disable-next-line max-len
           'Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.'
         );
       },

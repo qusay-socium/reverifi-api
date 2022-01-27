@@ -1,7 +1,6 @@
 const { Sequelize, Op } = require('sequelize');
 const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
-const { User } = require('models');
 
 class Listing extends BaseModel {
   static associate({ User, Features, PropertyType, ListingType }) {
@@ -26,8 +25,8 @@ class Listing extends BaseModel {
   static async getOneWithOwnerAndAgent(id) {
     const result = await this.getOne(id, {
       include: [
-        { model: User, as: 'owner', attributes: { exclude: ['password'] } },
-        { model: User, as: 'agent', attributes: { exclude: ['password'] } },
+        { model: this.sequelize.models.User, as: 'owner', attributes: { exclude: ['password'] } },
+        { model: this.sequelize.models.User, as: 'agent', attributes: { exclude: ['password'] } },
         'features',
       ],
     });
@@ -38,7 +37,8 @@ class Listing extends BaseModel {
   /**
    * Get all listing with owner,agent & features.
    *
-   * @param {string} [userId=null] The listing owner or agent ID, if provided only listing for this user will be retrieved.
+   * @param {string} [userId=null] The listing owner or agent ID,
+   *                               if provided only listing for this user will be retrieved.
    *
    * @return {Promise<Object[]>} All listing data.
    */
@@ -46,10 +46,26 @@ class Listing extends BaseModel {
     const result = await this.getAll({
       ...(userId ? { where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] } } : {}),
       include: [
-        { model: User, as: 'owner', attributes: { exclude: ['password'] } },
-        { model: User, as: 'agent', attributes: { exclude: ['password'] } },
+        { model: this.sequelize.models.User, as: 'owner', attributes: { exclude: ['password'] } },
+        { model: this.sequelize.models.User, as: 'agent', attributes: { exclude: ['password'] } },
         'features',
       ],
+    });
+    return result;
+  }
+
+  /**
+   * Search by city or aip code.
+   *
+   * @param {string} [value=''] Search value.
+   *
+   * @return {Promise<Object[]>} Listing data.
+   */
+  static async searchByCityOrZipCode(value = '') {
+    const result = await this.getAll({
+      where: {
+        [Op.or]: { city: { [Op.like]: `%${value}%` }, zipCode: { [Op.like]: `%${value}%` } },
+      },
     });
     return result;
   }

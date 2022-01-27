@@ -8,7 +8,7 @@ const {
   deleteListing,
   getListingById,
   getFeaturedListings,
-  getListingSearch,
+  searchListingsByCityOrZipCode,
 } = require('controllers/listing');
 
 const router = Router({ mergeParams: true });
@@ -19,9 +19,9 @@ const router = Router({ mergeParams: true });
 router.get('/featured', getFeaturedListings);
 
 /**
- * Handle GET to /api/listings/search?location={} route.
+ * Handle GET to /api/listings/search route.
  */
-router.get('/search', getListingSearch);
+router.get('/search', searchListingsByCityOrZipCode);
 
 /**
  * Handle GET to /api/listings route.
