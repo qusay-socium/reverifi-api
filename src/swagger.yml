@@ -11,7 +11,8 @@ tags:
     description: User information endpoints
   - name: Listings
     description: Listings endpoints
-
+  - name: Roles
+    description: Roles endpoints
 components:
   securitySchemes:
     bearerAuth:
@@ -131,6 +132,7 @@ paths:
       responses:
         '200':
           description: User information related by request body
+
     patch:
       security:
         - bearerAuth: []
@@ -357,6 +359,24 @@ paths:
           description: Created company information
 
   /api/listings/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: UUID of the list
+      tags:
+        - Listings
+      summary: List information
+      description: List information by id
+      responses:
+        '200':
+          description: List information
+
     patch:
       security:
         - bearerAuth: []
@@ -485,21 +505,12 @@ paths:
         '200':
           description: Confirmation message for deleting
 
+  /api/listings/featured:
     get:
-      security:
-        - bearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
-          description: UUID of the list
       tags:
         - Listings
-      summary: List information
-      description: List information by id
-
+      summary: Featured listings
+      description: Get featured listings
       responses:
         '200':
           description: List information

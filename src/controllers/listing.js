@@ -1,20 +1,6 @@
-const { Listing, ListingFeatures } = require('models');
-const { NotFound, Unauthorized, InternalError } = require('lib/errors');
+const { Listing, ListingFeatures, User, UserInfo } = require('models');
+const { NotFound } = require('lib/errors');
 const response = require('utils/response');
-
-/**
- * Remove password field from listing owner and agent object.
- *
- * @param {Object} listing Listing object.
- */
-const removeOwnerAndAgentPassword = (listing) => {
-  if (listing && listing.owner) {
-    delete listing.owner.password;
-  }
-  if (listing && listing.agent) {
-    delete listing.agent.password;
-  }
-};
 
 /**
  * Get all listings.
@@ -24,8 +10,6 @@ const removeOwnerAndAgentPassword = (listing) => {
  */
 const getAllListings = async (req, res) => {
   const data = await Listing.getAllWithRelations(req.user.id);
-
-  data.forEach(removeOwnerAndAgentPassword);
 
   res.json(response({ data }));
 };
@@ -124,9 +108,48 @@ const getListingById = async (req, res) => {
     throw new NotFound();
   }
 
-  removeOwnerAndAgentPassword(data);
+  res.json(response({ data }));
+};
+
+/**
+ * Get featured listings.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getFeaturedListings = async (req, res) => {
+  const data = await Listing.getAll({
+    attributes: [
+      'id',
+      'images',
+      'price',
+      'address',
+      'listingType',
+      'bedrooms',
+      'fullBathrooms',
+      'propertyType',
+      'createdAt',
+    ],
+    limit: 6,
+    order: [['created_at', 'DESC']],
+    include: [
+      {
+        model: User,
+        as: 'agent',
+        attributes: ['id'],
+        include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }],
+      },
+    ],
+  });
 
   res.json(response({ data }));
 };
 
-module.exports = { getAllListings, updateListing, createListing, getListingById, deleteListing };
+module.exports = {
+  getAllListings,
+  updateListing,
+  createListing,
+  getListingById,
+  deleteListing,
+  getFeaturedListings,
+};

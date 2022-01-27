@@ -36,6 +36,7 @@ const login = async (req, res) => {
   if (!valid) {
     throw new Unauthorized('Invalid email or password');
   }
+
   res.json(response({ data: getTokenResponse(user) }));
 };
 
