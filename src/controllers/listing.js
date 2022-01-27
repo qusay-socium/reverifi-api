@@ -1,5 +1,5 @@
 const { Listing, ListingFeatures, User, UserInfo } = require('models');
-const { NotFound, Unauthorized, InternalError } = require('lib/errors');
+const { NotFound } = require('lib/errors');
 const response = require('utils/response');
 
 /**
@@ -141,8 +141,6 @@ const getFeaturedListings = async (req, res) => {
       },
     ],
   });
-
-  data.forEach(removeOwnerAndAgentPassword);
 
   res.json(response({ data }));
 };
