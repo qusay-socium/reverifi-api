@@ -2,14 +2,14 @@ const Router = require('express-promise-router');
 
 const { Company } = require('models');
 const auth = require('middleware/auth');
-const { apiGetAll, apiPost, apiGet, apiPatch, apiDelete } = require('middleware/api-methods');
+const { apiGetPage, apiPost, apiGet, apiPatch, apiDelete } = require('middleware/api-methods');
 
 const router = Router({ mergeParams: true });
 
 /**
  * Handle GET to /api/companies route.
  */
-router.get('/', auth, apiGetAll(Company));
+router.get('/', auth, apiGetPage(Company));
 
 /**
  * Handle POST to /api/companies route.

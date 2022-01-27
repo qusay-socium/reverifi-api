@@ -11,6 +11,10 @@ tags:
     description: User information endpoints
   - name: Listings
     description: Listings endpoints
+  - name: Listing types
+    description: Listing types endpoints
+  - name: Property types
+    description: Property types endpoints
   - name: Roles
     description: Roles endpoints
 components:
@@ -222,9 +226,6 @@ paths:
     patch:
       description: Update user roles
       summary: Update user roles
-    patch:
-      description: Update user roles
-
       security:
         - bearerAuth: []
       tags:
@@ -518,6 +519,28 @@ paths:
         '200':
           description: List information
 
+  /api/listing-types:
+    get:
+      tags:
+        - Listing types
+      summary: Listing Types
+      description: All Listing Types
+
+      responses:
+        '200':
+          description: Listing Types
+
+  /api/property-types:
+    get:
+      tags:
+        - Property types
+      summary: Property Types
+      description: All Property Types
+
+      responses:
+        '200':
+          description: Property Types
+
   /api/roles:
     get:
       security:
@@ -530,27 +553,6 @@ paths:
       responses:
         '200':
           description: Roles
-  /api/property-types:
-    get:
-      tags:
-        - Listings
-      summary: Property Types
-      description: All Property Types
-
-      responses:
-        '200':
-          description: Property Types
-
-  /api/listing-types:
-    get:
-      tags:
-        - Listings
-      summary: Listing Types
-      description: All Listing Types
-
-      responses:
-        '200':
-          description: Listing Types
 
   /api/features:
     get:
