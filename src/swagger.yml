@@ -17,6 +17,8 @@ tags:
     description: Property types endpoints
   - name: Roles
     description: Roles endpoints
+  - name: Features
+    description: Features endpoints
 components:
   securitySchemes:
     bearerAuth:
@@ -557,7 +559,7 @@ paths:
   /api/features:
     get:
       tags:
-        - Listings
+        - Features
       summary: Features
       description: All Features
 
