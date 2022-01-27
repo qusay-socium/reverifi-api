@@ -4,9 +4,11 @@ const getSharedColumns = require('models/shared-columns');
 const { User } = require('models');
 
 class Listing extends BaseModel {
-  static associate({ User, Features }) {
+  static associate({ User, Features, PropertyType, ListingType }) {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
+    this.belongsTo(PropertyType, { as: 'propertyType', foreignKey: 'property_type_id' });
+    this.belongsTo(ListingType, { as: 'listingType', foreignKey: 'listing_type_id' });
     this.belongsToMany(Features, {
       through: 'ListingFeatures',
       foreignKey: 'listingId',
@@ -109,13 +111,23 @@ module.exports = (sequelize, DataTypes) => {
       street: {
         type: DataTypes.STRING,
       },
-      propertyType: {
-        type: DataTypes.STRING,
-        field: 'property_type',
+      propertyTypeId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: 'property_type',
+          key: 'id',
+        },
+        field: 'property_type_id',
       },
-      listingType: {
-        type: DataTypes.STRING,
-        field: 'listing_type',
+      listingTypedId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+        references: {
+          model: 'listing_type',
+          key: 'id',
+        },
+        field: 'listing_type_id',
       },
       bedrooms: {
         type: DataTypes.INTEGER,
@@ -148,10 +160,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       tags: {
         type: DataTypes.ARRAY(DataTypes.STRING),
-      },
-      propertyCondition: {
-        type: DataTypes.STRING,
-        field: 'property_condition',
       },
       yearBuilt: {
         type: DataTypes.INTEGER,

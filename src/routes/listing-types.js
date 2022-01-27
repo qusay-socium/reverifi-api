@@ -1,14 +1,13 @@
 const Router = require('express-promise-router');
 
-const { Roles } = require('models');
-const auth = require('middleware/auth');
 const { apiGetPage } = require('middleware/api-methods');
+const { ListingType } = require('models');
 
 const router = Router({ mergeParams: true });
 
 /**
- * Handle GET to /api/roles route.
+ * Handle GET to /api/listing-types route.
  */
-router.get('/', auth, apiGetPage(Roles));
+router.get('/', apiGetPage(ListingType));
 
 module.exports = router;

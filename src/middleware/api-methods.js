@@ -23,12 +23,13 @@ const getQueryConditions = (query) =>
   });
 
 /**
- * Get a middleware that handles get page requests for a model.
+ * Get a middleware that handles get all requests for a model.
  *
  * @param {import('models/base-model')} model Sequelize data model.
+ * @param {import("sequelize").FindOptions} [options={}] Query options.
  */
-const apiGetPage =
-  (model) =>
+const apiGetAll =
+  (model, options = {}) =>
   /**
    * Get page middleware.
    *
@@ -36,18 +37,27 @@ const apiGetPage =
    * @param {import('express').Response} res Express route response.
    */
   async (req, res) => {
-    const data = await model.getAll({});
+    const modelAttributes = Object.keys(model.rawAttributes);
+    const where = getQueryConditions(
+      pickBy(req.query, (value, key) => modelAttributes.includes(key.split(':')[0]))
+    );
+
+    const data = await model.getAll({
+      ...options,
+      where: [...(where || []), ...(options.where || [])],
+    });
 
     res.json(response({ data }));
   };
 
 /**
- * Get a middleware that handles get all requests for a model.
+ * Get a middleware that handles get page requests for a model.
  *
  * @param {import('models/base-model')} model Sequelize data model.
+ * @param {import("sequelize").FindOptions} [options={}] Query options.
  */
-const apiGetAll =
-  (model) =>
+const apiGetPage =
+  (model, options = {}) =>
   /**
    * Get all middleware.
    *
@@ -76,7 +86,8 @@ const apiGetAll =
       offset,
       limit,
       order,
-      where,
+      ...options,
+      where: [...(where || []), ...(options.where || [])],
     });
 
     const totalCount = await model.getCount({ where });
@@ -88,9 +99,10 @@ const apiGetAll =
  * Get a middleware that handles get requests for a model.
  *
  * @param {import('models/base-model')} model Sequelize data model.
+ * @param {import("sequelize").FindOptions} [options={}] Query options.
  */
 const apiGet =
-  (model) =>
+  (model, options = {}) =>
   /**
    * Get middleware.
    *
@@ -99,7 +111,7 @@ const apiGet =
    */
   async (req, res) => {
     const id = req.params[model.getIdField()];
-    const data = await model.getOne(id);
+    const data = await model.getOne(id, options);
     if (!data) {
       throw new NotFound('Data not found');
     }
@@ -110,9 +122,10 @@ const apiGet =
  * Get a middleware that handles post requests for a model.
  *
  * @param {import('models/base-model')} model Sequelize data model.
+ * @param {import("sequelize").CreateOptions} [options={}] Query options.
  */
 const apiPost =
-  (model) =>
+  (model, options = {}) =>
   /**
    * Post middleware.
    *
@@ -120,7 +133,7 @@ const apiPost =
    * @param {import('express').Response} res Express route response.
    */
   async (req, res) => {
-    const data = await model.createOne(req.body);
+    const data = await model.createOne(req.body, options);
 
     res.json(response({ data }));
   };
@@ -129,9 +142,10 @@ const apiPost =
  * Get a middleware that handles patch requests for a model.
  *
  * @param {import('models/base-model')} model Sequelize data model.
+ * @param {import("sequelize").UpdateOptions} [options={}] Query options.
  */
 const apiPatch =
-  (model) =>
+  (model, options = {}) =>
   /**
    * Patch middleware.
    *
@@ -141,7 +155,7 @@ const apiPatch =
   async (req, res) => {
     const id = req.params[model.getIdField()];
 
-    const data = await model.updateOne(id, req.body);
+    const data = await model.updateOne(id, req.body, options);
     if (!data) {
       throw new NotFound('Data not found');
     }
@@ -153,9 +167,10 @@ const apiPatch =
  * Get a middleware that handles delete requests for a model.
  *
  * @param {import('models/base-model')} model Sequelize data model.
+ * @param {import("sequelize").DestroyOptions} [options={}] Query options.
  */
 const apiDelete =
-  (model) =>
+  (model, options = {}) =>
   /**
    * Delete middleware.
    *
@@ -165,7 +180,7 @@ const apiDelete =
   async (req, res) => {
     const id = req.params[model.getIdField()];
 
-    const count = await model.deleteOne(id);
+    const count = await model.deleteOne(id, options);
     if (count <= 0) {
       throw new NotFound('Data not found');
     }
