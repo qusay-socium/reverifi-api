@@ -2,7 +2,6 @@ const Router = require('express-promise-router');
 
 const auth = require('middleware/auth');
 const {
-  getAllUserInfo,
   createUserInfo,
   updateUserInfo,
   deleteUserInfo,
@@ -26,7 +25,7 @@ router.patch('/roles', auth, updateUserRoles);
 /**
  * Handle GET to /api/users route.
  */
-router.get('/', auth, getAllUserInfo);
+router.get('/', auth, getUserInfoById);
 
 /**
  * Handle POST to /api/users route.
@@ -42,10 +41,5 @@ router.patch('/', auth, updateUserInfo);
  * Handle DELETE to /api/users route.
  */
 router.delete('/', auth, deleteUserInfo);
-
-/**
- * Handle GET to /api/users/:id route.
- */
-router.get('/:id', auth, getUserInfoById);
 
 module.exports = router;

@@ -31,9 +31,6 @@ module.exports = (sequelize, DataTypes) => {
       website: {
         type: DataTypes.STRING,
       },
-      address: {
-        type: DataTypes.JSON,
-      },
       metadata: {
         type: DataTypes.JSON,
       },

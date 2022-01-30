@@ -1,31 +1,6 @@
 const { NotFound } = require('lib/errors');
-const { UserInfo, UserRoles, User, Roles } = require('models');
+const { UserInfo, UserRoles, User, Roles, Company } = require('models');
 const response = require('utils/response');
-
-/**
- * Remove password field from user info user object.
- *
- * @param {Object} userInfo User info object.
- */
-const removeUserPassword = (userInfo) => {
-  if (userInfo && userInfo.user) {
-    delete userInfo.user.password;
-  }
-};
-
-/**
- * Get user info.
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const getAllUserInfo = async (req, res) => {
-  const data = await UserInfo.getAllWithUserAndCompany();
-
-  data.forEach(removeUserPassword);
-
-  res.json(response({ data }));
-};
 
 /**
  * Create new user info.
@@ -48,9 +23,33 @@ const createUserInfo = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const updateUserInfo = async (req, res) => {
-  const data = await UserInfo.updateByUserId(req.user.id, req.body);
+  const { id } = req.user;
+  const { user, userInfo, company } = req.body;
 
-  res.json(response({ data }));
+  // Update user model (name, phone, email)
+  await User.updateByCondition({ id }, user);
+
+  // update userInfo model and company model
+  let fetchedCompany = {};
+
+  if (company.name && company.email) {
+    const companyExist = await Company.getOneByCondition({ id: company.id });
+
+    if (!companyExist) {
+      fetchedCompany = await Company.createOne({
+        name: company.name,
+        email: company.email,
+        website: company.website,
+      });
+    } else {
+      await Company.updateByCondition({ id: companyExist.id }, company);
+      fetchedCompany = companyExist;
+    }
+  }
+
+  await UserInfo.updateByUserId(id, { ...userInfo, companyId: fetchedCompany.id || null });
+
+  res.json(response());
 };
 
 /**
@@ -75,15 +74,16 @@ const deleteUserInfo = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const getUserInfoById = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.user;
 
-  const data = await UserInfo.getOneWithUserAndCompany(id);
+  const data = await UserInfo.getOneByCondition(
+    { userId: id },
+    { include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }, 'company'] }
+  );
+
   if (!data) {
     throw new NotFound();
   }
-
-  removeUserPassword(data);
-
   res.json(response({ data }));
 };
 
@@ -130,7 +130,6 @@ const getUserRoles = async (req, res) => {
 };
 
 module.exports = {
-  getAllUserInfo,
   createUserInfo,
   updateUserInfo,
   deleteUserInfo,
