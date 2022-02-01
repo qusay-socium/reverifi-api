@@ -1,4 +1,12 @@
-const { Listing, ListingFeatures, User, UserInfo, PropertyType, ListingType } = require('models');
+const {
+  Listing,
+  ListingFeatures,
+  User,
+  UserInfo,
+  PropertyType,
+  ListingType,
+  Features,
+} = require('models');
 const { NotFound } = require('lib/errors');
 const response = require('utils/response');
 
@@ -102,9 +110,16 @@ const deleteListing = async (req, res) => {
 const getListingById = async (req, res) => {
   const { id } = req.params;
 
-  const data = await Listing.getOneWithOwnerAndAgent(id);
+  const data = await Listing.getOneWithOwnerAndAgent(id, {
+    include: {
+      model: Features,
+      as: 'features',
+      attributes: ['id', 'type'],
+      through: { attributes: [] },
+    },
+  });
 
-  if (!data || !(data.ownerId === req.user.id || data.agentId === req.user.id)) {
+  if (!data) {
     throw new NotFound();
   }
 
