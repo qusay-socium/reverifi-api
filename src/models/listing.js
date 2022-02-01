@@ -10,7 +10,7 @@ class Listing extends BaseModel {
     this.belongsTo(ListingType, { as: 'listingType', foreignKey: 'listing_type_id' });
     this.belongsToMany(Features, {
       through: 'ListingFeatures',
-      foreignKey: 'listingId',
+      foreignKey: 'listing_id',
       as: 'features',
     });
   }
@@ -28,7 +28,13 @@ class Listing extends BaseModel {
         { model: this.sequelize.models.User, as: 'owner', attributes: { exclude: ['password'] } },
         { model: this.sequelize.models.User, as: 'agent', attributes: { exclude: ['password'] } },
         'features',
+        { model: this.sequelize.models.Features,
+          as: 'features',
+          attributes: ['id', 'feature'],
+          through: { attributes: [] },
+        }
       ],
+      
     });
 
     return result;

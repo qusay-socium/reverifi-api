@@ -4,11 +4,11 @@ const BaseModel = require('models/base-model');
 class ListingFeatures extends BaseModel {
   static associate({ Listing, Features }) {
     this.belongsTo(Listing, {
-      foreignKey: 'listingId',
+      foreignKey: 'listing_id',
       as: 'listing',
     });
     this.belongsTo(Features, {
-      foreignKey: 'featureId',
+      foreignKey: 'feature_id',
       as: 'features',
     });
   }
