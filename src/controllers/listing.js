@@ -101,7 +101,6 @@ const deleteListing = async (req, res) => {
  */
 const getListingById = async (req, res) => {
   const { id } = req.params;
-
   const data = await Listing.getOneWithOwnerAndAgent(id);
 
   if (!data) {

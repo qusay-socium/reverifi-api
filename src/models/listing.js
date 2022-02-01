@@ -28,13 +28,13 @@ class Listing extends BaseModel {
         { model: this.sequelize.models.User, as: 'owner', attributes: { exclude: ['password'] } },
         { model: this.sequelize.models.User, as: 'agent', attributes: { exclude: ['password'] } },
         'features',
-        { model: this.sequelize.models.Features,
+        {
+          model: this.sequelize.models.Features,
           as: 'features',
           attributes: ['id', 'feature'],
           through: { attributes: [] },
-        }
+        },
       ],
-      
     });
 
     return result;
