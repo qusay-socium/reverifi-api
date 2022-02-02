@@ -130,7 +130,7 @@ const getUserRoles = async (req, res) => {
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getUsersByType = async (req, res) => {
+const getAgentUsersByType = async (req, res) => {
   const { type } = req.params;
   const { page, location, name } = req.query;
 
@@ -188,5 +188,5 @@ module.exports = {
   getUserInfo,
   updateUserRoles,
   getUserRoles,
-  getUsersByType,
+  getAgentUsersByType,
 };
