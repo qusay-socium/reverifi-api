@@ -1,4 +1,4 @@
-const { Listing, ListingFeatures, User, UserInfo } = require('models');
+const { Listing, ListingFeatures, User, UserInfo, PropertyType, ListingType } = require('models');
 const { NotFound } = require('lib/errors');
 const response = require('utils/response');
 
@@ -130,17 +130,7 @@ const searchListingsByCityOrZipCode = async (req, res) => {
  */
 const getFeaturedListings = async (req, res) => {
   const data = await Listing.getAll({
-    attributes: [
-      'id',
-      'images',
-      'price',
-      'address',
-      'listingType',
-      'bedrooms',
-      'fullBathrooms',
-      'propertyType',
-      'createdAt',
-    ],
+    attributes: ['id', 'images', 'price', 'address', 'bedrooms', 'fullBathrooms', 'createdAt'],
     limit: 6,
     order: [['created_at', 'DESC']],
     include: [
@@ -150,9 +140,18 @@ const getFeaturedListings = async (req, res) => {
         attributes: ['id'],
         include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }],
       },
+      {
+        model: PropertyType,
+        as: 'propertyType',
+        attributes: ['id', 'type'],
+      },
+      {
+        model: ListingType,
+        as: 'listingType',
+        attributes: ['id', 'type'],
+      },
     ],
   });
-
   res.json(response({ data }));
 };
 

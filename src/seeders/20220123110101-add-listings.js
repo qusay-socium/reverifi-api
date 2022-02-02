@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('listings', [
@@ -18,8 +20,6 @@ module.exports = {
         zip_code: '10467',
         street: '638 Western Ave',
         address: '638 Western Ave, Bronx, NY 10467',
-        property_type_id: '6af792b3-5f59-4789-bd5a-3714e5b7aa14',
-        listing_type_id: '0ec0b55b-0195-414b-bb69-3a7875aa2104',
         bedrooms: 1,
         full_bathrooms: 2,
         partial_bathrooms: 1,
@@ -51,8 +51,6 @@ module.exports = {
         zip_code: '08540',
         street: '627 Princeton Kingston Rd',
         address: '627 Princeton Kingston Rd, Princeton, NJ 08540',
-        property_type_id: '6af792b3-5f59-4789-bd5a-3714e5b7aa14',
-        listing_type_id: '0ec0b55b-0195-414b-bb69-3a7875aa2104',
         bedrooms: 1,
         full_bathrooms: 2,
         partial_bathrooms: 1,
@@ -83,8 +81,6 @@ module.exports = {
         zip_code: '08540',
         street: '627 Princeton Kingston Rd',
         address: '627 Princeton Kingston Rd, Princeton, NJ 08540',
-        property_type_id: '6af792b3-5f59-4789-bd5a-3714e5b7aa14',
-        listing_type_id: '0ec0b55b-0195-414b-bb69-3a7875aa2104',
         bedrooms: 1,
         full_bathrooms: 2,
         partial_bathrooms: 1,
@@ -115,8 +111,6 @@ module.exports = {
         zip_code: '10467',
         street: '638 Western Ave',
         address: '638 Western Ave, Bronx, NY 10467',
-        property_type_id: '6af792b3-5f59-4789-bd5a-3714e5b7aa14',
-        listing_type_id: '0ec0b55b-0195-414b-bb69-3a7875aa2104',
         bedrooms: 1,
         full_bathrooms: 2,
         partial_bathrooms: 1,
@@ -149,8 +143,6 @@ module.exports = {
         zip_code: '07078',
         street: '17 Oaklawn Rd',
         address: '17 Oaklawn Rd, Short Hills, NJ 07078',
-        property_type_id: '6af792b3-5f59-4789-bd5a-3714e5b7aa14',
-        listing_type_id: '0ec0b55b-0195-414b-bb69-3a7875aa2104',
         bedrooms: 1,
         full_bathrooms: 2,
         partial_bathrooms: 1,
@@ -183,8 +175,6 @@ module.exports = {
         zip_code: '07078',
         street: '17 Oaklawn Rd',
         address: '17 Oaklawn Rd, Short Hills, NJ 07078',
-        property_type_id: '6af792b3-5f59-4789-bd5a-3714e5b7aa14',
-        listing_type_id: '0ec0b55b-0195-414b-bb69-3a7875aa2104',
         bedrooms: 1,
         full_bathrooms: 2,
         partial_bathrooms: 1,
