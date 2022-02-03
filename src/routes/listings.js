@@ -45,6 +45,6 @@ router.delete('/:id', auth, deleteListing);
 /**
  * Handle GET to /api/listings/:id route.
  */
-router.get('/:id', auth, getListingById);
+router.get('/:id', getListingById);
 
 module.exports = router;

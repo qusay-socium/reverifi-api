@@ -101,10 +101,9 @@ const deleteListing = async (req, res) => {
  */
 const getListingById = async (req, res) => {
   const { id } = req.params;
-
   const data = await Listing.getOneWithOwnerAndAgent(id);
 
-  if (!data || !(data.ownerId === req.user.id || data.agentId === req.user.id)) {
+  if (!data) {
     throw new NotFound();
   }
 

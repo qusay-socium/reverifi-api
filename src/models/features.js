@@ -6,7 +6,7 @@ class Features extends BaseModel {
   static associate({ Listing }) {
     this.belongsToMany(Listing, {
       through: 'ListingFeatures',
-      foreignKey: 'featureId',
+      foreignKey: 'feature_id',
       as: 'features',
     });
   }
