@@ -1,5 +1,6 @@
 const { NotFound } = require('lib/errors');
 const { UserInfo, UserRoles, User, Roles, Company } = require('models');
+const { Op } = require('sequelize');
 const response = require('utils/response');
 
 /**
@@ -123,6 +124,63 @@ const getUserRoles = async (req, res) => {
   res.json(response({ data }));
 };
 
+/**
+ * Get users by type.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getAgentUsersByType = async (req, res) => {
+  const { type } = req.params;
+  const { page, location, name } = req.query;
+
+  let paginationOptions = {};
+  if (+page) {
+    const limit = 6;
+    const offset = (+page - 1) * limit;
+
+    paginationOptions = { limit, offset };
+  }
+
+  let locationCondition = {};
+  if (location) {
+    if (Number.isNaN(Number.parseInt(location, 10))) {
+      locationCondition = { city: location };
+    } else {
+      locationCondition = { zipCode: location };
+    }
+  }
+
+  const agents = await User.getAllByCondition(name ? { name } : {}, {
+    attributes: ['id', 'name', 'email', 'phone'],
+    ...paginationOptions,
+    include: [
+      {
+        model: UserInfo,
+        where: locationCondition,
+        as: 'userInfo',
+        attributes: ['image', 'city', 'country', 'zipCode'],
+        include: [{ model: Company, as: 'company', attributes: ['name'], required: true }],
+      },
+      {
+        model: Roles,
+        as: 'roles',
+        attributes: ['id', 'role'],
+        through: { attributes: [] },
+        where: { role: { [Op.or]: ['Agent', type] } },
+      },
+    ],
+  });
+
+  // filter agent users only
+  let data = agents;
+  if (type !== 'Agent') {
+    data = agents.filter((agent) => agent.roles.length > 1);
+  }
+
+  res.json(response({ data }));
+};
+
 module.exports = {
   createUserInfo,
   updateUserInfo,
@@ -130,4 +188,5 @@ module.exports = {
   getUserInfo,
   updateUserRoles,
   getUserRoles,
+  getAgentUsersByType,
 };

@@ -219,6 +219,25 @@ paths:
         '200':
           description: Confirmation message.
 
+  /api/users/roles/{type}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - User information
+      summary: Get agent users
+      description: Get agent users
+      parameters:
+        - in: path
+          name: type
+          schema:
+            type: string
+          required: true
+          description: type of the user
+      responses:
+        '200':
+          description: Users information
+
   /api/listings:
     get:
       security:

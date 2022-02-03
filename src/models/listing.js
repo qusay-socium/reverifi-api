@@ -93,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'User',
+          model: 'users',
           key: 'id',
         },
         field: 'agent_id',
@@ -102,7 +102,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
-          model: 'User',
+          model: 'users',
           key: 'id',
         },
         field: 'owner_id',
