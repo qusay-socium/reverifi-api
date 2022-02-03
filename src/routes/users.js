@@ -5,7 +5,7 @@ const {
   createUserInfo,
   updateUserInfo,
   deleteUserInfo,
-  getUserInfoById,
+  getUserInfo,
   updateUserRoles,
   getUserRoles,
 } = require('controllers/user');
@@ -25,7 +25,7 @@ router.patch('/roles', auth, updateUserRoles);
 /**
  * Handle GET to /api/users route.
  */
-router.get('/', auth, getUserInfoById);
+router.get('/', auth, getUserInfo);
 
 /**
  * Handle POST to /api/users route.

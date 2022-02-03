@@ -91,11 +91,11 @@ paths:
       tags:
         - User information
       summary: User information
-      description: Get all users information
+      description: get user information
 
       responses:
         '200':
-          description: Users information
+          description: User information
 
     post:
       security:
@@ -153,29 +153,20 @@ paths:
             schema:
               type: object
               properties:
-                address:
+                user:
                   type: object
                   example:
-                    england: london
-                website:
-                  type: string
-                  example: www.england.com
-                languages:
-                  type: array
-                  example:
-                    - eng
-                    - ar
-                serviceAreas:
-                  type: array
-                  example:
-                    - Europe
-                socials:
+                    name: name
+                userInfo:
                   type: object
                   example:
-                    FB: www.fb.com/england
-                aboutMe:
-                  type: string
-                  example: Broker
+                    address: address
+                company:
+                  type: object
+                  example:
+                    id: 97b07d0e-3e7e-4885-9930-b23db645f45f
+                    name: company-name
+                    email: email@test.com
 
       responses:
         '200':
@@ -191,26 +182,6 @@ paths:
       responses:
         '200':
           description: Confirmation message for deleting
-
-  /api/users/{id}:
-    get:
-      security:
-        - bearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
-          description: UUID of the user
-      tags:
-        - User information
-      summary: User information
-      description: user information by id
-
-      responses:
-        '200':
-          description: User information
 
   /api/users/roles:
     get:

@@ -26,28 +26,22 @@ const updateUserInfo = async (req, res) => {
   const { id } = req.user;
   const { user, userInfo, company } = req.body;
 
-  // Update user model (name, phone, email)
+  delete user.password;
+
   await User.updateByCondition({ id }, user);
 
-  // update userInfo model and company model
-  let fetchedCompany = {};
+  let dbCompany = {};
 
   if (company.name && company.email) {
-    const companyExist = await Company.getOneByCondition({ id: company.id });
-
-    if (!companyExist) {
-      fetchedCompany = await Company.createOne({
-        name: company.name,
-        email: company.email,
-        website: company.website,
-      });
-    } else {
-      await Company.updateByCondition({ id: companyExist.id }, company);
-      fetchedCompany = companyExist;
-    }
+    dbCompany = await Company.upsertOne({
+      id: company.id,
+      name: company.name,
+      email: company.email,
+      website: company.website,
+    });
   }
 
-  await UserInfo.updateByUserId(id, { ...userInfo, companyId: fetchedCompany.id || null });
+  await UserInfo.updateByUserId(id, { ...userInfo, companyId: dbCompany.id || null });
 
   res.json(response());
 };
@@ -68,12 +62,12 @@ const deleteUserInfo = async (req, res) => {
 };
 
 /**
- * Get user info by id.
+ * Get user info.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getUserInfoById = async (req, res) => {
+const getUserInfo = async (req, res) => {
   const { id } = req.user;
 
   const data = await UserInfo.getOneByCondition(
@@ -133,7 +127,7 @@ module.exports = {
   createUserInfo,
   updateUserInfo,
   deleteUserInfo,
-  getUserInfoById,
+  getUserInfo,
   updateUserRoles,
   getUserRoles,
 };
