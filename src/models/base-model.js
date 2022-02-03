@@ -75,6 +75,20 @@ class BaseModel extends Model {
   }
 
   /**
+   * Update or insert record.
+   *
+   * @param {Object} values Data values.
+   * @param {import("sequelize").UpsertOptions} [options={}] Query options.
+   *
+   * @return {Promise<Object>} The updated or inserted record JSON data.
+   */
+  static async upsertOne(values, options = {}) {
+    const data = await this.upsert(values, { returning: true, ...options });
+
+    return data[0].toJSON();
+  }
+
+  /**
    * Get an existing record by condition.
    *
    * @param {import("sequelize").WhereOptions} condition The query where condition.
@@ -84,7 +98,6 @@ class BaseModel extends Model {
    */
   static async getOneByCondition(condition, options = {}) {
     const result = await this.findOne({ where: condition, ...options });
-
     return result ? result.toJSON() : undefined;
   }
 

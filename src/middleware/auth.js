@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
   }
 
   const parsedToken = jwt.verify(authorization.split(' ').pop(), secret);
-  const user = await User.getOneByCondition({ email: parsedToken.email });
+  const user = await User.getOneByCondition({ id: parsedToken.id });
 
   if (!user) {
     throw new Unauthorized('Invalid token');

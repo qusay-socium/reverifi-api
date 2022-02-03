@@ -90,9 +90,16 @@ module.exports = (sequelize, DataTypes) => {
         field: 'company_id',
       },
       address: {
-        type: DataTypes.JSON,
+        type: DataTypes.STRING,
       },
-      website: {
+      city: {
+        type: DataTypes.STRING,
+      },
+      zipCode: {
+        type: DataTypes.STRING,
+        field: 'zip_code',
+      },
+      country: {
         type: DataTypes.STRING,
       },
       languages: {
