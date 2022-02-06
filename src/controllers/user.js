@@ -34,15 +34,27 @@ const updateUserInfo = async (req, res) => {
   let dbCompany = {};
 
   if (company.name && company.email) {
-    dbCompany = await Company.upsertOne({
-      id: company.id,
-      name: company.name,
-      email: company.email,
-      website: company.website,
-    });
+    const companyExist = await Company.getOneByCondition({ id: company.id });
+
+    if (!companyExist) {
+      dbCompany = await Company.createOne({
+        name: company.name,
+        email: company.email,
+        website: company.website,
+      });
+    } else {
+      await Company.updateByCondition({ id: companyExist.id }, company);
+      dbCompany = companyExist;
+    }
   }
 
-  await UserInfo.updateByUserId(id, { ...userInfo, companyId: dbCompany.id || null });
+  const fetchedUserInfo = await UserInfo.getOneByCondition({ userId: id });
+
+  if (!fetchedUserInfo) {
+    await UserInfo.createOne({ ...userInfo, userId: id, companyId: dbCompany.id || null });
+  } else {
+    await UserInfo.updateByUserId(id, { ...userInfo, companyId: dbCompany.id || null });
+  }
 
   res.json(response());
 };
@@ -75,7 +87,6 @@ const getUserInfo = async (req, res) => {
     { userId: id },
     { include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }, 'company'] }
   );
-
   if (!data) {
     throw new NotFound();
   }
