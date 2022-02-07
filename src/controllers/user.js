@@ -102,7 +102,6 @@ const getUserInfo = async (req, res) => {
 const updateUserRoles = async (req, res) => {
   const { roles } = req.body;
   const userId = req.user.id;
-
   await UserRoles.deleteByCondition({ userId });
 
   if (roles.length) {
@@ -169,9 +168,17 @@ const getAgentUsersByType = async (req, res) => {
       {
         model: UserInfo,
         where: locationCondition,
+        required: false,
         as: 'userInfo',
         attributes: ['image', 'city', 'country', 'zipCode'],
-        include: [{ model: Company, as: 'company', attributes: ['name'], required: true }],
+        include: [
+          {
+            model: Company,
+            as: 'company',
+            attributes: ['name'],
+            required: false,
+          },
+        ],
       },
       {
         model: Roles,
@@ -182,9 +189,6 @@ const getAgentUsersByType = async (req, res) => {
       },
     ],
   });
-
-  console.log('😀😀😀', agents);
-
   // filter agent users only
   let data = agents;
   if (type !== 'Agent') {
