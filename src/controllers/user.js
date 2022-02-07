@@ -146,7 +146,7 @@ const getAgentUsersByType = async (req, res) => {
 
   let paginationOptions = {};
   if (+page) {
-    const limit = 6;
+    const limit = 8;
     const offset = (+page - 1) * limit;
 
     paginationOptions = { limit, offset };
@@ -189,6 +189,7 @@ const getAgentUsersByType = async (req, res) => {
       },
     ],
   });
+
   // filter agent users only
   let data = agents;
   if (type !== 'Agent') {
