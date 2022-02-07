@@ -14,7 +14,7 @@ const {
 const router = Router({ mergeParams: true });
 
 /**
- * Handle GET to /api/users/roles/:type route.
+ * Handle GET to /api/users/agents/:type route.
  */
 router.get('/agents/:type', getAgentUsersByType);
 
