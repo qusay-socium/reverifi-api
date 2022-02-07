@@ -183,6 +183,8 @@ const getAgentUsersByType = async (req, res) => {
     ],
   });
 
+  console.log('😀😀😀', agents);
+
   // filter agent users only
   let data = agents;
   if (type !== 'Agent') {
