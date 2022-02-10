@@ -155,9 +155,9 @@ const getAgentUsersByType = async (req, res) => {
   let locationCondition = {};
   if (location) {
     if (Number.isNaN(Number.parseInt(location, 10))) {
-      locationCondition = { city: location };
+      locationCondition = { city: { [Op.iLike]: `%${location}%` } };
     } else {
-      locationCondition = { zipCode: location };
+      locationCondition = { zipCode: { [Op.iLike]: `%${location}%` } };
     }
   }
 
@@ -195,7 +195,6 @@ const getAgentUsersByType = async (req, res) => {
   if (type !== 'Agent') {
     data = agents.filter((agent) => agent.roles.length > 1);
   }
-
   res.json(response({ data }));
 };
 
