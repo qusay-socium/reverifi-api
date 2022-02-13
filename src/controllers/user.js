@@ -53,7 +53,10 @@ const updateUserInfo = async (req, res) => {
   if (!fetchedUserInfo) {
     await UserInfo.createOne({ ...userInfo, userId: id, companyId: dbCompany.id || null });
   } else {
-    await UserInfo.updateByUserId(id, { ...userInfo, companyId: dbCompany.id || null });
+    await UserInfo.updateByUserId(id, {
+      ...userInfo,
+      companyId: dbCompany.id || null,
+    });
   }
 
   res.json(response());
@@ -85,7 +88,12 @@ const getUserInfo = async (req, res) => {
 
   const data = await UserInfo.getOneByCondition(
     { userId: id },
-    { include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }, 'company'] }
+    {
+      include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] }, include: ['roles'] },
+        'company',
+      ],
+    }
   );
   if (!data) {
     throw new NotFound();
