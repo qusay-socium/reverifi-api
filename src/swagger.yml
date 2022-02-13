@@ -232,7 +232,26 @@ paths:
         '200':
           description: Users information
 
-  /api/listings:
+  /api/users/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - User information
+      summary: Get user information
+      description: Get user information
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id of the user
+      responses:
+        '200':
+          description: User information
+
+  /api/listings/{id}:
     get:
       security:
         - bearerAuth: []
@@ -243,6 +262,12 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/limit'
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id of the user
 
       responses:
         '200':
@@ -351,7 +376,7 @@ paths:
         '200':
           description: Created company information
 
-  /api/listings/{id}:
+  /api/listings/listing/{id}:
     get:
       parameters:
         - in: path

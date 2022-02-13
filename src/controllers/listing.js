@@ -11,8 +11,9 @@ const response = require('utils/response');
 const getAllListings = async (req, res) => {
   const page = +req.query.page || 1;
   const limit = +req.query.limit || 30;
+  const { id } = req.params;
 
-  const { data, count } = await Listing.getPageWithRelations(page, limit, req.user.id);
+  const { data, count } = await Listing.getPageWithRelations(page, limit, id);
 
   res.json(response({ data, page, limit, count }));
 };

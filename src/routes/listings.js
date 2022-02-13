@@ -26,7 +26,8 @@ router.get('/search', searchListingsByCityOrZipCode);
 /**
  * Handle GET to /api/listings route.
  */
-router.get('/', auth, getAllListings);
+router.get('/:id', getAllListings);
+
 /**
  * Handle POST to /api/listings route.
  */
@@ -43,8 +44,8 @@ router.patch('/:id', auth, updateListing);
 router.delete('/:id', auth, deleteListing);
 
 /**
- * Handle GET to /api/listings/:id route.
+ * Handle GET to /api/listings/listing/:id route.
  */
-router.get('/:id', getListingById);
+router.get('/listing/:id', getListingById);
 
 module.exports = router;
