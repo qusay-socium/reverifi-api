@@ -160,14 +160,13 @@ const getAgentUsersByType = async (req, res) => {
     paginationOptions = { limit, offset };
   }
 
-  let locationCondition = {};
-  if (location) {
-    if (Number.isNaN(Number.parseInt(location, 10))) {
-      locationCondition = { city: location };
-    } else {
-      locationCondition = { zipCode: location };
-    }
-  }
+  const locationCondition = location
+    ? {
+        [Number.isNaN(Number.parseInt(location, 10)) ? 'city' : 'zipCode']: {
+          [Op.iLike]: `%${location}%`,
+        },
+      }
+    : {};
 
   const agents = await User.getAllByCondition(name ? { name } : {}, {
     attributes: ['id', 'name', 'email', 'phone'],
@@ -203,7 +202,6 @@ const getAgentUsersByType = async (req, res) => {
   if (type !== 'Agent') {
     data = agents.filter((agent) => agent.roles.length > 1);
   }
-
   res.json(response({ data }));
 };
 
