@@ -73,11 +73,10 @@ class Listing extends BaseModel {
         [Op.or]: { city: { [Op.like]: `%${value}%` }, zipCode: { [Op.like]: `%${value}%` } },
       },
       include: [
-        { model: this.sequelize.models.User, as: 'owner', attributes: { exclude: ['password'] } },
         {
           model: this.sequelize.models.User,
           as: 'agent',
-          attributes: { exclude: ['password'] },
+          attributes: ['id'],
           include: ['roles'],
         },
         {
