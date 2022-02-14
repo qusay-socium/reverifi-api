@@ -9,9 +9,21 @@ const response = require('utils/response');
  * @param {import('express').Response} res Express response object.
  */
 const getAllListings = async (req, res) => {
-  const data = await Listing.getAllWithRelations(req.user.id);
+  const { page } = req.query;
 
-  res.json(response({ data }));
+  let paginationOptions = {};
+
+  if (+page) {
+    const limit = 8;
+    const offset = (+page - 1) * limit;
+
+    paginationOptions = { limit, offset };
+  }
+
+  const data = await Listing.getAllWithRelations(paginationOptions, req.user.id);
+  const count = await Listing.getCount({ where: { agentId: req.user.id } });
+
+  res.json(response({ data, count }));
 };
 /**
  * Create new listing.

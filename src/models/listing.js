@@ -48,12 +48,20 @@ class Listing extends BaseModel {
    *
    * @return {Promise<Object[]>} All listing data.
    */
-  static async getAllWithRelations(userId = null) {
+  static async getAllWithRelations(paginationOptions, userId = null) {
     const result = await this.getAll({
       ...(userId ? { where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] } } : {}),
+      ...paginationOptions,
       include: [
-        { model: this.sequelize.models.User, as: 'owner', attributes: { exclude: ['password'] } },
-        { model: this.sequelize.models.User, as: 'agent', attributes: { exclude: ['password'] } },
+        {
+          model: this.sequelize.models.User,
+          as: 'agent',
+          attributes: ['id', 'name'],
+          include: [
+            { model: this.sequelize.models.UserInfo, as: 'userInfo', attributes: ['image'] },
+            'roles',
+          ],
+        },
         'features',
       ],
     });
