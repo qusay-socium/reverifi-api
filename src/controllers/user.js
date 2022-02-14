@@ -33,7 +33,7 @@ const updateUserInfo = async (req, res) => {
 
   let dbCompany = {};
 
-  if (company.name && company.email) {
+  if (company.name || company.email || company.website) {
     const companyExist = await Company.getOneByCondition({ id: company.id });
 
     if (!companyExist) {
