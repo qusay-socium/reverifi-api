@@ -9,10 +9,14 @@ const response = require('utils/response');
  * @param {import('express').Response} res Express response object.
  */
 const getAllListings = async (req, res) => {
-  const data = await Listing.getAllWithRelations(req.user.id);
+  const page = +req.query.page || 1;
+  const limit = +req.query.limit || 30;
 
-  res.json(response({ data }));
+  const { data, count } = await Listing.getPageWithRelations(page, limit, req.user.id);
+
+  res.json(response({ data, page, limit, count }));
 };
+
 /**
  * Create new listing.
  *
