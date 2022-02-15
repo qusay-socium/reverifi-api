@@ -1,15 +1,6 @@
-const {
-  Listing,
-  ListingFeatures,
-  User,
-  UserInfo,
-  PropertyType,
-  ListingType,
-  Features,
-} = require('models');
+const { Listing, ListingFeatures, User, UserInfo, PropertyType, ListingType } = require('models');
 const { NotFound } = require('lib/errors');
 const response = require('utils/response');
-const { Op } = require('sequelize');
 
 /**
  * Get all listings.
@@ -18,45 +9,12 @@ const { Op } = require('sequelize');
  * @param {import('express').Response} res Express response object.
  */
 const getAllListings = async (req, res) => {
-  const { page, limit } = req.query;
+  const page = +req.query.page || 1;
+  const limit = +req.query.limit || 30;
 
-  const data = +page
-    ? await Listing.getPage(
-        page,
-        limit,
-        {
-          [Op.or]: [{ ownerId: req.user.id }, { agentId: req.user.id }],
-        },
-        {
-          include: [
-            {
-              model: User,
-              as: 'agent',
-              attributes: ['id', 'name'],
-              include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }, 'roles'],
-            },
-            {
-              model: Features,
-              as: 'features',
-              attributes: ['feature'],
-              through: { attributes: [] },
-            },
-            {
-              model: ListingType,
-              as: 'listingType',
-              attributes: ['type'],
-            },
-            {
-              model: PropertyType,
-              as: 'propertyType',
-              attributes: ['type'],
-            },
-          ],
-        }
-      )
-    : await Listing.getAllWithRelations(req.user.id, limit && { limit });
+  const { data, count } = await Listing.getPageWithRelations(page, limit, req.user.id);
 
-  res.json(response({ data }));
+  res.json(response({ data, page, limit, count }));
 };
 
 /**

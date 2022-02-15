@@ -19,12 +19,6 @@ tags:
     description: Roles endpoints
   - name: Features
     description: Features endpoints
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
 
 paths:
   /api/auth/signup:
@@ -246,6 +240,9 @@ paths:
         - Listings
       summary: Listings data
       description: Get all Listings data
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
 
       responses:
         '200':
@@ -571,3 +568,29 @@ paths:
       responses:
         '200':
           description: Features
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    page:
+      name: page
+      in: query
+      description: Page number
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 1
+    limit:
+      name: limit
+      in: query
+      description: Max items per page
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 30

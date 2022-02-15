@@ -143,6 +143,29 @@ class BaseModel extends Model {
   }
 
   /**
+   * Get paginated records.
+   *
+   * @param {number} page The page number.
+   * @param {number} limit The records limit per page.
+   * @param {import("sequelize").WhereOptions} [condition={}] The query where condition.
+   * @param {import("sequelize").FindOptions} [options={}] Query options.
+   *
+   * @return {Promise<{data:Object[], count:number}>} A Object with records JSON data and the count.
+   */
+  static async getPage(page, limit, condition = {}, options = {}) {
+    const data = await this.getAll({
+      where: condition,
+      ...options,
+      limit,
+      offset: (page - 1) * limit,
+    });
+
+    const count = await this.getCount({ where: condition });
+
+    return { data, count };
+  }
+
+  /**
    * Get the total count.
    *
    * @param {import("sequelize").CountOptions} [options={}] Query options.

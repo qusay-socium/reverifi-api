@@ -43,52 +43,48 @@ class Listing extends BaseModel {
   /**
    * Get all listing with owner,agent & features.
    *
+   * @param {number} page The page number.
+   * @param {number} limit The records limit per page.
    * @param {string} [userId=null] The listing owner or agent ID,
    *                               if provided only listing for this user will be retrieved.
    *
-   * @return {Promise<Object[]>} All listing data.
+   * @return {Promise<{data:Object[], count:number}>} Listing data.
    */
-  static async getAllWithRelations(userId = null, options = {}) {
-    const result = await this.getAll({
-      ...(userId ? { where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] } } : {}),
-      ...options,
-      include: [
-        {
-          model: this.sequelize.models.User,
-          as: 'agent',
-          attributes: ['id', 'name'],
-          include: [
-            { model: this.sequelize.models.UserInfo, as: 'userInfo', attributes: ['image'] },
-            'roles',
-          ],
-        },
-        'features',
-      ],
-    });
-    return result;
-  }
+  static async getPageWithRelations(page, limit, userId = null) {
+    const { User, UserInfo, Features, ListingType, PropertyType } = this.sequelize.models;
 
-  /**
-   * get page.
-   *
-   * @param {number} [page=null] The page number,
-   * @param {number} [limit=null] The limit listing per page,
-   * @param {object} [condition={}] The listing condition,
-   * @param {object} [options={}] The listing options
-   *
-   * @return {Promise<Object[]>} All listing data.
-   */
-  static async getPage(page, limit, condition = {}, options = {}) {
-    const data = await this.getAll({
-      where: condition,
-      ...options,
+    const result = await this.getPage(
+      page,
       limit,
-      offset: (+page - 1) * limit,
-    });
-
-    const count = await this.getCount({ where: condition });
-
-    return { data, count };
+      userId ? { [Op.or]: [{ ownerId: userId }, { agentId: userId }] } : {},
+      {
+        include: [
+          {
+            model: User,
+            as: 'agent',
+            attributes: ['id', 'name'],
+            include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }, 'roles'],
+          },
+          {
+            model: Features,
+            as: 'features',
+            attributes: ['feature'],
+            through: { attributes: [] },
+          },
+          {
+            model: ListingType,
+            as: 'listingType',
+            attributes: ['type'],
+          },
+          {
+            model: PropertyType,
+            as: 'propertyType',
+            attributes: ['type'],
+          },
+        ],
+      }
+    );
+    return result;
   }
 
   /**
