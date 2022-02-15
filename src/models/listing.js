@@ -48,10 +48,10 @@ class Listing extends BaseModel {
    *
    * @return {Promise<Object[]>} All listing data.
    */
-  static async getAllWithRelations(paginationOptions, userId = null) {
+  static async getAllWithRelations(userId = null, options = {}) {
     const result = await this.getAll({
       ...(userId ? { where: { [Op.or]: [{ ownerId: userId }, { agentId: userId }] } } : {}),
-      ...paginationOptions,
+      ...options,
       include: [
         {
           model: this.sequelize.models.User,
@@ -66,6 +66,29 @@ class Listing extends BaseModel {
       ],
     });
     return result;
+  }
+
+  /**
+   * get page.
+   *
+   * @param {number} [page=null] The page number,
+   * @param {number} [limit=null] The limit listing per page,
+   * @param {object} [condition={}] The listing condition,
+   * @param {object} [options={}] The listing options
+   *
+   * @return {Promise<Object[]>} All listing data.
+   */
+  static async getPage(page, limit, condition = {}, options = {}) {
+    const data = await this.getAll({
+      where: condition,
+      ...options,
+      limit,
+      offset: (+page - 1) * limit,
+    });
+
+    const count = await this.getCount({ where: condition });
+
+    return { data, count };
   }
 
   /**

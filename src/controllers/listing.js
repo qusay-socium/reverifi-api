@@ -1,6 +1,15 @@
-const { Listing, ListingFeatures, User, UserInfo, PropertyType, ListingType } = require('models');
+const {
+  Listing,
+  ListingFeatures,
+  User,
+  UserInfo,
+  PropertyType,
+  ListingType,
+  Features,
+} = require('models');
 const { NotFound } = require('lib/errors');
 const response = require('utils/response');
+const { Op } = require('sequelize');
 
 /**
  * Get all listings.
@@ -9,22 +18,47 @@ const response = require('utils/response');
  * @param {import('express').Response} res Express response object.
  */
 const getAllListings = async (req, res) => {
-  const { page } = req.query;
+  const { page, limit } = req.query;
 
-  let paginationOptions = {};
+  const data = +page
+    ? await Listing.getPage(
+        page,
+        limit,
+        {
+          [Op.or]: [{ ownerId: req.user.id }, { agentId: req.user.id }],
+        },
+        {
+          include: [
+            {
+              model: User,
+              as: 'agent',
+              attributes: ['id', 'name'],
+              include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }, 'roles'],
+            },
+            {
+              model: Features,
+              as: 'features',
+              attributes: ['feature'],
+              through: { attributes: [] },
+            },
+            {
+              model: ListingType,
+              as: 'listingType',
+              attributes: ['type'],
+            },
+            {
+              model: PropertyType,
+              as: 'propertyType',
+              attributes: ['type'],
+            },
+          ],
+        }
+      )
+    : await Listing.getAllWithRelations(req.user.id, limit && { limit });
 
-  if (+page) {
-    const limit = 8;
-    const offset = (+page - 1) * limit;
-
-    paginationOptions = { limit, offset };
-  }
-
-  const data = await Listing.getAllWithRelations(paginationOptions, req.user.id);
-  const count = await Listing.getCount({ where: { agentId: req.user.id } });
-
-  res.json(response({ data, count }));
+  res.json(response({ data }));
 };
+
 /**
  * Create new listing.
  *
