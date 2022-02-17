@@ -34,6 +34,11 @@ router.patch('/roles', auth, updateUserRoles);
 router.get('/', auth, getUserInfo);
 
 /**
+ * Handle GET to /api/users/:id route.
+ */
+router.get('/:id', getUserInfo);
+
+/**
  * Handle POST to /api/users route.
  */
 router.post('/', auth, createUserInfo);

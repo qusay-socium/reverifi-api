@@ -84,20 +84,22 @@ const deleteUserInfo = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const getUserInfo = async (req, res) => {
-  const { id } = req.user;
+  const { id } = req.user || req.params;
 
   const data = await UserInfo.getOneByCondition(
     { userId: id },
     {
       include: [
         { model: User, as: 'user', attributes: { exclude: ['password'] }, include: ['roles'] },
-        'company',
+        { model: Company, as: 'company', attributes: ['name', 'email', 'website'] },
       ],
     }
   );
+
   if (!data) {
     throw new NotFound();
   }
+
   res.json(response({ data }));
 };
 

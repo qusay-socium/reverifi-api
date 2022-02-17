@@ -113,7 +113,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.JSON,
       },
       aboutMe: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(500),
         field: 'about_me',
       },
       image: {
