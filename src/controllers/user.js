@@ -170,34 +170,43 @@ const getAgentUsersByType = async (req, res) => {
       }
     : {};
 
-  const agents = await User.getAllByCondition(name ? { name } : {}, {
-    attributes: ['id', 'name', 'email', 'phone'],
-    ...paginationOptions,
-    include: [
-      {
-        model: UserInfo,
-        where: locationCondition,
-        required: false,
-        as: 'userInfo',
-        attributes: ['image', 'city', 'country', 'zipCode'],
-        include: [
-          {
-            model: Company,
-            as: 'company',
-            attributes: ['name'],
-            required: false,
+  const agents = await User.getAllByCondition(
+    name
+      ? {
+          name: {
+            [Op.iLike]: `%${name}%`,
           },
-        ],
-      },
-      {
-        model: Roles,
-        as: 'roles',
-        attributes: ['id', 'role'],
-        through: { attributes: [] },
-        where: { role: { [Op.or]: ['Agent', type] } },
-      },
-    ],
-  });
+        }
+      : {},
+    {
+      attributes: ['id', 'name', 'email', 'phone'],
+      ...paginationOptions,
+      include: [
+        {
+          model: UserInfo,
+          where: locationCondition,
+          required: false,
+          as: 'userInfo',
+          attributes: ['image', 'city', 'country', 'zipCode'],
+          include: [
+            {
+              model: Company,
+              as: 'company',
+              attributes: ['name'],
+              required: false,
+            },
+          ],
+        },
+        {
+          model: Roles,
+          as: 'roles',
+          attributes: ['id', 'role'],
+          through: { attributes: [] },
+          where: { role: { [Op.or]: ['Agent', type] } },
+        },
+      ],
+    }
+  );
 
   // filter agent users only
   let data = agents;

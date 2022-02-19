@@ -126,6 +126,7 @@ const searchListingsByCityOrZipCode = async (req, res) => {
 
   res.json(response({ data }));
 };
+
 /**
  * Get featured listings.
  *
@@ -134,7 +135,17 @@ const searchListingsByCityOrZipCode = async (req, res) => {
  */
 const getFeaturedListings = async (req, res) => {
   const data = await Listing.getAll({
-    attributes: ['id', 'images', 'price', 'address', 'bedrooms', 'fullBathrooms', 'createdAt'],
+    attributes: [
+      'id',
+      'images',
+      'price',
+      'address',
+      'bedrooms',
+      'fullBathrooms',
+      'createdAt',
+      'homeArea',
+      'lotArea',
+    ],
     limit: 6,
     order: [['created_at', 'DESC']],
     include: [
