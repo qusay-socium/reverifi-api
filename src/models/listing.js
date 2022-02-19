@@ -66,6 +66,12 @@ class Listing extends BaseModel {
             include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }, 'roles'],
           },
           {
+            model: User,
+            as: 'owner',
+            attributes: ['id', 'name'],
+            include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }, 'roles'],
+          },
+          {
             model: Features,
             as: 'features',
             attributes: ['feature'],
