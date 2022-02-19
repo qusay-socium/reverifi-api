@@ -91,7 +91,7 @@ const getUserInfo = async (req, res) => {
     {
       include: [
         { model: User, as: 'user', attributes: { exclude: ['password'] }, include: ['roles'] },
-        { model: Company, as: 'company', attributes: ['name', 'email', 'website'] },
+        { model: Company, as: 'company', attributes: ['id', 'name', 'email', 'website'] },
       ],
     }
   );
