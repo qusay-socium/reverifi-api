@@ -1,5 +1,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    await queryInterface.removeConstraint('listings', 'listings_property_type_id_fkey');
+
     await queryInterface.bulkDelete('property_type', {
       id: ['6af792b3-5f59-4789-bd5a-3714e5b7aa14'],
     });
