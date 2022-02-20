@@ -224,7 +224,7 @@ module.exports = (sequelize, DataTypes) => {
       rooms: {
         type: DataTypes.INTEGER,
       },
-      garage: {
+      garages: {
         type: DataTypes.INTEGER,
       },
       tags: {
