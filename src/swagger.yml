@@ -353,7 +353,7 @@ paths:
                 rooms:
                   type: number
                   example: 1
-                garage:
+                garages:
                   type: number
                   example: 1
                 partialBathrooms:
