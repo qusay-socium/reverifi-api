@@ -619,3 +619,34 @@ components:
         type: integer
         format: int32
         default: 30
+
+  /api/schedule:
+    Post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Schedule
+      summary: Creating
+      description: listing Schedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+                properties:
+                startDate:
+                    type: date
+                    example: 2022-02-23 16:00:00.117+00
+                  endDate:
+                    type: date
+                    example: 2022-02-23 16:00:00.117+00
+                  days:
+                    type: object
+                    example: {start:one}
+                  listingId:
+                    type: string
+                    example: e8bef5e4-83bb-4be0-9288-f5688d46f8d8
+      responses:
+        '200':
+          description: listing Schedule

@@ -9,6 +9,7 @@ const rolesRouter = require('./roles');
 const propertyTypesRouter = require('./property-types');
 const listingTypesRouter = require('./listing-types');
 const featuresRouter = require('./features');
+const schedule = require('./schedule');
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.use('/api/roles', rolesRouter);
 router.use('/api/property-types', propertyTypesRouter);
 router.use('/api/listing-types', listingTypesRouter);
 router.use('/api/features', featuresRouter);
+router.use('/api/schedule', schedule);
 
 module.exports = router;
