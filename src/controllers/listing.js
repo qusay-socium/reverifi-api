@@ -1,4 +1,12 @@
-const { Listing, ListingFeatures, User, UserInfo, PropertyType, ListingType } = require('models');
+const {
+  Listing,
+  ListingFeatures,
+  User,
+  UserInfo,
+  PropertyType,
+  ListingType,
+  Schedule,
+} = require('models');
 const { NotFound } = require('lib/errors');
 const response = require('utils/response');
 
@@ -170,6 +178,20 @@ const getFeaturedListings = async (req, res) => {
   res.json(response({ data }));
 };
 
+/**
+ * Get listing schedule.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getListingSchedule = async (req, res) => {
+  const data = req.body;
+
+  const schedule = await Schedule.createOne(data);
+
+  res.json(response({ data: schedule }));
+};
+
 module.exports = {
   getAllListings,
   updateListing,
@@ -178,4 +200,5 @@ module.exports = {
   deleteListing,
   searchListingsByCityOrZipCode,
   getFeaturedListings,
+  getListingSchedule,
 };
