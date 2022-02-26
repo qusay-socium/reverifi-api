@@ -24,6 +24,8 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * PropertyType: import('./property-type')
  * ListingType: import('./listing-type')
  * Schedule: import('./schedule')
+ * SocialStatistics: import('./social-statistics')
+ * SavedUsersListings: import('./saved-users-listings')
  * }}
  */
 const db = {};

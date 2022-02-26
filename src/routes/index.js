@@ -10,6 +10,7 @@ const propertyTypesRouter = require('./property-types');
 const listingTypesRouter = require('./listing-types');
 const featuresRouter = require('./features');
 const schedule = require('./schedule');
+const socialStatisticsRouter = require('./social-statistics');
 
 const router = Router();
 
@@ -23,5 +24,6 @@ router.use('/api/property-types', propertyTypesRouter);
 router.use('/api/listing-types', listingTypesRouter);
 router.use('/api/features', featuresRouter);
 router.use('/api/schedule', schedule);
+router.use('/api/social-statistics', socialStatisticsRouter);
 
 module.exports = router;
