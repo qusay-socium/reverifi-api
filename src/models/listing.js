@@ -65,7 +65,7 @@ class Listing extends BaseModel {
    *
    * @return {Promise<{data:Object[], count:number}>} Listing data.
    */
-  static async getPageWithRelations(page, limit, userId = null) {
+  static async getPageWithRelations(page, limit, order, userId = null) {
     const { User, UserInfo, Features, ListingType, PropertyType } = this.sequelize.models;
 
     const result = await this.getPage(
@@ -103,6 +103,7 @@ class Listing extends BaseModel {
             attributes: ['type'],
           },
         ],
+        order: [['created_at', order]],
       }
     );
     return result;
