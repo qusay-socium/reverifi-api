@@ -19,7 +19,7 @@ const response = require('utils/response');
 const getAllListings = async (req, res) => {
   const page = +req.query.page || 1;
   const limit = +req.query.limit || 30;
-  const { order } = req.query || 'DESC';
+  const order = req.query.order || 'DESC';
   const { id } = req.params;
 
   const { data, count } = await Listing.getPageWithRelations(page, limit, order, id);
@@ -181,12 +181,12 @@ const getFeaturedListings = async (req, res) => {
 };
 
 /**
- * Get listing schedule.
+ * Create listing schedule.
  *
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getListingSchedule = async (req, res) => {
+const createListingSchedule = async (req, res) => {
   const data = req.body;
 
   const schedule = await Schedule.createOne(data);
@@ -202,5 +202,5 @@ module.exports = {
   deleteListing,
   searchListingsByCityOrZipCode,
   getFeaturedListings,
-  getListingSchedule,
+  createListingSchedule,
 };

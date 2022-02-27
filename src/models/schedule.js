@@ -5,8 +5,8 @@ const getSharedColumns = require('models/shared-columns');
 class Schedule extends BaseModel {
   static associate({ Listing }) {
     this.belongsTo(Listing, {
+      as: 'schedule',
       foreignKey: 'listingId',
-      as: 'listing',
     });
   }
 }
