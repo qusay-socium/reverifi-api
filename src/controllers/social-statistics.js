@@ -1,4 +1,12 @@
-const { SavedUsersListings, SocialStatistics } = require('models');
+const {
+  SavedUsersListings,
+  SocialStatistics,
+  Listing,
+  User,
+  UserInfo,
+  ListingType,
+  PropertyType,
+} = require('models');
 const response = require('utils/response');
 
 /**
@@ -105,5 +113,57 @@ const viewOrShareUserOrListing = async (req, res) => {
 
   res.json(response());
 };
+/**
+ * get user saved users or listings
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getUserSavedUsersOrListings = async (req, res) => {
+  const { type } = req.query;
+  const savedBy = req.params.id;
 
-module.exports = { getSavedUsersOrListings, saveUserOrListing, viewOrShareUserOrListing };
+  const filterCondition = type ? { [type === 'listing' ? 'userId' : 'listingId']: null } : {};
+
+  const data = await SavedUsersListings.getAllByCondition(
+    {
+      ...filterCondition,
+      savedBy,
+    },
+    {
+      include: [
+        {
+          model: Listing,
+          as: 'savedListing',
+          include: [
+            { model: User, as: 'agent', include: [{ model: UserInfo, as: 'userInfo' }] },
+            {
+              model: ListingType,
+              as: 'listingType',
+              attributes: ['type'],
+            },
+            {
+              model: PropertyType,
+              as: 'propertyType',
+              attributes: ['type'],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: 'savedUser',
+          attributes: { exclude: ['password'] },
+          include: [{ model: UserInfo, as: 'userInfo' }, 'roles'],
+        },
+      ],
+    }
+  );
+
+  res.json(response({ data }));
+};
+module.exports = {
+  getSavedUsersOrListings,
+  saveUserOrListing,
+  viewOrShareUserOrListing,
+  getUserSavedUsersOrListings,
+};

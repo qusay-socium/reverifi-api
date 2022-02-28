@@ -15,8 +15,8 @@ class Listing extends BaseModel {
   }) {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
-    this.belongsTo(PropertyType, { as: 'propertyType', foreignKey: 'property_type_id' });
-    this.belongsTo(ListingType, { as: 'listingType', foreignKey: 'listing_type_id' });
+    this.belongsTo(PropertyType, { as: 'propertyType', foreignKey: 'propertyTypeId' });
+    this.belongsTo(ListingType, { as: 'listingType', foreignKey: 'listingTypeId' });
     this.belongsToMany(Features, {
       through: 'ListingFeatures',
       foreignKey: 'listing_id',
@@ -209,7 +209,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         field: 'property_type_id',
       },
-      listingTypedId: {
+      listingTypeId: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {

@@ -4,7 +4,7 @@ const getSharedColumns = require('models/shared-columns');
 
 class PropertyType extends BaseModel {
   static associate({ Listing }) {
-    this.hasMany(Listing, { as: 'listing', foreignKey: 'property_type_id' });
+    this.hasOne(Listing, { as: 'propertyType', foreignKey: 'propertyTypeId' });
   }
 }
 
