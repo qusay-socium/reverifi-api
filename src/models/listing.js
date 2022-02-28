@@ -3,7 +3,15 @@ const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
 class Listing extends BaseModel {
-  static associate({ User, Features, PropertyType, ListingType, Schedule }) {
+  static associate({
+    User,
+    Features,
+    PropertyType,
+    ListingType,
+    Schedule,
+    SocialStatistics,
+    SavedUsersListings,
+  }) {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
     this.belongsTo(PropertyType, { as: 'propertyType', foreignKey: 'property_type_id' });
@@ -14,6 +22,8 @@ class Listing extends BaseModel {
       as: 'features',
     });
     this.hasOne(Schedule, { as: 'listing', foreignKey: 'listingId' });
+    this.hasOne(SocialStatistics, { as: 'listingSocial', foreignKey: 'listingId' });
+    this.hasOne(SavedUsersListings, { as: 'savedListing', foreignKey: 'listingId' });
   }
 
   /**
@@ -28,12 +38,16 @@ class Listing extends BaseModel {
       include: [
         { model: this.sequelize.models.User, as: 'owner', attributes: { exclude: ['password'] } },
         { model: this.sequelize.models.User, as: 'agent', attributes: { exclude: ['password'] } },
-        'features',
         {
           model: this.sequelize.models.Features,
           as: 'features',
           attributes: ['id', 'feature'],
           through: { attributes: [] },
+        },
+        {
+          model: this.sequelize.models.SocialStatistics,
+          as: 'listingSocial',
+          attributes: ['saves', 'views', 'shares'],
         },
       ],
     });
@@ -248,9 +262,6 @@ module.exports = (sequelize, DataTypes) => {
       offerType: {
         type: DataTypes.STRING,
         field: 'offer_type',
-      },
-      analytics: {
-        type: DataTypes.JSON,
       },
       ...getSharedColumns(sequelize, DataTypes),
     },
