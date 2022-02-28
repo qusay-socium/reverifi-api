@@ -11,6 +11,7 @@ class Listing extends BaseModel {
     Schedule,
     SocialStatistics,
     SavedUsersListings,
+    ScheduleVisit,
   }) {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
@@ -24,6 +25,7 @@ class Listing extends BaseModel {
     this.hasOne(SocialStatistics, { as: 'listingSocial', foreignKey: 'listingId' });
     this.hasOne(SavedUsersListings, { as: 'savedListing', foreignKey: 'listingId' });
     this.hasOne(Schedule, { as: 'schedule', foreignKey: 'listingId' });
+    this.hasMany(ScheduleVisit, { as: 'visitedListing', foreignKey: 'listingId' });
   }
 
   /**
@@ -44,15 +46,12 @@ class Listing extends BaseModel {
           attributes: ['id', 'feature'],
           through: { attributes: [] },
         },
-<<<<<<< HEAD
         {
           model: this.sequelize.models.SocialStatistics,
           as: 'listingSocial',
           attributes: ['saves', 'views', 'shares'],
         },
-=======
         'schedule',
->>>>>>> addressed comments
       ],
     });
 
@@ -106,6 +105,7 @@ class Listing extends BaseModel {
             as: 'propertyType',
             attributes: ['type'],
           },
+          'schedule',
         ],
         order: [['created_at', order]],
       }
