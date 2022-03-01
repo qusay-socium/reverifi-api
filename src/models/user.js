@@ -11,6 +11,7 @@ class User extends BaseModel {
     SocialStatistics,
     SavedUsersListings,
     Reviews,
+    ScheduleVisit,
   }) {
     this.hasOne(UserInfo, { as: 'userInfo', foreignKey: 'userId' });
     this.hasOne(Listing, { as: 'agent', foreignKey: 'agentId' });
@@ -25,6 +26,7 @@ class User extends BaseModel {
     this.hasOne(SavedUsersListings, { as: 'savedByUser', foreignKey: 'savedBy' });
     this.hasMany(Reviews, { as: 'reviewedUser', foreignKey: 'userId' });
     this.hasMany(Reviews, { as: 'reviewer', foreignKey: 'reviewerId' });
+    this.hasMany(ScheduleVisit, { as: 'visitor', foreignKey: 'userId' });
   }
 
   /**

@@ -2,20 +2,24 @@ const { Sequelize } = require('sequelize');
 const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
-class Schedule extends BaseModel {
-  static associate({ Listing }) {
+class ScheduleVisit extends BaseModel {
+  static associate({ Listing, User }) {
     this.belongsTo(Listing, {
-      as: 'schedule',
+      as: 'visitedListing',
       foreignKey: 'listingId',
+    });
+    this.belongsTo(User, {
+      as: 'visitor',
+      foreignKey: 'userId',
     });
   }
 }
 
 /**
- * @type {typeof Schedule}
+ * @type {typeof ScheduleVisit}
  */
 module.exports = (sequelize, DataTypes) => {
-  Schedule.init(
+  ScheduleVisit.init(
     {
       id: {
         description: 'Primary key',
@@ -23,22 +27,14 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      days: {
+      dateTime: {
         allowNull: false,
         type: DataTypes.JSON,
         unique: false,
+        field: 'date_time',
       },
-      startDate: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        unique: false,
-        field: 'start_date',
-      },
-      endDate: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        unique: false,
-        field: 'end_date',
+      status: {
+        type: DataTypes.STRING,
       },
       listingId: {
         type: DataTypes.UUID,
@@ -49,13 +45,22 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        field: 'user_id',
+        references: {
+          model: 'user',
+          key: 'id',
+        },
+      },
       ...getSharedColumns(sequelize, DataTypes),
     },
     {
       sequelize,
-      modelName: 'Schedule',
-      tableName: 'schedule',
+      modelName: 'ScheduleVisit',
+      tableName: 'schedule_visit',
     }
   );
-  return Schedule;
+  return ScheduleVisit;
 };

@@ -1,12 +1,4 @@
-const {
-  Listing,
-  ListingFeatures,
-  User,
-  UserInfo,
-  PropertyType,
-  ListingType,
-  Schedule,
-} = require('models');
+const { Listing, ListingFeatures, User, UserInfo, PropertyType, ListingType } = require('models');
 const { NotFound } = require('lib/errors');
 const response = require('utils/response');
 
@@ -19,9 +11,10 @@ const response = require('utils/response');
 const getAllListings = async (req, res) => {
   const page = +req.query.page || 1;
   const limit = +req.query.limit || 30;
+  const order = req.query.order || 'DESC';
   const { id } = req.params;
 
-  const { data, count } = await Listing.getPageWithRelations(page, limit, id);
+  const { data, count } = await Listing.getPageWithRelations(page, limit, order, id);
 
   res.json(response({ data, page, limit, count }));
 };
@@ -179,20 +172,6 @@ const getFeaturedListings = async (req, res) => {
   res.json(response({ data }));
 };
 
-/**
- * Get listing schedule.
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const getListingSchedule = async (req, res) => {
-  const data = req.body;
-
-  const schedule = await Schedule.createOne(data);
-
-  res.json(response({ data: schedule }));
-};
-
 module.exports = {
   getAllListings,
   updateListing,
@@ -201,5 +180,4 @@ module.exports = {
   deleteListing,
   searchListingsByCityOrZipCode,
   getFeaturedListings,
-  getListingSchedule,
 };

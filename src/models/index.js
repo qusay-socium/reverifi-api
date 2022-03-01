@@ -29,7 +29,7 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * RatingCriteria: import('./rating-criteria')
  * Reviews: import('./reviews')
  * ReviewRatings: import('./review-ratings')
- *
+ * ScheduleVisit: import('./schedule-visit')
  * }}
  */
 const db = {};

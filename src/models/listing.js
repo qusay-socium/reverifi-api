@@ -11,6 +11,7 @@ class Listing extends BaseModel {
     Schedule,
     SocialStatistics,
     SavedUsersListings,
+    ScheduleVisit,
   }) {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
@@ -21,9 +22,10 @@ class Listing extends BaseModel {
       foreignKey: 'listing_id',
       as: 'features',
     });
-    this.hasOne(Schedule, { as: 'listing', foreignKey: 'listingId' });
     this.hasOne(SocialStatistics, { as: 'listingSocial', foreignKey: 'listingId' });
     this.hasOne(SavedUsersListings, { as: 'savedListing', foreignKey: 'listingId' });
+    this.hasOne(Schedule, { as: 'schedule', foreignKey: 'listingId' });
+    this.hasMany(ScheduleVisit, { as: 'visitedListing', foreignKey: 'listingId' });
   }
 
   /**
@@ -49,6 +51,7 @@ class Listing extends BaseModel {
           as: 'listingSocial',
           attributes: ['saves', 'views', 'shares'],
         },
+        'schedule',
       ],
     });
 
@@ -65,7 +68,7 @@ class Listing extends BaseModel {
    *
    * @return {Promise<{data:Object[], count:number}>} Listing data.
    */
-  static async getPageWithRelations(page, limit, userId = null) {
+  static async getPageWithRelations(page, limit, order = 'DESC', userId = null) {
     const { User, UserInfo, Features, ListingType, PropertyType } = this.sequelize.models;
 
     const result = await this.getPage(
@@ -102,7 +105,9 @@ class Listing extends BaseModel {
             as: 'propertyType',
             attributes: ['type'],
           },
+          'schedule',
         ],
+        order: [['created_at', order]],
       }
     );
     return result;
