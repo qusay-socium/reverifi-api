@@ -26,14 +26,10 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * Schedule: import('./schedule')
  * SocialStatistics: import('./social-statistics')
  * SavedUsersListings: import('./saved-users-listings')
-<<<<<<< HEAD
  * RatingCriteria: import('./rating-criteria')
  * Reviews: import('./reviews')
  * ReviewRatings: import('./review-ratings')
- *
-=======
  * ScheduleVisit: import('./schedule-visit')
->>>>>>> add visit schedule
  * }}
  */
 const db = {};

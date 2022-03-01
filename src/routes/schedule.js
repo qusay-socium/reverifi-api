@@ -2,7 +2,7 @@ const {
   createListingSchedule,
   createVisitListing,
   getListingSchedule,
-} = require('controllers/listing');
+} = require('controllers/schedule');
 const Router = require('express-promise-router');
 const auth = require('middleware/auth');
 

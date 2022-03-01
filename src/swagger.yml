@@ -598,31 +598,17 @@ paths:
         '200':
           description: Features
 
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-  parameters:
-    page:
-      name: page
-      in: query
-      description: Page number
-      required: false
-      schema:
-        type: integer
-        format: int32
-        default: 1
-    limit:
-      name: limit
-      in: query
-      description: Max items per page
-      required: false
-      schema:
-        type: integer
-        format: int32
-        default: 30
+  /api/schedule/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Schedule
+      summary: get the schedule for listing
+      description: listing Schedule
+      responses:
+        '200':
+          description: listing Schedule
 
   /api/schedule:
     patch:
@@ -630,7 +616,7 @@ components:
         - bearerAuth: []
       tags:
         - Schedule
-      summary: Creating
+      summary: Creating or updating a Schedule
       description: listing Schedule
          properties:
                 startDate:
@@ -645,23 +631,11 @@ components:
                   listingId:
                     type: string
                     example: e8bef5e4-83bb-4be0-9288-f5688d46f8d8
-      responses:
+      responses:  
         '200':
           description: listing Schedule
 
-  /api/schedule:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-        - Schedule
-      summary: get the schedule for listing
-      description: listing Schedule
-      responses:
-        '200':
-          description: listing Schedule
-
-  /api/schedule/visit:
+  /api/schedule/visit/:
     post:
       security:
         - bearerAuth: []
@@ -675,7 +649,7 @@ components:
           application/json:
             schema:
               type: object
-                properties:
+                
                 dateTime:
                     type: date
                     example: 2022-02-23 16:00:00.117+00
@@ -849,3 +823,29 @@ components:
       responses:
         '200':
           description: updated review
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    page:
+      name: page
+      in: query
+      description: Page number
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 1
+    limit:
+      name: limit
+      in: query
+      description: Max items per page
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 30

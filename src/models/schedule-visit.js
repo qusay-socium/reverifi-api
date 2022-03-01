@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.JSON,
         unique: false,
+        field: 'date_time',
+      },
+      status: {
+        type: DataTypes.STRING,
       },
       listingId: {
         type: DataTypes.UUID,

@@ -38,6 +38,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.JSON,
         unique: false,
+        field: 'date_time',
+      },
+      status: {
+        type: Sequelize.STRING,
       },
       listingId: {
         type: Sequelize.UUID,
