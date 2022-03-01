@@ -120,12 +120,14 @@ const viewOrShareUserOrListing = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const getUserSavedUsersOrListings = async (req, res) => {
-  const { type } = req.query;
+  const { type, page, limit } = req.query;
   const savedBy = req.params.id;
 
   const filterCondition = type ? { [type === 'listing' ? 'userId' : 'listingId']: null } : {};
 
-  const data = await SavedUsersListings.getAllByCondition(
+  const data = await SavedUsersListings.getPage(
+    page,
+    limit,
     {
       ...filterCondition,
       savedBy,

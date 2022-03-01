@@ -830,6 +830,25 @@ paths:
         '200':
           description: updated review
 
+  /api/social-statistics/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Social Statistics
+      summary: Social Statistics
+      description: Get user statistics
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id of the user
+      responses:
+        '200':
+          description: User Social Statistics
+
 components:
   securitySchemes:
     bearerAuth:
