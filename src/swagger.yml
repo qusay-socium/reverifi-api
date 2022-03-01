@@ -627,13 +627,7 @@ components:
         - Schedule
       summary: Creating
       description: listing Schedule
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-                properties:
+         properties:
                 startDate:
                     type: date
                     example: 2022-02-23 16:00:00.117+00
@@ -649,7 +643,6 @@ components:
       responses:
         '200':
           description: listing Schedule
-
 
   /api/social-statistics:
     get:
@@ -724,3 +717,90 @@ components:
         responses:
           '200':
             description: Social Statistics         
+      
+  /api/rating-criteria:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Rating criteria
+      summary: Get Rating criteria
+      description: Get Rating criteria
+      responses:
+        '200':
+          description: Rating criteria
+
+  /api/reviews/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: UUID of the user
+      tags:
+        - Reviews
+      summary: Reviews
+      description: Reviews by id
+      responses:
+        '200':
+          description: Reviews
+
+  /api/reviews:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Reviews
+      summary: Creating
+      description: Create new review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: UUID
+                  example: 447df28e-9935-4eda-9c6e-93544d5dc56c
+                review:
+                  type: string
+                  example: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the
+                selectedCriteria:
+                  type: array
+                  example:
+                    - 1976dc24-b0a4-45a4-903e-65ec1f1b1701
+                    - 787f04ab-eaac-4558-ac9e-c2e33a18a9ab
+      responses:
+        '200':
+          description: Created review
+
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+        - Reviews
+      summary: Creating
+      description: Create new review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reviewId:
+                  type: UUID
+                review:
+                  type: string
+                  example: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the
+                selectedCriteria:
+                  type: array
+                  example:
+                    - 1976dc24-b0a4-45a4-903e-65ec1f1b1701
+                    - 787f04ab-eaac-4558-ac9e-c2e33a18a9ab
+      responses:
+        '200':
+          description: updated review

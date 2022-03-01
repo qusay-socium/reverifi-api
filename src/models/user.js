@@ -3,7 +3,15 @@ const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
 class User extends BaseModel {
-  static associate({ UserInfo, Listing, Roles, UserRoles, SocialStatistics, SavedUsersListings }) {
+  static associate({
+    UserInfo,
+    Listing,
+    Roles,
+    UserRoles,
+    SocialStatistics,
+    SavedUsersListings,
+    Reviews,
+  }) {
     this.hasOne(UserInfo, { as: 'userInfo', foreignKey: 'userId' });
     this.hasOne(Listing, { as: 'agent', foreignKey: 'agentId' });
     this.hasOne(Listing, { as: 'ownedListing', foreignKey: 'ownerId' });
@@ -15,6 +23,8 @@ class User extends BaseModel {
     this.hasOne(SocialStatistics, { as: 'userSocial', foreignKey: 'userId' });
     this.hasOne(SavedUsersListings, { as: 'savedUser', foreignKey: 'userId' });
     this.hasOne(SavedUsersListings, { as: 'savedByUser', foreignKey: 'savedBy' });
+    this.hasMany(Reviews, { as: 'reviewedUser', foreignKey: 'userId' });
+    this.hasMany(Reviews, { as: 'reviewer', foreignKey: 'reviewerId' });
   }
 
   /**
