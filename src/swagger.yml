@@ -739,48 +739,28 @@ paths:
                 listingId:
                   type: UUID
                   example: b975c3ec-f585-4348-8bc9-0af5743c0635
-        responses:
-          '200':
-            description: Social Statistics
-
-      summary: Social Statistics
-      description: update Social Statistics
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                  properties:
-                    userId:
-                      type: UUID
-                      example: 447df28e-9935-4eda-9c6e-93544d5dc56c
-                    listingId:
-                      type: UUID
-                      example: b975c3ec-f585-4348-8bc9-0af5743c0635
       responses:
         '200':
-          description: Social Statistics    
-
+          description: Social Statistics
   /api/social-statistics/{id}:
-      get:
-        security:
-          - bearerAuth: []
-        tags:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
         - Social Statistics
-        summary: Social Statistics
-        description: Get user statistics
-        parameters:
-          - in: path
-            name: id
-            schema:
-              type: string
-            required: true
-            description: id of the user
-      responses:
-        '200':
-          description: User Social Statistics           
-      
+      summary: Social Statistics
+      description: Get user statistics
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id of the user
+    responses:
+      '200':
+        description: User Social Statistics
+
   /api/rating-criteria:
     get:
       security:
