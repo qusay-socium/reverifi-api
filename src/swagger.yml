@@ -633,7 +633,8 @@ paths:
                   example: 2022-02-23 16:00:00.117+00
                 days:
                   type: object
-                  example: { start:2022-02-23 16:00:00.117+00 }
+                  example:
+                    start: 2022-02-23 16:00:00.117+00
                 listingId:
                   type: string
                   example: e8bef5e4-83bb-4be0-9288-f5688d46f8d8
@@ -810,7 +811,7 @@ paths:
                   example: 447df28e-9935-4eda-9c6e-93544d5dc56c
                 review:
                   type: string
-                  example: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the
+                  example: Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 selectedCriteria:
                   type: array
                   example:
@@ -838,7 +839,7 @@ paths:
                   type: UUID
                 review:
                   type: string
-                  example: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the
+                  example: Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 selectedCriteria:
                   type: array
                   example:

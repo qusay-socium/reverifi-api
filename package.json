@@ -42,6 +42,7 @@
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-yml": "^0.14.0",
     "nodemon": "^2.0.4",
     "prettier": "^2.5.1",
     "sequelize-cli": "^6.3.0"

@@ -11,7 +11,7 @@
       }
     }
   },
-  "extends": ["airbnb-base", "prettier"],
+  "extends": ["airbnb-base", "prettier", "plugin:yml/standard"],
   "plugins": ["import", "prettier"],
   "root": true,
   "ignorePatterns": ["src/seeders/*.js", "src/migrations/*.js"],
@@ -29,6 +29,7 @@
     "no-trailing-spaces": 2,
     "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next" }],
     "no-unused-expressions": [2, { "allowTaggedTemplates": true }],
-    "no-underscore-dangle": ["error", { "allowAfterThis": true }]
+    "no-underscore-dangle": ["error", { "allowAfterThis": true }],
+    "yml/quotes": ["error", { "prefer": "single" }]
   }
 }
