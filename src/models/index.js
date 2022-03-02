@@ -13,7 +13,7 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * @type {{
  * sequelize: import('sequelize').Sequelize,
  * Sequelize: typeof import('Sequelize')
- * Company: import('./company')
+ * Company: import('./company')``
  * Listing: import('./listing')
  * UserInfo: import('./user-info')
  * User: import('./user')

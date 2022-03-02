@@ -36,12 +36,28 @@ class Listing extends BaseModel {
    * @return {Promise<Object>} The listing data.
    */
   static async getOneWithOwnerAndAgent(id) {
+    const { User, UserInfo, Features} = this.sequelize.models;
     const result = await this.getOne(id, {
       include: [
-        { model: this.sequelize.models.User, as: 'owner', attributes: { exclude: ['password'] } },
-        { model: this.sequelize.models.User, as: 'agent', attributes: { exclude: ['password'] } },
         {
-          model: this.sequelize.models.Features,
+          model: User,
+          as: 'owner',
+          attributes: {
+            exclude: ['password'],
+          },
+          include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }]
+        },
+        {
+          model: User,
+          as: 'agent',
+          attributes: {
+            exclude: ['password'],
+          },
+          include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }]
+        },
+        'features',
+        {
+          model: Features,
           as: 'features',
           attributes: ['id', 'feature'],
           through: { attributes: [] },

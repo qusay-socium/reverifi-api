@@ -216,6 +216,34 @@ const getAgentUsersByType = async (req, res) => {
   res.json(response({ data }));
 };
 
+/**
+ * Get all users with limit.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getUsersWithLimit = async (req, res) => {
+  const { limit } = req.params;
+  const { name } = req.query;
+
+  const data = await User.getAllByCondition(
+    name
+      ? {
+          name: {
+            [Op.iLike]: `%${name}%`,
+          },
+        }
+      : {},
+    {
+      attributes: ['id', 'name'],
+      limit: limit,
+    }
+  );
+
+  console.log({ data });
+  res.json(response({ data }));
+};
+
 module.exports = {
   createUserInfo,
   updateUserInfo,
@@ -224,4 +252,5 @@ module.exports = {
   updateUserRoles,
   getUserRoles,
   getAgentUsersByType,
+  getUsersWithLimit,
 };
