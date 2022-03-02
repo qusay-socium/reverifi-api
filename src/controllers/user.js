@@ -236,11 +236,10 @@ const getUsersWithLimit = async (req, res) => {
       : {},
     {
       attributes: ['id', 'name'],
-      limit: limit,
+      limit,
     }
   );
 
-  console.log({ data });
   res.json(response({ data }));
 };
 

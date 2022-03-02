@@ -65,7 +65,7 @@ class Listing extends BaseModel {
         {
           model: PropertyType,
           as: 'propertyType',
-          attributes: ['type']
+          attributes: ['type'],
         },
         {
           model: SocialStatistics,
