@@ -2,11 +2,17 @@ const {
   getSavedUsersOrListings,
   saveUserOrListing,
   viewOrShareUserOrListing,
+  getUserSavedUsersOrListings,
 } = require('controllers/social-statistics');
 const Router = require('express-promise-router');
 const auth = require('middleware/auth');
 
 const router = Router({ mergeParams: true });
+
+/**
+ * Handle GET /api/social-statistics/:id route.
+ */
+router.get('/:id', auth, getUserSavedUsersOrListings);
 
 /**
  * Handle GET /api/social-statistics route.

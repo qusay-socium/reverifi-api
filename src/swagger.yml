@@ -715,9 +715,9 @@ paths:
                 type:
                   type: string
                   example: views
-        responses:
-          '200':
-            description: Social Statistics
+      responses:
+        '200':
+          description: Social Statistics
 
     patch:
       description: update Social Statistics
@@ -739,9 +739,27 @@ paths:
                 listingId:
                   type: UUID
                   example: b975c3ec-f585-4348-8bc9-0af5743c0635
-        responses:
-          '200':
-            description: Social Statistics
+      responses:
+        '200':
+          description: Social Statistics
+  /api/social-statistics/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Social Statistics
+      summary: Social Statistics
+      description: Get user statistics
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id of the user
+    responses:
+      '200':
+        description: User Social Statistics
 
   /api/rating-criteria:
     get:
