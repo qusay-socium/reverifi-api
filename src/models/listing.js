@@ -36,7 +36,7 @@ class Listing extends BaseModel {
    * @return {Promise<Object>} The listing data.
    */
   static async getOneWithOwnerAndAgent(id) {
-    const { User, UserInfo, Features} = this.sequelize.models;
+    const { User, UserInfo, Features, SocialStatistics, PropertyType } = this.sequelize.models;
     const result = await this.getOne(id, {
       include: [
         {
@@ -45,7 +45,7 @@ class Listing extends BaseModel {
           attributes: {
             exclude: ['password'],
           },
-          include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }]
+          include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }],
         },
         {
           model: User,
@@ -53,7 +53,7 @@ class Listing extends BaseModel {
           attributes: {
             exclude: ['password'],
           },
-          include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }]
+          include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }],
         },
         'features',
         {
@@ -63,7 +63,12 @@ class Listing extends BaseModel {
           through: { attributes: [] },
         },
         {
-          model: this.sequelize.models.SocialStatistics,
+          model: PropertyType,
+          as: 'propertyType',
+          attributes: ['type']
+        },
+        {
+          model: SocialStatistics,
           as: 'listingSocial',
           attributes: ['saves', 'views', 'shares'],
         },
