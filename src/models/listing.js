@@ -123,7 +123,11 @@ class Listing extends BaseModel {
   static async searchByCityOrZipCode(value = '') {
     const result = await this.getAll({
       where: {
-        [Op.or]: { city: { [Op.like]: `%${value}%` }, zipCode: { [Op.like]: `%${value}%` } },
+        [Op.or]: {
+          address: { [Op.iLike]: `%${value}%` },
+          city: { [Op.iLike]: `%${value}%` },
+          zipCode: { [Op.iLike]: `%${value}%` },
+        },
       },
       include: [
         {
@@ -140,6 +144,7 @@ class Listing extends BaseModel {
         },
       ],
     });
+
     return result;
   }
 }

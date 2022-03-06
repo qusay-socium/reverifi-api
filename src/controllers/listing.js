@@ -27,6 +27,7 @@ const getAllListings = async (req, res) => {
  */
 const createListing = async (req, res) => {
   const { isAgent, isOwner, featureIds, ...data } = req.body;
+
   if (isAgent) {
     data.agentId = req.user.id;
   }
