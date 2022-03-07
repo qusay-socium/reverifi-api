@@ -1,4 +1,4 @@
-const { Reviews, User, UserInfo, ReviewRatings, RatingCriteria } = require('models');
+const { Reviews, User, UserInfo, ReviewRatings, RatingCriteria, Sequelize } = require('models');
 const response = require('utils/response');
 
 /**
@@ -13,7 +13,10 @@ const getReviews = async (req, res) => {
   const data = await Reviews.getAllByCondition(
     { userId },
     {
-      order: [['created_at', 'DESC']],
+      order: [
+        ['created_at', 'DESC'],
+        [Sequelize.literal('"ratings.criteria"'), 'ASC'],
+      ],
       include: [
         {
           model: User,
