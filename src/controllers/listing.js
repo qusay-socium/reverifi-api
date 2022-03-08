@@ -58,8 +58,8 @@ const updateListing = async (req, res) => {
   const { id } = req.params;
   const { isAgent, isOwner, features, ...data } = req.body;
 
-  data.agentId = isAgent ? req.user.id : undefined;
-  data.ownerId = isOwner ? req.user.id : undefined;
+  data.agentId = isAgent ? req.user.id : null;
+  data.ownerId = isOwner ? req.user.id : null;
 
   const listing = await Listing.getOne(id);
   if (!listing || !(listing.ownerId === req.user.id || listing.agentId === req.user.id)) {
