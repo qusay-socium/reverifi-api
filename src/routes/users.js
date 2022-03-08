@@ -9,6 +9,7 @@ const {
   updateUserRoles,
   getUserRoles,
   getAgentUsersByType,
+  getUsersWithLimit,
 } = require('controllers/user');
 
 const router = Router({ mergeParams: true });
@@ -17,6 +18,11 @@ const router = Router({ mergeParams: true });
  * Handle GET to /api/users/agents/:type route.
  */
 router.get('/agents/:type', getAgentUsersByType);
+
+/**
+ * Handle GET to /api/users/all/:limit route.
+ */
+router.get('/all/:limit', auth, getUsersWithLimit);
 
 /**
  * Handle GET to /api/users/roles route.
