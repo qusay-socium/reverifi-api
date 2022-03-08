@@ -22,7 +22,7 @@ router.get('/agents/:type', getAgentUsersByType);
 /**
  * Handle GET to /api/users/all/:limit route.
  */
-router.get('/all/:limit', getUsersWithLimit);
+router.get('/all/:limit', auth, getUsersWithLimit);
 
 /**
  * Handle GET to /api/users/roles route.

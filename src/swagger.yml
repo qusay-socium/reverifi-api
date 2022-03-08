@@ -251,6 +251,30 @@ paths:
         '200':
           description: User information
 
+  /api/users/all/{limit}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - User information
+      summary: Get users
+      description: Get users
+      parameters:
+        - in: path
+          name: limit
+          schema:
+            type: string
+          required: true
+          description: limit of the users
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: name of the user
+      responses:
+        '200':
+          description: Users
+
   /api/listings/{id}:
     get:
       security:
