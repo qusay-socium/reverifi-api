@@ -26,7 +26,7 @@ const getAllListings = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const createListing = async (req, res) => {
-  const { isAgent, isOwner, featureIds, ...data } = req.body;
+  const { isAgent, isOwner, features, ...data } = req.body;
 
   if (isAgent) {
     data.agentId = req.user.id;
@@ -36,9 +36,9 @@ const createListing = async (req, res) => {
   }
   const listing = await Listing.createOne(data);
 
-  if (featureIds.length) {
+  if (features.length) {
     await ListingFeatures.createAll(
-      featureIds.map((feature) => ({
+      features.map((feature) => ({
         featureId: feature,
         listingId: listing.id,
       }))
