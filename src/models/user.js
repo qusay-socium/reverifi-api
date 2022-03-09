@@ -72,6 +72,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         field: 'is_verified',
       },
+      active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       ...getSharedColumns(sequelize, DataTypes),
     },
     {
