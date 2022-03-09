@@ -21,6 +21,10 @@ tags:
     description: Features endpoints
   - name: Upload
     description: Upload endpoints
+  - name: Action types
+    description: Action types endpoints
+  - name: User action types
+    description: User action types endpoints
 
 paths:
   /api/auth/signup:
@@ -900,6 +904,135 @@ paths:
       responses:
         '200':
           description: updated review
+
+  /api/action-types:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Action types
+      summary: Action types
+      description: get action types
+
+      responses:
+        '200':
+          description: Action types
+    post:
+      description: add Action type
+      summary: Action types
+      security:
+        - bearerAuth: []
+      tags:
+        - Action types
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: Complete registration
+                points:
+                  type: integer
+                  example: 50
+      responses:
+        '200':
+          description: Social Statistics
+
+  /api/action-types/{id}:
+    patch:
+      description: Update action type
+      summary: Update action type
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+      tags:
+        - Action types
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: Complete registration
+                points:
+                  type: integer
+                  example: 50
+      responses:
+        '200':
+          description: Action types
+
+    delete:
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+      tags:
+        - Action types
+      summary: Delete action types
+      description: Delete action types by token
+      responses:
+        '200':
+          description: Confirmation message for deleting
+
+  /api/user-action-types:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - User action types
+      summary: User action types
+      description: get all users action types
+
+      responses:
+        '200':
+          description: User action types
+    post:
+      description: add Action type
+      summary: User action types
+      security:
+        - bearerAuth: []
+      tags:
+        - User action types
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: UUID
+                  example: 787f04ab-eaac-4558-ac9e-c2e33a18a9ab
+                actionTypeName:
+                  type: string
+                  example: Registration
+      responses:
+        '200':
+          description: Social Statistics
+
+  /api/user-action-types/{id}:
+    get:
+      description: Get user action type by user id
+      summary: Get user action types
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+      tags:
+        - User action types
+      responses:
+        '200':
+          description: User action types
 
   /api/invitations/{type}:
     get:
