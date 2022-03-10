@@ -76,7 +76,7 @@ const signup = async (req, res) => {
     active: true,
   });
 
-  res.json(response({ data: getTokenResponse(user) }));
+  return res.json(response({ data: getTokenResponse(user) }));
 };
 
 module.exports = { signup, login };
