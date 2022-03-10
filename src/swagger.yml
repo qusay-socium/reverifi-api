@@ -275,6 +275,31 @@ paths:
         '200':
           description: Users
 
+  /api/users/invited:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - User information
+      summary: Create a user.
+      description: Create a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: xyz@xyz.com
+                name:
+                  type: string
+                  example: john
+      responses:
+        '200':
+          description: user info
+
   /api/listings/{id}:
     get:
       security:

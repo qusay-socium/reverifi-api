@@ -243,6 +243,27 @@ const getUsersWithLimit = async (req, res) => {
   res.json(response({ data }));
 };
 
+/**
+ * add Invited User
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const addInvitedUser = async (req, res) => {
+  const { name, email } = req.body;
+
+  const data =
+    name && email
+      ? await User.createOne({
+          name,
+          email: email.toLowerCase(),
+          active: false,
+        })
+      : {};
+
+  res.json(response({ data }));
+};
+
 module.exports = {
   createUserInfo,
   updateUserInfo,
@@ -252,4 +273,5 @@ module.exports = {
   getUserRoles,
   getAgentUsersByType,
   getUsersWithLimit,
+  addInvitedUser,
 };

@@ -10,6 +10,7 @@ const {
   getUserRoles,
   getAgentUsersByType,
   getUsersWithLimit,
+  addInvitedUser,
 } = require('controllers/user');
 
 const router = Router({ mergeParams: true });
@@ -43,6 +44,11 @@ router.get('/', auth, getUserInfo);
  * Handle GET to /api/users/:id route.
  */
 router.get('/:id', getUserInfo);
+
+/**
+ * Handle POST to /api/users/invited route.
+ */
+router.post('/invited', auth, addInvitedUser);
 
 /**
  * Handle POST to /api/users route.

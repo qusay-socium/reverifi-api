@@ -47,7 +47,7 @@ const login = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const signup = async (req, res) => {
-  const { name, email, password, phone, active } = req.body;
+  const { name, email, password, phone } = req.body;
   const dbUser = await User.getOneByCondition({ email: email.toLowerCase() });
 
   if (dbUser) {
@@ -55,16 +55,6 @@ const signup = async (req, res) => {
   }
 
   req.body.email = email.toLowerCase();
-
-  if (!active) {
-    const data = await User.createOne({
-      name,
-      email: email.toLowerCase(),
-      active: false,
-    });
-
-    return res.json(response({ data }));
-  }
 
   const passwordHash = await bcrypt.hash(password, 10);
 
