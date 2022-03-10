@@ -57,13 +57,13 @@ const signup = async (req, res) => {
   req.body.email = email.toLowerCase();
 
   if (!active) {
-    await User.createOne({
+    const data = await User.createOne({
       name,
       email: email.toLowerCase(),
       active: false,
     });
 
-    return res.json(response());
+    return res.json(response({ data }));
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
