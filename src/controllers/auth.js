@@ -63,9 +63,10 @@ const signup = async (req, res) => {
     email: email.toLowerCase(),
     password: passwordHash,
     phone,
+    active: true,
   });
 
-  res.json(response({ data: getTokenResponse(user) }));
+  return res.json(response({ data: getTokenResponse(user) }));
 };
 
 module.exports = { signup, login };
