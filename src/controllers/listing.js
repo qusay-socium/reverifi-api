@@ -124,7 +124,7 @@ const getListingById = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const searchListingsByCityOrZipCode = async (req, res) => {
-  const data = await Listing.searchByCityOrZipCode(req.query.key);
+  const data = await Listing.searchByCityOrZipCode(req.query);
 
   res.json(response({ data }));
 };
