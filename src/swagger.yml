@@ -792,6 +792,7 @@ paths:
       responses:
         '200':
           description: Social Statistics
+
   /api/social-statistics/{id}:
     get:
       security:
@@ -897,6 +898,85 @@ paths:
       responses:
         '200':
           description: updated review
+
+  /api/invitations/{type}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Invitations
+      summary: invitations
+      description: get user invitations
+      parameters:
+        - in: path
+          name: type
+          schema:
+            type: string
+          required: true
+          description: type of invitation sent or incoming
+      responses:
+        '200':
+          description: User invitations
+
+  /api/invitations:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Invitations
+      summary: Add invitations
+      description: Add invitations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userIdsAndRoles:
+                  type: array
+                modelId:
+                  type: UUID
+                model:
+                  type: string
+                  example:
+                    - listings
+                name:
+                  type: string
+                  example:
+                    - transaction
+      responses:
+        '200':
+          description: User invitations
+
+  /api/invitations/{id}:
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+        - Invitations
+      summary: Update user invitation
+      description: Update user invitation
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: UUID
+          required: true
+          description: invitation id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: accepted
+      responses:
+        '200':
+          description: Updated user information
 
 components:
   securitySchemes:
