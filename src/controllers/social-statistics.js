@@ -133,6 +133,7 @@ const getUserSavedUsersOrListings = async (req, res) => {
       savedBy,
     },
     {
+      order: [['created_at', 'DESC']],
       include: [
         {
           model: Listing,
