@@ -31,6 +31,13 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * ReviewRatings: import('./review-ratings')
  * ScheduleVisit: import('./schedule-visit')
  * Invitations: import('./invitations')
+ * TransactionWorkflowSteps: import('./transaction-workflow-steps')
+ * Transactions: import('./transactions')
+ * TransactionsNotes: import('./transactions-notes')
+ * TransactionAssignee: import('./transaction-assignee')
+ * States: import('./states')
+ * Processes: import('./processes')
+ * TransactionProcesses: import('./transaction-processes')
  * }}
  */
 const db = {};

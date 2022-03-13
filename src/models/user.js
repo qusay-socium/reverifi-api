@@ -13,6 +13,8 @@ class User extends BaseModel {
     Reviews,
     ScheduleVisit,
     Invitations,
+    Transactions,
+    TransactionAssignee,
   }) {
     this.hasOne(UserInfo, { as: 'userInfo', foreignKey: 'userId' });
     this.hasOne(Listing, { as: 'agent', foreignKey: 'agentId' });
@@ -30,6 +32,8 @@ class User extends BaseModel {
     this.hasMany(ScheduleVisit, { as: 'visitor', foreignKey: 'userId' });
     this.hasMany(Invitations, { as: 'inviter', foreignKey: 'inviteById' });
     this.hasMany(Invitations, { as: 'invitedUser', foreignKey: 'invitedUserId' });
+    this.hasMany(Transactions, { as: 'createdByUser', foreignKey: 'createdBy' });
+    this.belongsTo(TransactionAssignee, { as: 'assignedUser', foreignKey: ' userId' });
   }
 
   /**
