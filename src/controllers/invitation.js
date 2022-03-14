@@ -1,4 +1,4 @@
-const { InvitationType, Invitations, User, Listing, UserInfo } = require('models');
+const { Invitations, User, Listing, UserInfo } = require('models');
 const response = require('utils/response');
 
 /**
@@ -26,9 +26,8 @@ const getInvitations = async (req, res) => {
         include: [{ model: UserInfo, as: 'userInfo', attributes: ['image'] }],
       },
       {
-        model: InvitationType,
-        as: 'invitationType',
-        include: [{ model: Listing, as: 'invitedListing' }],
+        model: Listing,
+        as: 'invitedListing',
       },
     ],
   });
@@ -43,16 +42,14 @@ const getInvitations = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const addInvitation = async (req, res) => {
-  const { userIdsAndRoles, listingId, model, name } = req.body;
+  const { userIdsAndRoles, listingId } = req.body;
   const inviteById = req.user.id;
 
-  let invitationType = await InvitationType.getOneByCondition({ listingId });
+  const invitationExist = await Invitations.getOneByCondition({ listingId });
 
-  if (!invitationType) {
-    invitationType = await InvitationType.createOne({ listingId, model, name });
-  } else {
+  if (invitationExist) {
     // to update invited users
-    await Invitations.deleteByCondition({ invitationTypeId: invitationType.id });
+    await Invitations.deleteByCondition({ listingId });
   }
 
   if (userIdsAndRoles.length) {
@@ -61,7 +58,7 @@ const addInvitation = async (req, res) => {
         invitedUserId,
         role,
         inviteById,
-        invitationTypeId: invitationType.id,
+        listingId,
       }))
     );
   }

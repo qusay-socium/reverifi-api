@@ -28,32 +28,6 @@ module.exports = {
       },
     };
 
-    await queryInterface.createTable('invitation_type', {
-      id: {
-        primaryKey: true,
-        type: Sequelize.UUID,
-        primaryKey: true,
-        defaultValue: Sequelize.literal('uuid_generate_v4()'),
-      },
-      listingId: {
-        type: Sequelize.UUID,
-        field: 'listing_id',
-        references: {
-          model: 'listings',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade ',
-      },
-      model: {
-        type: Sequelize.STRING,
-      },
-      name: {
-        type: Sequelize.STRING,
-      },
-      ...sharedColumns,
-    });
-
     await queryInterface.createTable('invitations', {
       id: {
         description: 'Primary key',
@@ -83,12 +57,11 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'cascade ',
       },
-      invitationTypeId: {
+      listingId: {
         type: Sequelize.UUID,
-        allowNull: false,
-        field: 'invitation_type_id',
+        field: 'listing_id',
         references: {
-          model: 'invitation_type',
+          model: 'listings',
           key: 'id',
         },
         onUpdate: 'cascade',
@@ -106,6 +79,5 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('invitations');
-    await queryInterface.dropTable('invitation_type');
   },
 };

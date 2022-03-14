@@ -3,8 +3,8 @@ const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
 class Invitations extends BaseModel {
-  static associate({ InvitationType, User }) {
-    this.belongsTo(InvitationType, { as: 'invitationType', foreignKey: 'invitationTypeId' });
+  static associate({ User, Listing }) {
+    this.belongsTo(Listing, { as: 'invitedListing', foreignKey: 'listingId' });
     this.belongsTo(User, { as: 'inviter', foreignKey: 'inviteById' });
     this.belongsTo(User, { as: 'invitedUser', foreignKey: 'invitedUserId' });
   }
@@ -40,14 +40,15 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
-      invitationTypeId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: 'invitation_type_id',
+      listingId: {
+        type: Sequelize.UUID,
+        field: 'listing_id',
         references: {
-          model: 'invitation_type',
+          model: 'listings',
           key: 'id',
         },
+        onUpdate: 'cascade',
+        onDelete: 'cascade ',
       },
       role: {
         type: DataTypes.STRING,

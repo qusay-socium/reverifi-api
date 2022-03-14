@@ -31,7 +31,6 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * ReviewRatings: import('./review-ratings')
  * ScheduleVisit: import('./schedule-visit')
  * Invitations: import('./invitations')
- * InvitationType: import('./invitation-type')
  * }}
  */
 const db = {};
