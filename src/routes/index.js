@@ -13,6 +13,7 @@ const schedule = require('./schedule');
 const socialStatisticsRouter = require('./social-statistics');
 const ratingCriteriaRouter = require('./rating-criteria');
 const reviewsRouter = require('./reviews');
+const invitationsRouter = require('./invitations');
 
 const router = Router();
 
@@ -29,5 +30,6 @@ router.use('/api/schedule', schedule);
 router.use('/api/social-statistics', socialStatisticsRouter);
 router.use('/api/rating-criteria', ratingCriteriaRouter);
 router.use('/api/reviews', reviewsRouter);
+router.use('/api/invitations', invitationsRouter);
 
 module.exports = router;
