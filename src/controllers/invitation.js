@@ -11,7 +11,7 @@ const getInvitations = async (req, res) => {
   const { type } = req.params;
   const { id } = req.user;
 
-  const condition = type === 'incoming' ? { invitedUserId: id } : { inviteBy: id };
+  const condition = type === 'incoming' ? { invitedUserId: id } : { inviteById: id };
 
   const data = await Invitations.getAllByCondition(condition, {
     include: [
@@ -43,13 +43,13 @@ const getInvitations = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const addInvitation = async (req, res) => {
-  const { userIdsAndRoles, modelId, model, name } = req.body;
-  const inviteBy = req.user.id;
+  const { userIdsAndRoles, listingId, model, name } = req.body;
+  const inviteById = req.user.id;
 
-  let invitationType = await InvitationType.getOneByCondition({ modelId });
+  let invitationType = await InvitationType.getOneByCondition({ listingId });
 
   if (!invitationType) {
-    invitationType = await InvitationType.createOne({ modelId, model, name });
+    invitationType = await InvitationType.createOne({ listingId, model, name });
   } else {
     // to update invited users
     await Invitations.deleteByCondition({ invitationTypeId: invitationType.id });
@@ -60,7 +60,7 @@ const addInvitation = async (req, res) => {
       userIdsAndRoles.map(({ invitedUserId, role }) => ({
         invitedUserId,
         role,
-        inviteBy,
+        inviteById,
         invitationTypeId: invitationType.id,
       }))
     );

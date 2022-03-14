@@ -5,7 +5,7 @@ const getSharedColumns = require('models/shared-columns');
 class Invitations extends BaseModel {
   static associate({ InvitationType, User }) {
     this.belongsTo(InvitationType, { as: 'invitationType', foreignKey: 'invitationTypeId' });
-    this.belongsTo(User, { as: 'inviter', foreignKey: 'inviteBy' });
+    this.belongsTo(User, { as: 'inviter', foreignKey: 'inviteById' });
     this.belongsTo(User, { as: 'invitedUser', foreignKey: 'invitedUserId' });
   }
 }
@@ -22,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      inviteBy: {
+      inviteById: {
         type: DataTypes.UUID,
         allowNull: false,
-        field: 'invite_by',
+        field: 'invite_by_id',
         references: {
           model: 'users',
           key: 'id',

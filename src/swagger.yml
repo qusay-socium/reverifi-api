@@ -935,7 +935,7 @@ paths:
               properties:
                 userIdsAndRoles:
                   type: array
-                modelId:
+                listingId:
                   type: UUID
                 model:
                   type: string

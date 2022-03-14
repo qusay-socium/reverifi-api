@@ -27,7 +27,7 @@ class Listing extends BaseModel {
     this.hasOne(SavedUsersListings, { as: 'savedListing', foreignKey: 'listingId' });
     this.hasOne(Schedule, { as: 'schedule', foreignKey: 'listingId' });
     this.hasMany(ScheduleVisit, { as: 'visitedListing', foreignKey: 'listingId' });
-    this.hasMany(InvitationType, { as: 'invitedListing', foreignKey: 'modelId' });
+    this.hasMany(InvitationType, { as: 'invitedListing', foreignKey: 'listingId' });
   }
 
   /**

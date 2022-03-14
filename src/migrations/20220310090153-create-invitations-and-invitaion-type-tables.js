@@ -35,10 +35,9 @@ module.exports = {
         primaryKey: true,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      modelId: {
+      listingId: {
         type: Sequelize.UUID,
-        allowNull: false,
-        field: 'model_id',
+        field: 'listing_id',
         references: {
           model: 'listings',
           key: 'id',
@@ -62,10 +61,10 @@ module.exports = {
         primaryKey: true,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
       },
-      inviteBy: {
+      inviteById: {
         type: Sequelize.UUID,
         allowNull: false,
-        field: 'invite_by',
+        field: 'invite_by_id',
         references: {
           model: 'users',
           key: 'id',
