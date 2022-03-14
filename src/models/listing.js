@@ -143,13 +143,35 @@ class Listing extends BaseModel {
    *
    * @return {Promise<Object[]>} Listing data.
    */
-  static async searchByCityOrZipCode(value = '') {
+  static async searchByCityOrZipCode(filter = {}) {
+    const { key, min, max, propertyTypeId, bedrooms, fullBathrooms, listingTypeId } = filter;
+
+    const selectedFilters = {};
+    if (bedrooms) {
+      selectedFilters.bedrooms = bedrooms;
+    }
+    if (fullBathrooms) {
+      selectedFilters.fullBathrooms = fullBathrooms;
+    }
+    if (listingTypeId) {
+      selectedFilters.listingTypeId = listingTypeId;
+    }
+    if (propertyTypeId) {
+      selectedFilters.propertyTypeId = propertyTypeId;
+    }
+    if (min && max) {
+      selectedFilters.price = { [Op.between]: [+min, +max] };
+    }
+
     const result = await this.getAll({
       where: {
         [Op.or]: {
-          address: { [Op.iLike]: `%${value}%` },
-          city: { [Op.iLike]: `%${value}%` },
-          zipCode: { [Op.iLike]: `%${value}%` },
+          address: { [Op.iLike]: `%${key}%` },
+          city: { [Op.iLike]: `%${key}%` },
+          zipCode: { [Op.iLike]: `%${key}%` },
+        },
+        [Op.and]: {
+          ...selectedFilters,
         },
       },
       include: [
