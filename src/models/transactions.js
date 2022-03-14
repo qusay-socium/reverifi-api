@@ -49,15 +49,6 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
-      createdBy: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        field: 'created_by',
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-      },
       status: {
         type: DataTypes.STRING,
         defaultValue: 'in progress',

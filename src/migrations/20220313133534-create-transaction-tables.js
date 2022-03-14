@@ -10,6 +10,12 @@ module.exports = {
       createdBy: {
         type: Sequelize.UUID,
         field: 'created_by',
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade ',
       },
       updatedAt: {
         type: Sequelize.DATE,
@@ -69,17 +75,6 @@ module.exports = {
         field: 'workflow_step_id',
         references: {
           model: 'transaction_workflow_steps',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade ',
-      },
-      createdBy: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        field: 'created_by',
-        references: {
-          model: 'users',
           key: 'id',
         },
         onUpdate: 'cascade',

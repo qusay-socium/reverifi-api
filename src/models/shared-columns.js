@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => ({
   createdBy: {
     type: DataTypes.UUID,
     field: 'created_by',
+    references: {
+      model: 'users',
+      key: 'id',
+    },
   },
   updatedAt: {
     type: DataTypes.DATE,
