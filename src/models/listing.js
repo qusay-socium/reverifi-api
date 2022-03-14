@@ -144,22 +144,21 @@ class Listing extends BaseModel {
   static async searchByCityOrZipCode(filter = {}) {
     const { key, min, max, propertyTypeId, bedrooms, fullBathrooms, listingTypeId } = filter;
 
-    let selectedFilters = {};
-
+    const selectedFilters = {};
     if (bedrooms) {
-      selectedFilters = { ...selectedFilters, bedrooms };
+      selectedFilters.bedrooms = bedrooms;
     }
     if (fullBathrooms) {
-      selectedFilters = { ...selectedFilters, fullBathrooms };
+      selectedFilters.fullBathrooms = fullBathrooms;
     }
     if (listingTypeId) {
-      selectedFilters = { ...selectedFilters, listingTypeId };
+      selectedFilters.listingTypeId = listingTypeId;
     }
     if (propertyTypeId) {
-      selectedFilters = { ...selectedFilters, propertyTypeId };
+      selectedFilters.propertyTypeId = propertyTypeId;
     }
     if (min && max) {
-      selectedFilters = { ...selectedFilters, price: { [Op.between]: [+min, +max] } };
+      selectedFilters.price = { [Op.between]: [+min, +max] };
     }
 
     const result = await this.getAll({
