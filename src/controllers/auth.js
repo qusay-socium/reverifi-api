@@ -48,6 +48,7 @@ const login = async (req, res) => {
  */
 const signup = async (req, res) => {
   const { name, email, password, phone } = req.body;
+
   const dbUser = await User.getOneByCondition({ email: email.toLowerCase() });
 
   if (dbUser) {
