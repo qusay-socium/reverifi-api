@@ -89,6 +89,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
+      provider: {
+        type: DataTypes.ENUM('Email', 'Facebook', 'Google'),
+        defaultValue: 'Email',
+      },
       ...getSharedColumns(sequelize, DataTypes),
     },
     {

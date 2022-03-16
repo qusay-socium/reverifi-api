@@ -11,6 +11,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: '96088d97-7ee7-4868-a490-d96c1fdd26ee',
@@ -20,6 +21,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: '447df28e-9935-4eda-9c6e-93544d5dc56c',
@@ -29,6 +31,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: '9d8012fd-960c-42a5-8276-8ebbb8a9d3e7',
@@ -38,6 +41,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: '5b8a89f6-9f66-48da-865c-d8a20098fa67',
@@ -47,6 +51,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: '3822822f-f910-41fd-8821-5754f2a1d150',
@@ -56,6 +61,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: 'a976deae-5e2a-47a2-931d-fdcad47252cc',
@@ -65,6 +71,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: 'f221a35e-df27-49b4-b717-69c26defc700',
@@ -74,6 +81,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: '86384563-4a56-48b5-b6c1-bc1be2261fe8',
@@ -83,6 +91,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: 'f98ca513-ee05-4672-946e-f046c3ce521c',
@@ -92,6 +101,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: '525542fa-a1bc-466b-873f-caf9d24cca48',
@@ -101,6 +111,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
       {
         id: '806b78db-4d9e-4dcd-b2ce-533eb41fef81',
@@ -110,6 +121,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider: 'Email',
       },
     ]);
 

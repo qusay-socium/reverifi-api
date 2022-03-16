@@ -11,6 +11,7 @@ module.exports = {
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),
+        provider:'Email'
       },
     ]);
 
