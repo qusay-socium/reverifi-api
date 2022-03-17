@@ -8,6 +8,7 @@ const {
   TransactionsNotes,
   User,
   Processes,
+  Sequelize,
 } = require('models');
 const response = require('utils/response');
 
@@ -258,6 +259,7 @@ const getProcessesAssignee = async (req, res) => {
   const data = await TransactionProcesses.getAllByCondition(
     { transactionId },
     {
+      order: [[Sequelize.literal('"process.name"'), 'ASC']],
       include: [
         {
           model: TransactionAssignee,
