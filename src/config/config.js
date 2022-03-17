@@ -1,5 +1,17 @@
-const { CORS_ORIGIN, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME, NODE_ENV, PORT, SECRET } =
-  process.env;
+const {
+  CORS_ORIGIN,
+  DB_HOST,
+  DB_NAME,
+  DB_PASSWORD,
+  DB_PORT,
+  DB_USERNAME,
+  NODE_ENV,
+  PORT,
+  SECRET,
+  GCLOUD_STORAGE_BUCKET,
+  GCLOUD_PROJECT,
+  GOOGLE_APPLICATION_CREDENTIALS,
+} = process.env;
 
 const config = {
   corsOrigin: CORS_ORIGIN || '*',
@@ -11,6 +23,9 @@ const config = {
   nodeEnv: NODE_ENV,
   port: Number.parseInt(PORT || '3000', 10),
   secret: SECRET,
+  GCLOUD_STORAGE_BUCKET,
+  GCLOUD_PROJECT,
+  GOOGLE_APPLICATION_CREDENTIALS,
 };
 
 module.exports = config;

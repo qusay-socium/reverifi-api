@@ -16,6 +16,7 @@ const reviewsRouter = require('./reviews');
 const invitationsRouter = require('./invitations');
 const processesRouter = require('./processes');
 const transactionsRouter = require('./transactions');
+const uploadRouter = require('./upload');
 
 const router = Router();
 
@@ -35,5 +36,6 @@ router.use('/api/reviews', reviewsRouter);
 router.use('/api/invitations', invitationsRouter);
 router.use('/api/processes', processesRouter);
 router.use('/api/transactions', transactionsRouter);
+router.use('/api/upload', uploadRouter);
 
 module.exports = router;

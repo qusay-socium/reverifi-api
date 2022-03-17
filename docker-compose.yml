@@ -17,6 +17,10 @@ services:
       - PORT=3000
       - SECRET=AK
       - VIRTUAL_HOST=reverifi-api.docker
+      - GCLOUD_STORAGE_BUCKET
+      - GCLOUD_PROJECT
+      - GOOGLE_APPLICATION_CREDENTIALS
+
     ports:
       - 3000
     volumes:
