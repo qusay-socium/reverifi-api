@@ -5,7 +5,7 @@ const getSharedColumns = require('models/shared-columns');
 class TransactionAssignee extends BaseModel {
   static associate({ Transactions, User, TransactionProcesses }) {
     this.belongsTo(Transactions, { as: 'assignedTransaction', foreignKey: 'transactionId' });
-    this.belongsTo(User, { as: 'assignedUser', foreignKey: ' userId' });
+    this.belongsTo(User, { as: 'assignedUser', foreignKey: 'userId' });
     this.hasMany(TransactionProcesses, { as: 'assignee', foreignKey: 'assigneeId' });
   }
 }

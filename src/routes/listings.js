@@ -9,6 +9,7 @@ const {
   getListingById,
   getFeaturedListings,
   searchListingsByCityOrZipCode,
+  updateListingTransaction,
 } = require('controllers/listing');
 
 const router = Router({ mergeParams: true });
@@ -47,5 +48,10 @@ router.delete('/:id', auth, deleteListing);
  * Handle GET to /api/listings/listing/:id route.
  */
 router.get('/listing/:id', getListingById);
+
+/**
+ * Handle GET to /api/listings/transaction/close route.
+ */
+router.patch('/transaction/close', updateListingTransaction);
 
 module.exports = router;

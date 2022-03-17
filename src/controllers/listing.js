@@ -173,6 +173,20 @@ const getFeaturedListings = async (req, res) => {
   res.json(response({ data }));
 };
 
+/**
+ * Get listing by ID.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const updateListingTransaction = async (req, res) => {
+  const { id, agentId, ownerId } = req.body;
+
+  await Listing.updateOne({ id }, { agentId, ownerId });
+
+  res.json(response());
+};
+
 module.exports = {
   getAllListings,
   updateListing,
@@ -181,4 +195,5 @@ module.exports = {
   deleteListing,
   searchListingsByCityOrZipCode,
   getFeaturedListings,
+  updateListingTransaction,
 };

@@ -14,6 +14,8 @@ const socialStatisticsRouter = require('./social-statistics');
 const ratingCriteriaRouter = require('./rating-criteria');
 const reviewsRouter = require('./reviews');
 const invitationsRouter = require('./invitations');
+const processesRouter = require('./processes');
+const transactionsRouter = require('./transactions');
 
 const router = Router();
 
@@ -31,5 +33,7 @@ router.use('/api/social-statistics', socialStatisticsRouter);
 router.use('/api/rating-criteria', ratingCriteriaRouter);
 router.use('/api/reviews', reviewsRouter);
 router.use('/api/invitations', invitationsRouter);
+router.use('/api/processes', processesRouter);
+router.use('/api/transactions', transactionsRouter);
 
 module.exports = router;
