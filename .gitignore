@@ -109,3 +109,6 @@ mochawesome-report/
 data/
 
 docker-compose.override.yml
+
+# Cloud storage creds
+src/config/gcs.json

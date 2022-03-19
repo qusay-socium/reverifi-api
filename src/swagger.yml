@@ -19,6 +19,8 @@ tags:
     description: Roles endpoints
   - name: Features
     description: Features endpoints
+  - name: Upload
+    description: Upload endpoints
 
 paths:
   /api/auth/signup:
@@ -977,6 +979,21 @@ paths:
       responses:
         '200':
           description: Updated user information
+
+  /api/upload:
+    post:
+      summary: Uploads a file to GC
+      tags:
+        - Upload
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
 
 components:
   securitySchemes:
