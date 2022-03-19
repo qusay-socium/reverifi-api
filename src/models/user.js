@@ -75,6 +75,10 @@ module.exports = (sequelize, DataTypes) => {
       phone: {
         type: DataTypes.STRING,
       },
+      points: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
       isVerified: {
         type: DataTypes.BOOLEAN,
         field: 'is_verified',

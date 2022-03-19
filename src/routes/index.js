@@ -17,6 +17,8 @@ const invitationsRouter = require('./invitations');
 const processesRouter = require('./processes');
 const transactionsRouter = require('./transactions');
 const uploadRouter = require('./upload');
+const actionTypesRouter = require('./action-types');
+const userActionTypesRouter = require('./user-action-types');
 
 const router = Router();
 
@@ -37,5 +39,7 @@ router.use('/api/invitations', invitationsRouter);
 router.use('/api/processes', processesRouter);
 router.use('/api/transactions', transactionsRouter);
 router.use('/api/upload', uploadRouter);
+router.use('/api/action-types', actionTypesRouter);
+router.use('/api/user-action-types', userActionTypesRouter);
 
 module.exports = router;

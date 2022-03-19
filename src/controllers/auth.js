@@ -13,8 +13,8 @@ const response = require('utils/response');
  *
  * @return {Object} Object contain the token.
  */
-const getTokenResponse = ({ id, email, name, phone, roles }) => ({
-  token: jwt.sign({ id, email, name, phone, roles }, secret),
+const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt }) => ({
+  token: jwt.sign({ id, email, name, phone, roles, points, createdAt }, secret),
 });
 
 /**
