@@ -10,6 +10,7 @@ class Transactions extends BaseModel {
     TransactionsNotes,
     TransactionAssignee,
     TransactionProcesses,
+    Documents,
   }) {
     this.belongsTo(TransactionWorkflowSteps, { as: 'workflowStep', foreignKey: 'workflowStepId' });
     this.belongsTo(Listing, { as: 'transactionListing', foreignKey: 'listingId' });
@@ -17,6 +18,7 @@ class Transactions extends BaseModel {
     this.hasMany(TransactionsNotes, { as: 'transaction', foreignKey: 'transactionId' });
     this.hasMany(TransactionAssignee, { as: 'assignedTransaction', foreignKey: 'transactionId' });
     this.hasMany(TransactionProcesses, { as: 'currentTransaction', foreignKey: 'transactionId' });
+    this.hasMany(Documents, { as: 'transactionDocument', foreignKey: 'transactionId' });
   }
 }
 

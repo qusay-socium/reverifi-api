@@ -1,5 +1,5 @@
 const Router = require('express-promise-router');
-const Multer = require('multer');
+const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
 const response = require('utils/response');
 const { BadRequest } = require('lib/errors');
@@ -17,8 +17,8 @@ const storageClient = new Storage({
 
 const bucket = storageClient.bucket(GCLOUD_STORAGE_BUCKET);
 
-const multer = Multer({
-  storage: Multer.memoryStorage(),
+const mul = multer({
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 5 * 1024 * 1024, // 5mb
   },
@@ -27,12 +27,13 @@ const multer = Multer({
 const router = Router({ mergeParams: true });
 
 /**
- * Handle POST to /api/upload/image route.
+ * Handle POST to /api/upload/file route.
  */
-router.post('/image', [auth, multer.single('file')], (req, res, next) => {
+router.post('/file', [auth, mul.single('file')], (req, res, next) => {
   if (!req.file) {
     throw new BadRequest('No file uploaded');
   }
+
   // Create a new blob in the bucket and upload the file data.
   const blob = bucket.file(req.file.originalname);
   const blobStream = blob.createWriteStream();

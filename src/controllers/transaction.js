@@ -1,3 +1,4 @@
+const { NotFound } = require('lib/errors');
 const {
   TransactionProcesses,
   Listing,
@@ -9,7 +10,10 @@ const {
   User,
   Processes,
   Sequelize,
+  DocumentsNames,
+  Documents,
 } = require('models');
+const { updateOne } = require('models/base-model');
 const response = require('utils/response');
 
 /**
@@ -278,6 +282,70 @@ const getProcessesAssignee = async (req, res) => {
   res.json(response({ data }));
 };
 
+/**
+ * get all documents names
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getDocumentsNames = async (req, res) => {
+  const data = await DocumentsNames.getAll();
+
+  res.json(response({ data }));
+};
+
+/**
+ * add document
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const addDocument = async (req, res) => {
+  const { transactionId, documentNameId, documentUrl } = req.body;
+  const createdBy = req.user.id;
+
+  const exist = await Documents.getOneByCondition({ transactionId, documentNameId, createdBy });
+
+  let data;
+
+  if (!exist) {
+    data = await Documents.createOne({ createdBy, transactionId, documentNameId, documentUrl });
+  } else {
+    data = updateOne(exist.id, { documentNameId, documentUrl });
+  }
+
+  res.json(response({ data }));
+};
+
+/**
+ * get all documents
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getDocuments = async (req, res) => {
+  const data = await Documents.getAll({ include: [{ model: User, as: 'documentUser' }] });
+
+  res.json(response({ data }));
+};
+
+/**
+ * delete document
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const deleteDocument = async (req, res) => {
+  const { id } = req.params;
+
+  const valid = await Documents.deleteByCondition({ id });
+  if (!valid) {
+    throw new NotFound();
+  }
+
+  res.json(response());
+};
+
 module.exports = {
   updateProcessesStatus,
   getTransactions,
@@ -291,4 +359,8 @@ module.exports = {
   addProcesses,
   getNotes,
   getProcessesAssignee,
+  getDocumentsNames,
+  addDocument,
+  getDocuments,
+  deleteDocument,
 };
