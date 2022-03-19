@@ -1,19 +1,43 @@
-const { scryptSync } = require('crypto');
-const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
-const { Unauthorized, BadRequest } = require('lib/errors');
-const { secret } = require('config/config');
-const { User, LoginProviders } = require('models');
-const response = require('utils/response');
 const { OAuth2Client } = require('google-auth-library');
+const { checkSchema } = require('express-validator');
 
+const { baseUrl } = require('config/config');
+const { User, LoginProviders } = require('models');
+const { Unauthorized, BadRequest, NotFound } = require('lib/errors');
+const response = require('utils/response');
+const cipher = require('utils/cipher');
+
+// TODO: move to env var
 const GOOGLE_CLEINT_ID = '136239126169-7ffbg6nhe5uno7p0ng4kvbld4mak9dph.apps.googleusercontent.com';
 const client = new OAuth2Client(GOOGLE_CLEINT_ID);
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
-// TODO: move the salt to env var
-const hashSalt = 'hash-salt';
+const sendResetPasswordValidator = checkSchema(
+  {
+    email: {
+      notEmpty: { errorMessage: 'email is required', bail: true },
+      isEmail: { errorMessage: 'email should be valid format email', bail: true },
+    },
+  },
+  ['body']
+);
 
-const getHash = (password) => scryptSync(password, hashSalt, 32).toString('hex');
+const resetPasswordValidator = checkSchema(
+  {
+    password: {
+      notEmpty: { errorMessage: 'password is required', bail: true },
+      matches: {
+        if: (value) => !passwordRegex.test(value),
+        errorMessage:
+          'password should be at least 8 characters and contain 1' +
+          'upper and lower case letter and 1 number and 1 special case character',
+        bail: true,
+      },
+    },
+  },
+  ['body']
+);
 
 /**
  * Get token response after login or signup.
@@ -23,7 +47,7 @@ const getHash = (password) => scryptSync(password, hashSalt, 32).toString('hex')
  * @return {Object} Object contain the token.
  */
 const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt }) => ({
-  token: jwt.sign({ id, email, name, phone, roles, points, createdAt }, secret),
+  token: cipher.getJwtToken({ id, email, name, phone, roles, points, createdAt }),
 });
 
 /**
@@ -66,7 +90,7 @@ const login = async (req, res) => {
   if (!user) {
     throw new Unauthorized('Invalid email or password');
   }
-  if (getHash(password) !== user.password) {
+  if (cipher.hash(password) !== user.password) {
     throw new Unauthorized('Invalid email or password');
   }
 
@@ -90,7 +114,7 @@ const signup = async (req, res) => {
 
   req.body.email = email.toLowerCase();
 
-  const passwordHash = getHash(password);
+  const passwordHash = cipher.hash(password);
 
   const user = await User.createOne({
     name,
@@ -142,5 +166,53 @@ const googleLogin = async (req, res) => {
 
   res.json(response({ data: getTokenResponse(user) }));
 };
+/**
+ * Send reset password link to the user.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const sendResetPasswordLink = async (req, res) => {
+  const user = await User.getOneByCondition({ email: req.body.email });
+  if (!user) {
+    throw new NotFound('User not found');
+  }
 
-module.exports = { signup, login, googleLogin, facebookLogin };
+  const encryptedToken = cipher.encrypt(
+    cipher.getJwtToken({ email: user.email, id: user.id }, 1800)
+  );
+
+  // TODO: send the link via email
+  res.json(response({ data: { link: `${baseUrl}/api/auth/reset-password/${encryptedToken}` } }));
+};
+
+/**
+ * Reset user password.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const resetUserPassword = async (req, res) => {
+  const decryptedToken = cipher.decrypt(req.params.token);
+
+  if (!cipher.verifyJwtToken(decryptedToken)) {
+    throw new BadRequest('invalid or expired link');
+  }
+
+  const { id } = cipher.decodeJwtToken(decryptedToken);
+
+  await User.updateOne(id, { password: cipher.hash(req.body.password) });
+
+  res.json(response());
+};
+
+module.exports = {
+  signup,
+  login,
+  googleLogin,
+  facebookLogin,
+  sendResetPasswordValidator,
+  resetPasswordValidator,
+  sendResetPasswordLink,
+  resetUserPassword,
+};
