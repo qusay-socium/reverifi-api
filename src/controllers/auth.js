@@ -36,7 +36,6 @@ const socialLogin = async (email, name) => {
     await User.createOne({
       name,
       email,
-      provider: 'Facebook',
     });
   }
 
@@ -92,7 +91,6 @@ const signup = async (req, res) => {
     password: passwordHash,
     phone,
     active: true,
-    provider: 'Email',
   });
 
   return res.json(response({ data: getTokenResponse(user) }));
@@ -111,7 +109,8 @@ const facebookLogin = async (req, res) => {
     .then((ress) => ress.json())
     .then(async (userData) => {
       const { name, email } = userData;
-      const user = await socialLogin(name, email);
+
+      const user = await socialLogin(email, name);
       res.send(response({ data: getTokenResponse(user) }));
     });
 };
@@ -132,7 +131,7 @@ const googleLogin = async (req, res) => {
 
   const { name, email } = await ticket.getPayload();
 
-  const user = await socialLogin(name, email);
+  const user = await socialLogin(email, name);
 
   res.json(response({ data: getTokenResponse(user) }));
 };
