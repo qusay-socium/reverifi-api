@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        - NODE_ENV=development
+        - NODE_ENV=production
     environment:
       - CORS_ORIGIN=*
       - DB_HOST=reverifi-db
