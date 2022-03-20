@@ -30,7 +30,7 @@ router.get('/documents-names', auth, getDocumentsNames);
 /**
  * Handle GET to /api/transactions/document route.
  */
-router.get('/document', auth, getDocuments);
+router.get('/document/:transactionId', auth, getDocuments);
 
 /**
  * Handle POST to /api/transactions/document route.
