@@ -7,7 +7,7 @@ module.exports = {
         id: '5acf8623-b8f3-4b09-9269-d38fdca1bd63',
         name: 'ibrahim',
         email: 'iba@iba.com',
-        password: '$2b$10$VhaLnq5yGWlKaoCQ0qVMweLMMNRsr78ea8kB6GIq8Y80/7BI357km',
+        password: '841f1fa7ca66b28772d5b2f6ec4e882fd28130c87ca33b43b1d23e69942bfe5e',
         is_verified: true,
         phone: '079555555',
         created_at: Sequelize.fn('NOW'),

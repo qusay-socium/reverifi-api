@@ -10,6 +10,7 @@ const { OAuth2Client } = require('google-auth-library');
 const GOOGLE_CLEINT_ID = '136239126169-7ffbg6nhe5uno7p0ng4kvbld4mak9dph.apps.googleusercontent.com';
 const client = new OAuth2Client(GOOGLE_CLEINT_ID);
 
+// TODO: move the salt to env var
 const hashSalt = 'hash-salt';
 
 const getHash = (password) => scryptSync(password, hashSalt, 32).toString('hex');
