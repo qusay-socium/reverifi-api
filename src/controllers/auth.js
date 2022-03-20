@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const { scryptSync } = require('crypto');
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 const { Unauthorized, BadRequest } = require('lib/errors');
@@ -9,6 +9,10 @@ const { OAuth2Client } = require('google-auth-library');
 
 const GOOGLE_CLEINT_ID = '136239126169-7ffbg6nhe5uno7p0ng4kvbld4mak9dph.apps.googleusercontent.com';
 const client = new OAuth2Client(GOOGLE_CLEINT_ID);
+
+const hashSalt = 'hash-salt';
+
+const getHash = (password) => scryptSync(password, hashSalt, 32).toString('hex');
 
 /**
  * Get token response after login or signup.
@@ -61,9 +65,7 @@ const login = async (req, res) => {
   if (!user) {
     throw new Unauthorized('Invalid email or password');
   }
-
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) {
+  if (getHash(password) !== user.password) {
     throw new Unauthorized('Invalid email or password');
   }
 
@@ -87,7 +89,7 @@ const signup = async (req, res) => {
 
   req.body.email = email.toLowerCase();
 
-  const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = getHash(password);
 
   const user = await User.createOne({
     name,
