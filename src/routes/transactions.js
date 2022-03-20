@@ -11,12 +11,36 @@ const {
   addProcesses,
   getNotes,
   getProcessesAssignee,
+  getDocumentsNames,
+  addDocument,
+  getDocuments,
+  deleteDocument,
 } = require('controllers/transaction');
 const Router = require('express-promise-router');
 
 const auth = require('middleware/auth');
 
 const router = Router({ mergeParams: true });
+
+/**
+ * Handle GET to /api/transactions/documents-names route.
+ */
+router.get('/documents-names', auth, getDocumentsNames);
+
+/**
+ * Handle GET to /api/transactions/document route.
+ */
+router.get('/document', auth, getDocuments);
+
+/**
+ * Handle POST to /api/transactions/document route.
+ */
+router.post('/document', auth, addDocument);
+
+/**
+ * Handle DELETE to /api/transactions/documents/:id route.
+ */
+router.delete('/document/:id', auth, deleteDocument);
 
 /**
  * Handle GET to /api/transactions/processes/:transactionId route.

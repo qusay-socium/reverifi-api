@@ -3,8 +3,9 @@ const BaseModel = require('models/base-model');
 const getSharedColumns = require('models/shared-columns');
 
 class States extends BaseModel {
-  static associate({ Processes }) {
+  static associate({ Processes, DocumentsNames }) {
     this.hasOne(Processes, { as: 'state', foreignKey: 'stateId' });
+    this.hasOne(DocumentsNames, { as: 'documentState', foreignKey: 'stateId' });
   }
 }
 

@@ -38,6 +38,8 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * States: import('./states')
  * Processes: import('./processes')
  * TransactionProcesses: import('./transaction-processes')
+ * Documents: import('./documents')
+ * DocumentsNames: import('./documents-names')
  * }}
  */
 const db = {};
