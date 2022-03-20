@@ -19,6 +19,7 @@ const transactionsRouter = require('./transactions');
 const uploadRouter = require('./upload');
 const actionTypesRouter = require('./action-types');
 const userActionTypesRouter = require('./user-action-types');
+const offerRouter = require('./offer');
 
 const router = Router();
 
@@ -41,5 +42,6 @@ router.use('/api/transactions', transactionsRouter);
 router.use('/api/upload', uploadRouter);
 router.use('/api/action-types', actionTypesRouter);
 router.use('/api/user-action-types', userActionTypesRouter);
+router.use('/api/offer', offerRouter);
 
 module.exports = router;

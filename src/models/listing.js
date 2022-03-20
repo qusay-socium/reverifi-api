@@ -14,6 +14,7 @@ class Listing extends BaseModel {
     ScheduleVisit,
     Invitations,
     Transactions,
+    PurchaseOffer,
   }) {
     this.belongsTo(User, { as: 'agent', foreignKey: 'agentId' });
     this.belongsTo(User, { as: 'owner', foreignKey: 'ownerId' });
@@ -30,6 +31,7 @@ class Listing extends BaseModel {
     this.hasMany(ScheduleVisit, { as: 'visitedListing', foreignKey: 'listingId' });
     this.hasMany(Invitations, { as: 'invitedListing', foreignKey: 'listingId' });
     this.hasMany(Transactions, { as: 'transactionListing', foreignKey: 'listingId' });
+    this.hasMany(PurchaseOffer, { as: 'listingOffer', foreignKey: 'listingId' });
   }
 
   /**

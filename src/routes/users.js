@@ -11,6 +11,7 @@ const {
   getAgentUsersByType,
   getUsersWithLimit,
   addInvitedUser,
+  updatePhoneNumber,
 } = require('controllers/user');
 
 const router = Router({ mergeParams: true });
@@ -64,5 +65,10 @@ router.patch('/', auth, updateUserInfo);
  * Handle DELETE to /api/users route.
  */
 router.delete('/', auth, deleteUserInfo);
+
+/**
+ * Handle PATCH to /api/users/phone route.
+ */
+router.patch('/phone', auth, updatePhoneNumber);
 
 module.exports = router;
