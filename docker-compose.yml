@@ -13,7 +13,7 @@ services:
       - DB_PASSWORD=postgres
       - DB_PORT=5432
       - DB_USERNAME=postgres
-      - NODE_ENV=development
+      - NODE_ENV=production
       - PORT=3000
       - SECRET=AK
       - VIRTUAL_HOST=reverifi-api.docker
