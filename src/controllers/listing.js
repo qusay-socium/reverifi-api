@@ -182,7 +182,7 @@ const getFeaturedListings = async (req, res) => {
 const updateListingTransaction = async (req, res) => {
   const { id, agentId, ownerId } = req.body;
 
-  await Listing.updateOne({ id }, { agentId, ownerId });
+  await Listing.updateOne(id, { agentId, ownerId });
 
   res.json(response());
 };
