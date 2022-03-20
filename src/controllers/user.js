@@ -1,4 +1,4 @@
-const { NotFound } = require('lib/errors');
+const { NotFound, BadRequest } = require('lib/errors');
 const { UserInfo, UserRoles, User, Roles, Company } = require('models');
 const { Op } = require('sequelize');
 const response = require('utils/response');
@@ -251,6 +251,12 @@ const getUsersWithLimit = async (req, res) => {
  */
 const addInvitedUser = async (req, res) => {
   const { name, email } = req.body;
+
+  const dbUser = await User.getOneByCondition({ email: email.toLowerCase() });
+
+  if (dbUser) {
+    throw new BadRequest('Email already in use');
+  }
 
   const data =
     name && email
