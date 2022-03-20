@@ -41,6 +41,7 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * TransactionProcesses: import('./transaction-processes')
  * Documents: import('./documents')
  * DocumentsNames: import('./documents-names')
+ * PurchaseOffer:import('./purchase-offer')
  * }}
  */
 const db = {};

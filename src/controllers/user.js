@@ -264,6 +264,19 @@ const addInvitedUser = async (req, res) => {
   res.json(response({ data }));
 };
 
+/**
+ * update Phone Number
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const updatePhoneNumber = async (req, res) => {
+  const { phone, id } = req.body;
+  await User.updateByCondition({ id }, { phone });
+
+  res.json(response());
+};
+
 module.exports = {
   createUserInfo,
   updateUserInfo,
@@ -274,4 +287,5 @@ module.exports = {
   getAgentUsersByType,
   getUsersWithLimit,
   addInvitedUser,
+  updatePhoneNumber,
 };
