@@ -48,6 +48,10 @@ const getTransactions = async (req, res) => {
           as: 'transactionListing',
           include: [{ model: User, as: 'agent', include: [{ model: Roles, as: 'roles' }] }],
         },
+        {
+          model: TransactionWorkflowSteps,
+          as: 'workflowStep',
+        },
       ],
     }
   );
@@ -151,7 +155,13 @@ const getTransactionsAssignees = async (req, res) => {
         {
           model: Transactions,
           as: 'assignedTransaction',
-          include: [{ model: Listing, as: 'transactionListing' }],
+          include: [
+            { model: Listing, as: 'transactionListing' },
+            {
+              model: TransactionWorkflowSteps,
+              as: 'workflowStep',
+            },
+          ],
         },
       ],
     }
