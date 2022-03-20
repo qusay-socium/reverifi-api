@@ -3,11 +3,11 @@ const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 const { Unauthorized, BadRequest } = require('lib/errors');
 const { secret } = require('config/config');
-const { User } = require('models');
+const { User, LoginProviders } = require('models');
 const response = require('utils/response');
 const { OAuth2Client } = require('google-auth-library');
 
-const GOOGLE_CLEINT_ID = '277465120739-3k8i62n20e9fg3hv1rkcd32agkv0c4ak.apps.googleusercontent.com';
+const GOOGLE_CLEINT_ID = '136239126169-7ffbg6nhe5uno7p0ng4kvbld4mak9dph.apps.googleusercontent.com';
 const client = new OAuth2Client(GOOGLE_CLEINT_ID);
 
 /**
@@ -29,16 +29,20 @@ const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt }) 
  *
  * @return {Object} Object contain the user data.
  */
-const socialLogin = async (email, name) => {
+const socialLogin = async (email, name, provider) => {
   const dbUser = await User.getOneByCondition({ email });
 
   if (!dbUser) {
-    await User.createOne({
+    const newUser = await User.createOne({
       name,
       email,
     });
+    await LoginProviders.createOne({ userId: newUser.id, provider });
   }
 
+  if (dbUser) {
+    await LoginProviders.createOne({ userId: dbUser.id, provider });
+  }
   const user = await User.getUserWithRoles(email.toLowerCase());
   return user;
 };
@@ -110,7 +114,7 @@ const facebookLogin = async (req, res) => {
     .then(async (userData) => {
       const { name, email } = userData;
 
-      const user = await socialLogin(email, name);
+      const user = await socialLogin(email, name, 'Facebook');
       res.send(response({ data: getTokenResponse(user) }));
     });
 };
@@ -131,7 +135,7 @@ const googleLogin = async (req, res) => {
 
   const { name, email } = await ticket.getPayload();
 
-  const user = await socialLogin(email, name);
+  const user = await socialLogin(email, name, 'Google');
 
   res.json(response({ data: getTokenResponse(user) }));
 };
