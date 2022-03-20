@@ -1,10 +1,14 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const fetch = require('node-fetch');
 const { Unauthorized, BadRequest } = require('lib/errors');
 const { secret } = require('config/config');
-const { User } = require('models');
+const { User, LoginProviders } = require('models');
 const response = require('utils/response');
+const { OAuth2Client } = require('google-auth-library');
+
+const GOOGLE_CLEINT_ID = '136239126169-7ffbg6nhe5uno7p0ng4kvbld4mak9dph.apps.googleusercontent.com';
+const client = new OAuth2Client(GOOGLE_CLEINT_ID);
 
 /**
  * Get token response after login or signup.
@@ -16,6 +20,32 @@ const response = require('utils/response');
 const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt }) => ({
   token: jwt.sign({ id, email, name, phone, roles, points, createdAt }, secret),
 });
+
+/**
+ * Social Login.
+ *
+ * @param {String} email User email.
+ * @param {String} name User name.
+ *
+ * @return {Object} Object contain the user data.
+ */
+const socialLogin = async (email, name, provider) => {
+  const dbUser = await User.getOneByCondition({ email });
+
+  if (!dbUser) {
+    const newUser = await User.createOne({
+      name,
+      email,
+    });
+    await LoginProviders.createOne({ userId: newUser.id, provider });
+  }
+
+  if (dbUser) {
+    await LoginProviders.createOne({ userId: dbUser.id, provider });
+  }
+  const user = await User.getUserWithRoles(email.toLowerCase());
+  return user;
+};
 
 /**
  * Login user.
@@ -70,4 +100,44 @@ const signup = async (req, res) => {
   return res.json(response({ data: getTokenResponse(user) }));
 };
 
-module.exports = { signup, login };
+/**
+ * Login using Facebook.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const facebookLogin = async (req, res) => {
+  const { accessToken } = req.body;
+
+  fetch(`https://graph.facebook.com/me?access_token=${accessToken}&fields=email,name,id`)
+    .then((ress) => ress.json())
+    .then(async (userData) => {
+      const { name, email } = userData;
+
+      const user = await socialLogin(email, name, 'Facebook');
+      res.send(response({ data: getTokenResponse(user) }));
+    });
+};
+
+/**
+ * Login using Google.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const googleLogin = async (req, res) => {
+  const { idToken } = req.body;
+
+  const ticket = await client.verifyIdToken({
+    idToken,
+    audience: GOOGLE_CLEINT_ID,
+  });
+
+  const { name, email } = await ticket.getPayload();
+
+  const user = await socialLogin(email, name, 'Google');
+
+  res.json(response({ data: getTokenResponse(user) }));
+};
+
+module.exports = { signup, login, googleLogin, facebookLogin };
