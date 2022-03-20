@@ -17,7 +17,7 @@ jobs:
         key: ${{ secrets.BACKEND_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /home/reverifi-backend/reverifi-api && git checkout package-lock.json && git pull origin main
+          cd /home/reverifi-backend/reverifi-api && git checkout package-lock.json docker-compose.yml && git pull origin main
           cd /home/reverifi-backend/reverifi-api && sed -i 's/\${PWD}/\/home\/reverifi-backend\/reverifi-api/' docker-compose.yml
           /usr/bin/npm install
           docker-compose ps
