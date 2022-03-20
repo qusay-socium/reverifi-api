@@ -17,15 +17,14 @@ services:
       - PORT=3000
       - SECRET=AK
       - VIRTUAL_HOST=reverifi-api.docker
-      - GCLOUD_STORAGE_BUCKET
-      - GCLOUD_PROJECT
-      - GOOGLE_APPLICATION_CREDENTIALS
+      - GCLOUD_STORAGE_BUCKET=reverifi-default
+      - GCLOUD_PROJECT=reverifi-342815
+      - GOOGLE_APPLICATION_CREDENTIALS=src/config/gcs.json
 
     ports:
-      - 3000
+      - 3000:3000
     volumes:
       - ${PWD}:/app
-      - /app/node_modules/
     depends_on:
       - reverifi-db
     command: ['bin/boot.sh']
