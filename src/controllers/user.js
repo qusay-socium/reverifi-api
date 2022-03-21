@@ -25,11 +25,13 @@ const createUserInfo = async (req, res) => {
  */
 const updateUserInfo = async (req, res) => {
   const { id } = req.user;
-  const { user, userInfo, company } = req.body;
+  const { user = {}, userInfo, company = {} } = req.body;
 
-  delete user.password;
+  if (user.email || user.phone || user.name) {
+    delete user.password;
 
-  await User.updateByCondition({ id }, user);
+    await User.updateByCondition({ id }, user);
+  }
 
   let dbCompany = {};
 
