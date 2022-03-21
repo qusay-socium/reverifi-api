@@ -334,7 +334,12 @@ const addDocument = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const getDocuments = async (req, res) => {
-  const data = await Documents.getAll({ include: [{ model: User, as: 'documentUser' }] });
+  const { transactionId } = req.params;
+
+  const data = await Documents.getAllByCondition(
+    { transactionId },
+    { include: [{ model: User, as: 'documentUser' }] }
+  );
 
   res.json(response({ data }));
 };
