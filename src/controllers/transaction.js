@@ -222,9 +222,18 @@ const addProcesses = async (req, res) => {
  * @param {import('express').Response} res Express response object.
  */
 const updateTransaction = async (req, res) => {
-  const { transactionId, status } = req.body;
+  const { transactionId, status, finalSalePrice } = req.body;
 
-  await Transactions.updateOne(transactionId, { status });
+  let data = {};
+  if (status) {
+    data = { status };
+  }
+
+  if (finalSalePrice) {
+    data = { ...data, finalSalePrice };
+  }
+
+  await Transactions.updateOne(transactionId, data);
 
   res.json(response());
 };
