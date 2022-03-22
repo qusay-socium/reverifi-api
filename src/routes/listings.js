@@ -10,6 +10,7 @@ const {
   getFeaturedListings,
   searchListingsByCityOrZipCode,
   updateListingTransaction,
+  addOrUpdateListingImages,
 } = require('controllers/listing');
 
 const router = Router({ mergeParams: true });
@@ -53,5 +54,10 @@ router.get('/listing/:id', getListingById);
  * Handle GET to /api/listings/transaction/close route.
  */
 router.patch('/transaction/close', updateListingTransaction);
+
+/**
+ * Handle GET to /api/listings/images/:id route.
+ */
+router.patch('/images/:id', auth, addOrUpdateListingImages);
 
 module.exports = router;
