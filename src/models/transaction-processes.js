@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       dueDate: {
         field: 'due_date',
-        type: DataTypes.ARRAY(DataTypes.DATE),
+        type: DataTypes.DATE,
       },
       isCompleted: {
         field: 'is_completed',
