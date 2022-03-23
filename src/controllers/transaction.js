@@ -69,7 +69,7 @@ const addTransaction = async (req, res) => {
   const { listingId, workflowStepId } = req.body;
   const createdBy = req.user.id;
 
-  const exist = await Transactions.getOneByCondition({ listingId, createdBy });
+  const exist = await Transactions.getOneByCondition({ listingId });
 
   let data;
 
