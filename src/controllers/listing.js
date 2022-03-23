@@ -187,6 +187,25 @@ const updateListingTransaction = async (req, res) => {
   res.json(response());
 };
 
+/**
+ * add or update listing images
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const addOrUpdateListingImages = async (req, res) => {
+  const { id } = req.params;
+  const { images } = req.body;
+
+  const listing = await Listing.getOne(id);
+
+  if (listing) {
+    await Listing.updateOne(id, { images });
+  }
+
+  res.json(response());
+};
+
 module.exports = {
   getAllListings,
   updateListing,
@@ -196,4 +215,5 @@ module.exports = {
   searchListingsByCityOrZipCode,
   getFeaturedListings,
   updateListingTransaction,
+  addOrUpdateListingImages,
 };

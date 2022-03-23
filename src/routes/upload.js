@@ -24,6 +24,8 @@ const mul = multer({
   },
 });
 
+const multipleFilesLimit = 10;
+
 const router = Router({ mergeParams: true });
 
 /**
@@ -47,6 +49,36 @@ router.post('/file', [auth, mul.single('file')], (req, res, next) => {
   });
 
   blobStream.end(req.file.buffer);
+});
+
+/**
+ * Handle POST to /api/upload/multiple-files route.
+ */
+router.post('/multiple-files', [mul.array('files[]', multipleFilesLimit)], (req, res, next) => {
+  if (!req.files.length) {
+    throw new BadRequest('No files uploaded');
+  }
+
+  let count = 0;
+  const publicUrls = [];
+
+  req.files.forEach((file, index, array) => {
+    // Create a new blob in the bucket and upload the file data.
+    const blob = bucket.file(file.originalname);
+    const blobStream = blob.createWriteStream();
+    blobStream.on('error', (err) => {
+      next(err);
+    });
+    blobStream.on('finish', () => {
+      count += 1;
+      publicUrls.push(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+
+      if (count >= array.length) {
+        res.json(response({ publicUrls }));
+      }
+    });
+    blobStream.end(file.buffer);
+  });
 });
 
 module.exports = router;
