@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: 'in progress',
       },
+      finalSalePrice: {
+        type: DataTypes.STRING,
+        field: 'final_sale_price',
+      },
       ...getSharedColumns(sequelize, DataTypes),
     },
     {
