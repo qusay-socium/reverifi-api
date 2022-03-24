@@ -42,6 +42,10 @@ const { dbHost, dbName, dbPassword, dbPort, dbUsername } = config;
  * Documents: import('./documents')
  * DocumentsNames: import('./documents-names')
  * PurchaseOffer:import('./purchase-offer')
+ * Channel: import('./channel')
+ * NotificationChannels: import('./notification-channels')
+ * NotificationType: import('./notification-type')
+ * Notification: import('./notification')
  * }}
  */
 const db = {};
