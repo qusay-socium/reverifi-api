@@ -1,4 +1,12 @@
-const { Listing, ListingFeatures, User, UserInfo, PropertyType, ListingType } = require('models');
+const {
+  Listing,
+  ListingFeatures,
+  User,
+  UserInfo,
+  PropertyType,
+  ListingType,
+  ClaimListingAddress,
+} = require('models');
 const { NotFound } = require('lib/errors');
 const response = require('utils/response');
 
@@ -206,6 +214,63 @@ const addOrUpdateListingImages = async (req, res) => {
   res.json(response());
 };
 
+/**
+ * add or update listing claim
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const addListingClaim = async (req, res) => {
+  const { id } = req.params;
+  const { status, documentUrl } = req.body;
+  const createdBy = req.user.id;
+
+  const exist = await ClaimListingAddress.getOneByCondition({ listingId: id, createdBy });
+
+  if (!exist) {
+    await ClaimListingAddress.createOne({
+      listingId: id,
+      createdBy,
+      documentUrl,
+    });
+  } else {
+    let data = {};
+
+    if (status) {
+      data = { status };
+    }
+
+    if (documentUrl) {
+      data = { ...data, documentUrl };
+    }
+
+    await ClaimListingAddress.updateOne(exist.id, data);
+  }
+
+  res.json(response());
+};
+/**
+ * get listing claim
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const getListingClaim = async (req, res) => {
+  const { id } = req.params;
+  const createdBy = req.user.id;
+
+  const data = await ClaimListingAddress.getOneByCondition(
+    { listingId: id, createdBy },
+    { include: [{ model: Listing, as: 'claimedListing' }] }
+  );
+
+  if (!data) {
+    throw new NotFound();
+  }
+
+  res.json(response({ data }));
+};
+
 module.exports = {
   getAllListings,
   updateListing,
@@ -216,4 +281,6 @@ module.exports = {
   getFeaturedListings,
   updateListingTransaction,
   addOrUpdateListingImages,
+  addListingClaim,
+  getListingClaim,
 };

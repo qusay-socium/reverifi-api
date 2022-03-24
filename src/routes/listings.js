@@ -11,6 +11,8 @@ const {
   searchListingsByCityOrZipCode,
   updateListingTransaction,
   addOrUpdateListingImages,
+  addListingClaim,
+  getListingClaim,
 } = require('controllers/listing');
 
 const router = Router({ mergeParams: true });
@@ -59,5 +61,15 @@ router.patch('/transaction/close', updateListingTransaction);
  * Handle GET to /api/listings/images/:id route.
  */
 router.patch('/images/:id', auth, addOrUpdateListingImages);
+
+/**
+ * Handle GET to /api/listings/claim-address/:id route.
+ */
+router.get('/claim-address/:id', auth, getListingClaim);
+
+/**
+ * Handle POST to /api/listings/claim-address/:id route.
+ */
+router.post('/claim-address/:id', auth, addListingClaim);
 
 module.exports = router;
