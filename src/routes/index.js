@@ -20,6 +20,8 @@ const uploadRouter = require('./upload');
 const actionTypesRouter = require('./action-types');
 const userActionTypesRouter = require('./user-action-types');
 const offerRouter = require('./offer');
+const notificationChannelsRouter = require('./notification-channels');
+const notificationsRouter = require('./notifications');
 
 const router = Router();
 
@@ -43,5 +45,7 @@ router.use('/api/upload', uploadRouter);
 router.use('/api/action-types', actionTypesRouter);
 router.use('/api/user-action-types', userActionTypesRouter);
 router.use('/api/offer', offerRouter);
+router.use('/api/notification-channels', notificationChannelsRouter);
+router.use('/api/notifications', notificationsRouter);
 
 module.exports = router;
