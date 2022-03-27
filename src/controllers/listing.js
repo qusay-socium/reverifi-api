@@ -148,6 +148,7 @@ const getFeaturedListings = async (req, res) => {
       'homeArea',
       'lotArea',
       'tags',
+      'garages',
     ],
     limit: 6,
     order: [['created_at', 'DESC']],
