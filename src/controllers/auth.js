@@ -51,10 +51,27 @@ const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt }) 
 });
 
 /**
+ * Wheather is user social registered.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const isSocialUser = async (req, res) => {
+  const { userId } = req.body;
+
+  const isRegistered = await LoginProviders.getOneByCondition({ userId });
+
+  res.json({
+    data: { isRegistered: !!isRegistered },
+  });
+};
+
+/**
  * Social Login.
  *
  * @param {String} email User email.
  * @param {String} name User name.
+ * @param {String} provider User register provider.
  *
  * @return {Object} Object contain the user data.
  */
@@ -125,6 +142,26 @@ const signup = async (req, res) => {
   });
 
   return res.json(response({ data: getTokenResponse(user) }));
+};
+
+/**
+ * Change user password.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const changePassword = async (req, res) => {
+  const { currentPassword, id, newPassword } = req.body;
+
+  const dbUser = await User.getOneByCondition({ id });
+
+  if (dbUser.password !== cipher.hash(currentPassword)) {
+    throw new Error('Password does not match');
+  }
+
+  await User.updateByCondition({ id }, { password: cipher.hash(newPassword) });
+
+  res.json(response());
 };
 
 /**
@@ -207,12 +244,14 @@ const resetUserPassword = async (req, res) => {
 };
 
 module.exports = {
-  signup,
-  login,
-  googleLogin,
+  changePassword,
   facebookLogin,
-  sendResetPasswordValidator,
+  googleLogin,
+  isSocialUser,
+  login,
   resetPasswordValidator,
-  sendResetPasswordLink,
   resetUserPassword,
+  sendResetPasswordLink,
+  sendResetPasswordValidator,
+  signup,
 };
