@@ -42,7 +42,8 @@ class Listing extends BaseModel {
    * @return {Promise<Object>} The listing data.
    */
   static async getOneWithOwnerAndAgent(id) {
-    const { User, UserInfo, Features, SocialStatistics, PropertyType } = this.sequelize.models;
+    const { User, UserInfo, Features, SocialStatistics, PropertyType, ListingType } =
+      this.sequelize.models;
     const result = await this.getOne(id, {
       include: [
         {
@@ -71,6 +72,11 @@ class Listing extends BaseModel {
         {
           model: PropertyType,
           as: 'propertyType',
+          attributes: ['type'],
+        },
+        {
+          model: ListingType,
+          as: 'listingType',
           attributes: ['type'],
         },
         {
@@ -157,10 +163,10 @@ class Listing extends BaseModel {
 
     const selectedFilters = {};
     if (bedrooms) {
-      selectedFilters.bedrooms = bedrooms;
+      selectedFilters.bedrooms = { [Op.gte]: bedrooms };
     }
     if (fullBathrooms) {
-      selectedFilters.fullBathrooms = fullBathrooms;
+      selectedFilters.fullBathrooms = { [Op.gte]: fullBathrooms };
     }
     if (listingTypeId) {
       selectedFilters.listingTypeId = listingTypeId;
@@ -195,6 +201,11 @@ class Listing extends BaseModel {
           as: 'features',
           attributes: ['id', 'feature'],
           through: { attributes: [] },
+        },
+        {
+          model: this.sequelize.models.ListingType,
+          as: 'listingType',
+          attributes: ['type'],
         },
       ],
     });
