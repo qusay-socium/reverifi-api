@@ -1128,6 +1128,49 @@ paths:
                   type: string
                   format: binary
 
+  /api/claim-address:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Claim Address
+      summary: Claim Address
+      description: get claims
+      parameters:
+        - in: query
+          name: listingId
+          schema:
+            type: UUID
+          description: listing id
+      responses:
+        '200':
+          description: Claim Address
+    post:
+      description: add claim
+      summary: Claim Address
+      security:
+        - bearerAuth: []
+      tags:
+        - Claim Address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: accepted
+                documentUrl:
+                  type: string
+                  example: https://via.placeholder.com/150
+                listingId:
+                  type: UUID
+      responses:
+        '200':
+          description: listing claim
+
 components:
   securitySchemes:
     bearerAuth:

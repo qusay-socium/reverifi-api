@@ -43,42 +43,16 @@ const addListingClaim = async (req, res) => {
  * @param {import('express').Request} req Express request object.
  * @param {import('express').Response} res Express response object.
  */
-const getListingClaim = async (req, res) => {
-  const { id } = req.params;
-  const createdBy = req.user.id;
-
-  const data = await ClaimListingAddress.getOneByCondition(
-    { listingId: id, createdBy },
-    { include: [{ model: Listing, as: 'claimedListing' }] }
-  );
-
-  if (!data) {
-    throw new NotFound();
-  }
-
-  res.json(response({ data }));
-};
-/**
- * get listing claim
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const getAllClaims = async (req, res) => {
+const getClaims = async (req, res) => {
   const { listingId } = req.query;
   const createdBy = req.user.id;
 
-  let filterCondition = {};
-
-  if (listingId) {
-    filterCondition = { listingId };
-  } else {
-    filterCondition = { createdBy };
-  }
-
-  const data = await ClaimListingAddress.getAllByCondition(filterCondition, {
-    include: [{ model: Listing, as: 'claimedListing' }],
-  });
+  const data = await ClaimListingAddress.getAllByCondition(
+    { createdBy, ...(listingId ? { listingId } : {}) },
+    {
+      include: [{ model: Listing, as: 'claimedListing' }],
+    }
+  );
 
   if (!data) {
     throw new NotFound();
@@ -89,6 +63,5 @@ const getAllClaims = async (req, res) => {
 
 module.exports = {
   addListingClaim,
-  getListingClaim,
-  getAllClaims,
+  getClaims,
 };
