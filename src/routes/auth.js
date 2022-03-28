@@ -5,7 +5,6 @@ const {
   changePassword,
   facebookLogin,
   googleLogin,
-  isSocialUser,
   login,
   resetPasswordValidator,
   resetUserPassword,
@@ -45,11 +44,6 @@ router.post('/reset-password/:token', resetPasswordValidator, validateRequest, r
  * Handle POST to /api/auth/reset-password route.
  */
 router.post('/reset-password', sendResetPasswordValidator, validateRequest, sendResetPasswordLink);
-
-/**
- * Handle POST to /api/auth/is-social-login route.
- */
-router.post('/is-social-user', isSocialUser);
 
 /**
  * Handle PATCH to /api/auth/change-password route.

@@ -46,25 +46,9 @@ const resetPasswordValidator = checkSchema(
  *
  * @return {Object} Object contain the token.
  */
-const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt }) => ({
-  token: cipher.getJwtToken({ id, email, name, phone, roles, points, createdAt }),
+const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt, isSocialUser }) => ({
+  token: cipher.getJwtToken({ id, email, name, phone, roles, points, createdAt, isSocialUser }),
 });
-
-/**
- * Wheather is user social registered.
- *
- * @param {import('express').Request} req Express request object.
- * @param {import('express').Response} res Express response object.
- */
-const isSocialUser = async (req, res) => {
-  const { userId } = req.body;
-
-  const isRegistered = await LoginProviders.getOneByCondition({ userId });
-
-  res.json({
-    data: { isRegistered: !!isRegistered },
-  });
-};
 
 /**
  * Social Login.
@@ -102,7 +86,7 @@ const socialLogin = async (email, name, provider) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.getUserWithRoles(email.toLowerCase());
+  let user = await User.getUserWithRoles(email.toLowerCase());
 
   if (!user) {
     throw new Unauthorized('Invalid email or password');
@@ -110,6 +94,10 @@ const login = async (req, res) => {
   if (cipher.hash(password) !== user.password) {
     throw new Unauthorized('Invalid email or password');
   }
+
+  const isRegistered = await LoginProviders.getOneByCondition({ userId: user.id });
+
+  user = { ...user, isSocialUser: !!isRegistered };
 
   res.json(response({ data: getTokenResponse(user) }));
 };
@@ -133,13 +121,15 @@ const signup = async (req, res) => {
 
   const passwordHash = cipher.hash(password);
 
-  const user = await User.createOne({
+  let user = await User.createOne({
     name,
     email: email.toLowerCase(),
     password: passwordHash,
     phone,
     active: true,
   });
+
+  user = { ...user, isSocialUser: false };
 
   return res.json(response({ data: getTokenResponse(user) }));
 };
@@ -178,7 +168,9 @@ const facebookLogin = async (req, res) => {
     .then(async (userData) => {
       const { name, email } = userData;
 
-      const user = await socialLogin(email, name, 'Facebook');
+      let user = await socialLogin(email, name, 'Facebook');
+      user = { ...user, isSocialUser: true };
+
       res.send(response({ data: getTokenResponse(user) }));
     });
 };
@@ -199,7 +191,8 @@ const googleLogin = async (req, res) => {
 
   const { name, email } = await ticket.getPayload();
 
-  const user = await socialLogin(email, name, 'Google');
+  let user = await socialLogin(email, name, 'Google');
+  user = { ...user, isSocialUser: true };
 
   res.json(response({ data: getTokenResponse(user) }));
 };
@@ -247,7 +240,6 @@ module.exports = {
   changePassword,
   facebookLogin,
   googleLogin,
-  isSocialUser,
   login,
   resetPasswordValidator,
   resetUserPassword,
