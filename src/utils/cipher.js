@@ -24,7 +24,8 @@ const decrypt = (text) => {
 
 const hash = (password) => crypto.scryptSync(password, hashSalt, 32).toString('hex');
 
-const getJwtToken = (data, expiry = undefined) => jwt.sign(data, secret, { expiresIn: expiry });
+const getJwtToken = (data, expiry = undefined) =>
+  jwt.sign(data, secret, expiry ? { expiresIn: expiry } : undefined);
 
 const verifyJwtToken = (token) => {
   try {
