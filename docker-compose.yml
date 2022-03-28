@@ -7,6 +7,7 @@ services:
       args:
         - NODE_ENV=production
     environment:
+      - BASE_URL=https://reverifi.sociumtech.com
       - CORS_ORIGIN=*
       - DB_HOST=reverifi-db
       - DB_NAME=postgres

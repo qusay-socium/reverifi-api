@@ -1,4 +1,5 @@
 const {
+  BASE_URL,
   CORS_ORIGIN,
   DB_HOST,
   DB_NAME,
@@ -22,6 +23,7 @@ const {
 } = process.env;
 
 const config = {
+  baseUrl: BASE_URL,
   corsOrigin: CORS_ORIGIN || '*',
   dbHost: DB_HOST,
   dbName: DB_NAME,
