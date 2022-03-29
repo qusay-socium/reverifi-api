@@ -23,8 +23,8 @@ services:
       - SMTP_PASSWORD=
       - SMTP_PORT=
       - SMTP_USER=
-      - TWILIO_ACCOUNT_SID=
-      - TWILIO_AUTH_TOKEN=
+      - TWILIO_ACCOUNT_SID=AC67c2883d8b74d446597ea7face2c575a
+      - TWILIO_AUTH_TOKEN=c8a2242f8b32136082c39b7782f08477
       - VIRTUAL_HOST=reverifi-api.docker
       - GCLOUD_STORAGE_BUCKET=reverifi-default
       - GCLOUD_PROJECT=reverifi-342815
