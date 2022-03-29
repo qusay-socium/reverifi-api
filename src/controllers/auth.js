@@ -16,8 +16,8 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,
 const sendResetPasswordValidator = checkSchema(
   {
     email: {
-      notEmpty: { errorMessage: 'email is required', bail: true },
-      isEmail: { errorMessage: 'email should be valid format email', bail: true },
+      notEmpty: { errorMessage: 'Email is required', bail: true },
+      isEmail: { errorMessage: 'Email should be valid format email', bail: true },
     },
   },
   ['body']
@@ -26,11 +26,11 @@ const sendResetPasswordValidator = checkSchema(
 const resetPasswordValidator = checkSchema(
   {
     password: {
-      notEmpty: { errorMessage: 'password is required', bail: true },
+      notEmpty: { errorMessage: 'Password is required', bail: true },
       matches: {
-        if: (value) => !passwordRegex.test(value),
+        options: passwordRegex,
         errorMessage:
-          'password should be at least 8 characters and contain 1' +
+          'Password should be at least 8 characters and contain 1' +
           'upper and lower case letter and 1 number and 1 special case character',
         bail: true,
       },
