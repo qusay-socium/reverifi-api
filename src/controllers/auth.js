@@ -46,8 +46,8 @@ const resetPasswordValidator = checkSchema(
  *
  * @return {Object} Object contain the token.
  */
-const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt }) => ({
-  token: cipher.getJwtToken({ id, email, name, phone, roles, points, createdAt }),
+const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt, isSocialUser }) => ({
+  token: cipher.getJwtToken({ id, email, name, phone, roles, points, createdAt, isSocialUser }),
 });
 
 /**
@@ -55,6 +55,7 @@ const getTokenResponse = ({ id, email, name, phone, roles, points, createdAt }) 
  *
  * @param {String} email User email.
  * @param {String} name User name.
+ * @param {String} provider User register provider.
  *
  * @return {Object} Object contain the user data.
  */
@@ -85,7 +86,7 @@ const socialLogin = async (email, name, provider) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.getUserWithRoles(email.toLowerCase());
+  let user = await User.getUserWithRoles(email.toLowerCase());
 
   if (!user) {
     throw new Unauthorized('Invalid email or password');
@@ -93,6 +94,10 @@ const login = async (req, res) => {
   if (cipher.hash(password) !== user.password) {
     throw new Unauthorized('Invalid email or password');
   }
+
+  const isRegistered = await LoginProviders.getOneByCondition({ userId: user.id });
+
+  user = { ...user, isSocialUser: !!isRegistered };
 
   res.json(response({ data: getTokenResponse(user) }));
 };
@@ -116,7 +121,7 @@ const signup = async (req, res) => {
 
   const passwordHash = cipher.hash(password);
 
-  const user = await User.createOne({
+  let user = await User.createOne({
     name,
     email: email.toLowerCase(),
     password: passwordHash,
@@ -124,7 +129,29 @@ const signup = async (req, res) => {
     active: true,
   });
 
+  user = { ...user, isSocialUser: false };
+
   return res.json(response({ data: getTokenResponse(user) }));
+};
+
+/**
+ * Change user password.
+ *
+ * @param {import('express').Request} req Express request object.
+ * @param {import('express').Response} res Express response object.
+ */
+const changePassword = async (req, res) => {
+  const { currentPassword, id, newPassword } = req.body;
+
+  const dbUser = await User.getOneByCondition({ id });
+
+  if (dbUser.password !== cipher.hash(currentPassword)) {
+    throw new Error('Password does not match');
+  }
+
+  await User.updateByCondition({ id }, { password: cipher.hash(newPassword) });
+
+  res.json(response());
 };
 
 /**
@@ -141,7 +168,9 @@ const facebookLogin = async (req, res) => {
     .then(async (userData) => {
       const { name, email } = userData;
 
-      const user = await socialLogin(email, name, 'Facebook');
+      let user = await socialLogin(email, name, 'Facebook');
+      user = { ...user, isSocialUser: true };
+
       res.send(response({ data: getTokenResponse(user) }));
     });
 };
@@ -162,7 +191,8 @@ const googleLogin = async (req, res) => {
 
   const { name, email } = await ticket.getPayload();
 
-  const user = await socialLogin(email, name, 'Google');
+  let user = await socialLogin(email, name, 'Google');
+  user = { ...user, isSocialUser: true };
 
   res.json(response({ data: getTokenResponse(user) }));
 };
@@ -207,12 +237,13 @@ const resetUserPassword = async (req, res) => {
 };
 
 module.exports = {
-  signup,
-  login,
-  googleLogin,
+  changePassword,
   facebookLogin,
-  sendResetPasswordValidator,
+  googleLogin,
+  login,
   resetPasswordValidator,
-  sendResetPasswordLink,
   resetUserPassword,
+  sendResetPasswordLink,
+  sendResetPasswordValidator,
+  signup,
 };

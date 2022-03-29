@@ -2,14 +2,15 @@ const Router = require('express-promise-router');
 
 const validateRequest = require('middleware/validate-request');
 const {
-  login,
-  signup,
-  googleLogin,
+  changePassword,
   facebookLogin,
-  sendResetPasswordValidator,
-  sendResetPasswordLink,
+  googleLogin,
+  login,
   resetPasswordValidator,
   resetUserPassword,
+  sendResetPasswordLink,
+  sendResetPasswordValidator,
+  signup,
 } = require('controllers/auth');
 
 const router = Router({ mergeParams: true });
@@ -43,5 +44,10 @@ router.post('/reset-password/:token', resetPasswordValidator, validateRequest, r
  * Handle POST to /api/auth/reset-password route.
  */
 router.post('/reset-password', sendResetPasswordValidator, validateRequest, sendResetPasswordLink);
+
+/**
+ * Handle PATCH to /api/auth/change-password route.
+ */
+router.patch('/change-password', changePassword);
 
 module.exports = router;
