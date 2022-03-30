@@ -29,6 +29,9 @@ services:
       - GCLOUD_STORAGE_BUCKET=reverifi-default
       - GCLOUD_PROJECT=reverifi-342815
       - GOOGLE_APPLICATION_CREDENTIALS=src/config/gcs.json
+      - MAIL_CHIMP_API_KEY=169ffb3074fa80e3dec5736bbe2acde2-us14
+      - MAIL_CHIMP_SERVER=us14
+      - MAIL_CHIMP_LIST_ID=8a55115bd4
 
     ports:
       - 3000:3000
